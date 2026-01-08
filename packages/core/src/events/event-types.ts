@@ -228,9 +228,9 @@ export interface CoreErrorEvent {
 	/** Whether the system can continue operating */
 	recoverable: boolean;
 	/** Original error if available */
-	originalError?: Error;
+	originalError?: Error | undefined;
 	/** Additional context */
-	context?: Record<string, unknown>;
+	context?: Record<string, unknown> | undefined;
 }
 
 /**

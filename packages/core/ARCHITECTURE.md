@@ -130,6 +130,12 @@ packages/core/src/
 │  ├─ event-bus.ts          # Typed pub/sub with debug mode
 │  └─ event-types.ts        # Complete event definitions
 │
+├─ errors/                  # Error handling & diagnostics
+│  ├─ error-types.ts        # Structured error types & codes
+│  ├─ error-reporter.ts     # Central error reporting system
+│  ├─ logger.ts             # Diagnostic logging
+│  └─ index.ts              # Barrel export
+│
 ├─ react/                   # React adapters (optional)
 │  ├─ index.ts              # Barrel export
 │  ├─ MapContext.ts         # React context definition
@@ -290,6 +296,113 @@ unsubscribe();
 
 // Clear all handlers
 eventBus.off();
+```
+
+---
+
+## Error Handling & Diagnostics
+
+MapWise provides a comprehensive error handling system that:
+- Never crashes the app
+- Makes debugging straightforward
+- Uses structured error objects
+
+### Error Categories
+
+| Category | Description |
+|----------|-------------|
+| `configuration` | Invalid options, missing required values |
+| `network` | Failed requests, timeouts, CORS issues |
+| `maplibre` | MapLibre GL errors (style, sources, layers) |
+| `plugin` | Plugin lifecycle errors |
+| `layer` | Layer registry errors |
+| `style` | Basemap/style errors |
+| `persistence` | Serialization/hydration errors |
+| `validation` | Input validation failures |
+| `internal` | Unexpected internal errors |
+
+### Structured Errors
+
+All errors are structured `MapwiseError` objects:
+
+```typescript
+interface MapwiseError {
+  code: string;           // e.g., "LAYER_NOT_FOUND"
+  message: string;        // Human-readable
+  category: ErrorCategory;
+  severity: ErrorSeverity; // debug | info | warning | error | critical
+  recoverable: boolean;
+  timestamp: number;
+  source: string;         // Component that generated error
+  cause?: Error;          // Original error
+  context?: Record<string, unknown>;
+  recovery?: string;      // Suggested fix
+}
+```
+
+### Error Reporter
+
+The central error reporter handles all errors:
+
+```typescript
+import { defaultErrorReporter, createError, LayerErrors } from '@mapwise/core';
+
+// Report a structured error
+defaultErrorReporter.report(createError({
+  code: LayerErrors.notFound,
+  message: 'Layer "buildings" not found',
+  category: 'layer',
+  source: 'layer-registry',
+  context: { layerId: 'buildings' },
+  recovery: 'Check the layer ID and ensure it is registered',
+}));
+
+// Wrap async operations with automatic error handling
+const result = await defaultErrorReporter.wrapAsync(
+  () => fetchLayerData(),
+  { source: 'data-loader', category: 'network', recoveryValue: [] }
+);
+```
+
+### Debug & Production Modes
+
+```typescript
+import { enableDebugMode, enableProductionMode, defaultLogger } from '@mapwise/core';
+
+// Debug mode: verbose logging, timestamps, full traces
+enableDebugMode();
+
+// Production mode: minimal logs, errors only
+enableProductionMode();
+
+// Custom configuration
+defaultLogger.configure({
+  level: 'warn',
+  timestamps: true,
+  handler: (entry) => sendToMonitoring(entry),
+});
+```
+
+### Safe Wrappers
+
+Wrap operations to ensure they never throw:
+
+```typescript
+import { createSafeWrapper, safePromise } from '@mapwise/core';
+
+// Sync wrapper - never throws, returns recovery value on error
+const safeParse = createSafeWrapper(JSON.parse, {
+  source: 'parser',
+  category: 'validation',
+  recoveryValue: null,
+});
+
+// Async wrapper - never rejects
+const data = await safePromise(fetch(url), {
+  source: 'fetch',
+  category: 'network',
+  recoveryValue: { features: [] },
+});
 ```
 
 ---

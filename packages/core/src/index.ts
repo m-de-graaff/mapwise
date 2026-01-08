@@ -131,6 +131,54 @@ export {
 } from "./persistence/hydrate";
 
 // =============================================================================
+// Errors & Diagnostics
+// =============================================================================
+
+export {
+	// Error types
+	type ErrorCategory,
+	type ErrorSeverity,
+	type MapwiseError,
+	type CreateErrorOptions,
+	// Error codes
+	ConfigurationErrors,
+	NetworkErrors,
+	MapLibreErrors,
+	PluginErrors,
+	LayerErrors,
+	StyleErrors,
+	PersistenceErrors,
+	ValidationErrors,
+	InternalErrors,
+	// Error utilities
+	createError,
+	isMapwiseError,
+	extractErrorMessage,
+	extractError,
+	formatError,
+	serializeError,
+	// Logger
+	type LogLevel,
+	type LoggerOptions,
+	type LogHandler,
+	type LogEntry,
+	type Logger,
+	createLogger,
+	defaultLogger,
+	enableDebugMode,
+	enableProductionMode,
+	// Error reporter
+	type ErrorReporterOptions,
+	type ErrorHistoryEntry,
+	type ErrorReporter,
+	createErrorReporter,
+	defaultErrorReporter,
+	createSafeWrapper,
+	createSafeAsyncWrapper,
+	safePromise,
+} from "./errors";
+
+// =============================================================================
 // Types
 // =============================================================================
 
