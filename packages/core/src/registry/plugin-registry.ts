@@ -11,6 +11,7 @@ import type { Map as MapLibreMap } from "maplibre-gl";
 import type { EventBus } from "../events/event-bus";
 import type { StyleManager } from "../map/style-manager";
 import type { Viewport } from "../types/map";
+import { debounce } from "../utils/debounce";
 import type { LayerRegistry } from "./layer-registry";
 import type {
 	PluginContext,
@@ -308,16 +309,26 @@ export function createPluginManager(deps: PluginManagerDependencies): PluginMana
 			entry.eventUnsubscribers.push(unsub);
 		}
 
-		// Viewport change (debounced via map events)
+		// Viewport change (debounced to prevent excessive callbacks)
 		if (def.onViewportChange) {
 			const map = getMap();
 			if (map) {
-				const handler = () => {
+				// Debounce viewport change callbacks to prevent excessive updates
+				// MapLibre's moveend already fires after movement stops, but we add
+				// additional debouncing for rapid successive changes
+				const debouncedHandler = debounce(() => {
 					const viewport = ctx.getViewport();
 					safeExecuteHook(entry, "onViewportChange", () => def.onViewportChange?.(ctx, viewport));
+				}, 150); // 150ms debounce for viewport changes
+
+				const handler = () => {
+					debouncedHandler();
 				};
 				map.on("moveend", handler);
-				entry.eventUnsubscribers.push(() => map.off("moveend", handler));
+				entry.eventUnsubscribers.push(() => {
+					debouncedHandler.cancel();
+					map.off("moveend", handler);
+				});
 			}
 		}
 	}

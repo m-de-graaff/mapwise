@@ -144,6 +144,16 @@ export function createLayerRegistry(
 	// Quick lookup by ID
 	const layerMap = new Map<string, InternalLayerEntry>();
 
+	// Operation guards to prevent duplicate operations
+	let isApplying = false;
+	let isUnapplying = false;
+	let pendingApply: Promise<void> | null = null;
+
+	// Batch layer operations to prevent excessive churn
+	const pendingLayerOps = new Set<string>();
+	let batchTimeout: ReturnType<typeof setTimeout> | null = null;
+	const BATCH_DELAY_MS = 50; // Batch layer operations within 50ms
+
 	// ==========================================================================
 	// Helper Functions
 	// ==========================================================================
@@ -457,17 +467,38 @@ export function createLayerRegistry(
 		// Update order for all layers
 		updateOrder();
 
-		// Apply if map is ready
+		// Apply if map is ready (batched to prevent excessive churn)
 		const map = getMap();
 		if (map) {
-			applyLayer(entry)
-				.then(() => {
-					entry.state.applied = true;
-					emitStateChange(entry, "added");
-				})
-				.catch(() => {
-					emitStateChange(entry, "error");
-				});
+			// Add to pending operations
+			pendingLayerOps.add(definition.id);
+
+			// Clear existing batch timeout
+			if (batchTimeout) {
+				clearTimeout(batchTimeout);
+			}
+
+			// Schedule batched apply
+			batchTimeout = setTimeout(() => {
+				batchTimeout = null;
+				const toApply = Array.from(pendingLayerOps);
+				pendingLayerOps.clear();
+
+				// Apply all pending layers
+				for (const layerId of toApply) {
+					const entryToApply = layerMap.get(layerId);
+					if (entryToApply && !entryToApply.state.applied) {
+						applyLayer(entryToApply)
+							.then(() => {
+								entryToApply.state.applied = true;
+								emitStateChange(entryToApply, "added");
+							})
+							.catch(() => {
+								emitStateChange(entryToApply, "error");
+							});
+					}
+				}
+			}, BATCH_DELAY_MS);
 		}
 	}
 
@@ -722,34 +753,85 @@ export function createLayerRegistry(
 	}
 
 	async function applyAll(): Promise<void> {
-		for (const entry of layers) {
-			if (entry.state.applied) {
-				continue;
+		// Prevent duplicate applyAll operations
+		if (isApplying) {
+			// If there's a pending apply, wait for it
+			if (pendingApply) {
+				return pendingApply;
 			}
-
-			try {
-				await applyLayer(entry);
-			} catch (error) {
-				emitLayerApplyError(entry, error);
-			}
+			// Otherwise create a new promise that will be resolved when current apply completes
+			return new Promise<void>((resolve) => {
+				const checkInterval = setInterval(() => {
+					if (!isApplying) {
+						clearInterval(checkInterval);
+						resolve();
+					}
+				}, 10);
+			});
 		}
+
+		isApplying = true;
+		pendingApply = (async () => {
+			try {
+				for (const entry of layers) {
+					if (entry.state.applied) {
+						continue;
+					}
+
+					try {
+						await applyLayer(entry);
+					} catch (error) {
+						emitLayerApplyError(entry, error);
+					}
+				}
+			} finally {
+				isApplying = false;
+				pendingApply = null;
+			}
+		})();
+
+		return pendingApply;
 	}
 
 	async function unapplyAll(): Promise<void> {
-		// Unapply in reverse order (top to bottom)
-		for (let i = layers.length - 1; i >= 0; i--) {
-			const entry = layers[i];
-			if (entry?.state.applied) {
-				try {
-					await unapplyLayer(entry);
-				} catch {
-					// Ignore unapply errors
+		// Prevent duplicate unapplyAll operations
+		if (isUnapplying) {
+			return; // Already unapplying, skip
+		}
+
+		isUnapplying = true;
+		try {
+			// Cancel any pending batch operations
+			if (batchTimeout) {
+				clearTimeout(batchTimeout);
+				batchTimeout = null;
+			}
+			pendingLayerOps.clear();
+
+			// Unapply in reverse order (top to bottom)
+			for (let i = layers.length - 1; i >= 0; i--) {
+				const entry = layers[i];
+				if (entry?.state.applied) {
+					try {
+						await unapplyLayer(entry);
+					} catch {
+						// Ignore unapply errors
+					}
 				}
 			}
+		} finally {
+			isUnapplying = false;
 		}
 	}
 
 	function clear(): void {
+		// Cancel any pending batch operations
+		if (batchTimeout) {
+			clearTimeout(batchTimeout);
+			batchTimeout = null;
+		}
+		pendingLayerOps.clear();
+
 		// Unapply all first
 		unapplyAll();
 

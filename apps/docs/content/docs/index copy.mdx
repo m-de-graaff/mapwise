@@ -1,0 +1,161 @@
+---
+title: Introduction
+description: MapWise - A headless map engine built on MapLibre GL JS
+---
+
+# Welcome to MapWise
+
+MapWise is a **headless map engine** built on [MapLibre GL JS](https://maplibre.org/). It provides a clean, type-safe API for building interactive maps without opinionated UI components.
+
+## Philosophy
+
+**No UI. No shadcn. No DOM assumptions except the map container.**
+
+MapWise focuses on what matters:
+
+- 🗺️ **Map Management** — Create, configure, and destroy MapLibre instances with proper lifecycle handling
+- 📦 **Layer Registry** — Add, remove, reorder, and persist layers across basemap changes
+- 🔌 **Plugin System** — Extensible architecture for adding map functionality
+- 🎯 **Event Bus** — Typed pub/sub for reactive communication
+- ⚛️ **React Bindings** — Context and hooks for seamless React integration
+- 💾 **Persistence** — Serialize and hydrate complete map state
+
+## Quick Example
+
+```tsx
+import { MapProvider, useMap, useLayerState } from "@mapwise/core";
+
+function App() {
+  return (
+    <MapProvider
+      options={{
+        style: "https://demotiles.maplibre.org/style.json",
+        center: [0, 0],
+        zoom: 2,
+      }}
+      style={{ width: "100vw", height: "100vh" }}
+    >
+      <LayerPanel />
+    </MapProvider>
+  );
+}
+
+function LayerPanel() {
+  const { controller, isReady } = useMap();
+  const layers = useAllLayers();
+
+  if (!isReady) return <div>Loading map...</div>;
+
+  return (
+    <ul>
+      {layers.map((layer) => (
+        <li key={layer.id}>{layer.metadata?.title ?? layer.id}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## Packages
+
+| Package | Description |
+|---------|-------------|
+| `@mapwise/core` | Headless map engine with React bindings |
+| `@mapwise/layers` | Pre-built layer definitions (coming soon) |
+| `@mapwise/plugins` | Official plugins (coming soon) |
+| `@mapwise/ui` | Optional UI components (coming soon) |
+
+## Getting Started
+
+<Cards>
+  <Card title="Installation" href="/docs/installation">
+    Install MapWise in your project
+  </Card>
+  <Card title="Quick Start" href="/docs/quick-start">
+    Build your first map in minutes
+  </Card>
+  <Card title="Core Concepts" href="/docs/core/architecture">
+    Understand the architecture
+  </Card>
+</Cards>
+
+## Why MapWise?
+
+### Layer Persistence Across Basemap Changes
+
+When you change basemaps with MapLibre, all your custom layers disappear. MapWise automatically preserves and reapplies your layers:
+
+```typescript
+// Register a layer once
+controller.layers.registerLayer({
+  id: "my-points",
+  type: "geojson-points",
+  source: { id: "points", spec: { type: "geojson", data: geojson } },
+  layers: [{ id: "points-layer", type: "circle", source: "points" }],
+});
+
+// Change basemap - layers are automatically preserved
+await controller.setBasemap("https://new-style.json");
+// Your "my-points" layer is still there!
+```
+
+### Type-Safe Events
+
+Every event is fully typed with TypeScript:
+
+```typescript
+import { useMapEvent } from "@mapwise/core";
+
+// TypeScript knows the exact payload shape
+useMapEvent("layer:added", (event) => {
+  console.log(event.layerId); // string
+  console.log(event.definition); // LayerDefinition
+});
+```
+
+### Plugin Architecture
+
+Extend functionality without modifying core:
+
+```typescript
+controller.plugins.register({
+  id: "my-plugin",
+  onRegister(ctx) {
+    ctx.log("info", "Plugin registered!");
+  },
+  onMapReady(ctx) {
+    // Access map, layers, events, and state
+    const viewport = ctx.getViewport();
+    ctx.events.on("layer:added", handleLayerAdded);
+  },
+  onDestroy(ctx) {
+    // Clean up resources
+  },
+});
+```
+
+### React-First Design
+
+While the core is framework-agnostic, React integration is first-class:
+
+```tsx
+import { 
+  MapProvider, 
+  useMap, 
+  useMapReady, 
+  useLayerState,
+  useMapEvent 
+} from "@mapwise/core";
+
+function MyComponent() {
+  const { controller, isReady } = useMap();
+  const layers = useAllLayers();
+  
+  useMapEvent("layer:visibility", (event) => {
+    console.log(`Layer ${event.layerId} visibility: ${event.visible}`);
+  });
+
+  // Reactive layer state updates automatically
+  return <LayerList layers={layers} />;
+}
+```

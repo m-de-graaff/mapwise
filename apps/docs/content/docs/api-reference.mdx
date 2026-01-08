@@ -1,0 +1,43 @@
+---
+title: API Reference
+description: Complete API reference for MapWise
+---
+
+# API Reference
+
+This section contains the complete API reference for MapWise.
+
+## Core Modules
+
+### MapProvider
+
+The `MapProvider` component initializes and manages the MapLibre map instance.
+
+```tsx
+<MapProvider
+  options={mapOptions}
+  maplibreGl={maplibreGl}
+>
+  {children}
+</MapProvider>
+```
+
+### useMap Hook
+
+Access the map instance and utilities:
+
+```tsx
+const map = useMap();
+```
+
+### useMapReady Hook
+
+Subscribe to map ready state:
+
+```tsx
+const isReady = useMapReady();
+```
+
+## More Documentation
+
+For more detailed API documentation, check the source code and TypeScript definitions.

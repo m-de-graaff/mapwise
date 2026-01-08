@@ -483,6 +483,9 @@ export function createStyleManager(
 
 		state.isChanging = true;
 
+		// Track if this operation was cancelled (e.g., during map destruction)
+		let cancelled = false;
+
 		// Emit start event
 		eventBus.emit("style:changeStart", {
 			previousStyle,
@@ -490,11 +493,24 @@ export function createStyleManager(
 		});
 
 		try {
+			// Check if map is still available (may have been destroyed)
+			const currentMap = getMap();
+			if (!currentMap || currentMap !== map) {
+				cancelled = true;
+				throw new Error("Map was destroyed during style change");
+			}
+
 			// Capture current feature states from map before style change
 			captureFeatureStates(map);
 
 			// Set the style
 			await setStyleWithTimeout(map, style, timeout, diff, validate);
+
+			// Check again if map is still available
+			if (!getMap() || getMap() !== map) {
+				cancelled = true;
+				throw new Error("Map was destroyed during style change");
+			}
 
 			// Update current style
 			state.currentStyle = styleIdentifier;
@@ -510,13 +526,15 @@ export function createStyleManager(
 
 			const durationMs = performance.now() - startTime;
 
-			// Emit success event
-			eventBus.emit("style:changeComplete", {
-				style: styleIdentifier,
-				reappliedLayers,
-				reappliedSources,
-				durationMs,
-			});
+			// Emit success event (only if not cancelled)
+			if (!cancelled) {
+				eventBus.emit("style:changeComplete", {
+					style: styleIdentifier,
+					reappliedLayers,
+					reappliedSources,
+					durationMs,
+				});
+			}
 
 			state.isChanging = false;
 
@@ -529,15 +547,18 @@ export function createStyleManager(
 		} catch (error) {
 			state.isChanging = false;
 
-			const errorMessage = error instanceof Error ? error.message : String(error);
-			const errorCode = categorizeStyleError(errorMessage);
+			// Only emit error event if not cancelled (cancellation is expected during cleanup)
+			if (!cancelled) {
+				const errorMessage = error instanceof Error ? error.message : String(error);
+				const errorCode = categorizeStyleError(errorMessage);
 
-			eventBus.emit("style:changeError", {
-				style: styleIdentifier,
-				code: errorCode,
-				message: errorMessage,
-				rolledBack: false,
-			});
+				eventBus.emit("style:changeError", {
+					style: styleIdentifier,
+					code: errorCode,
+					message: errorMessage,
+					rolledBack: false,
+				});
+			}
 
 			return {
 				success: false,
@@ -563,14 +584,23 @@ export function createStyleManager(
 		return new Promise((resolve, reject) => {
 			let timeoutId: ReturnType<typeof setTimeout> | null = null;
 			let resolved = false;
+			let styleLoadUnsub: (() => void) | null = null;
+			let errorUnsub: (() => void) | null = null;
 
 			const cleanup = () => {
 				if (timeoutId) {
 					clearTimeout(timeoutId);
 					timeoutId = null;
 				}
-				map.off("style.load", onStyleLoad);
-				map.off("error", onError);
+				// Ensure all event listeners are removed to prevent memory leaks
+				if (styleLoadUnsub) {
+					styleLoadUnsub();
+					styleLoadUnsub = null;
+				}
+				if (errorUnsub) {
+					errorUnsub();
+					errorUnsub = null;
+				}
 			};
 
 			const onStyleLoad = () => {
@@ -605,9 +635,11 @@ export function createStyleManager(
 				reject(new Error(`Style load timed out after ${timeout}ms`));
 			}, timeout);
 
-			// Listen for style load
+			// Listen for style load (using once to auto-cleanup, but we track it anyway)
 			map.once("style.load", onStyleLoad);
+			// Track error listener for cleanup
 			map.on("error", onError);
+			errorUnsub = () => map.off("error", onError);
 
 			// Apply the style
 			try {
@@ -773,10 +805,15 @@ export function createStyleManager(
 	// =========================================================================
 
 	function clear(): void {
+		// Cancel any pending style changes
+		state.isChanging = false;
+
+		// Clear all registered state
 		state.sources.clear();
 		state.layers.clear();
 		state.featureStates = [];
 		state.orderCounter = 0;
+		state.currentStyle = null;
 	}
 
 	// =========================================================================
@@ -808,15 +845,5 @@ export function createStyleManager(
 	};
 }
 
-/**
- * Initialize the StyleManager with the current style from the map.
- * Should be called once the map is ready.
- */
-export function initializeStyleManager(manager: StyleManager, map: MapLibreMap): void {
-	// Capture the initial style URL if available
-	const style = map.getStyle();
-	if (style?.name) {
-		// Style name is available - use it as identifier
-		(manager as { currentStyle: string | null }).currentStyle = style.name;
-	}
-}
+// Note: initializeStyleManager was removed as it's not needed
+// StyleManager tracks currentStyle internally during setBasemap calls

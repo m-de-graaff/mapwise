@@ -443,40 +443,48 @@ function createController(
 				return;
 			}
 
-			// Notify plugins of destruction first
-			await pluginManager.notifyDestroy();
+			try {
+				// Notify plugins of destruction first
+				await pluginManager.notifyDestroy();
 
-			// Clear plugins
-			await pluginManager.clear();
+				// Clear plugins
+				await pluginManager.clear();
 
-			// Clear layer registry
-			layerRegistry.clear();
+				// Clear layer registry (this will cancel any pending operations)
+				layerRegistry.clear();
 
-			// Clear style manager state
-			styleManager.clear();
+				// Clear style manager state (this will cancel any pending style changes)
+				styleManager.clear();
 
-			// Run all cleanup functions
-			runCleanup(state);
+				// Run all cleanup functions (removes all event listeners, observers, etc.)
+				runCleanup(state);
 
-			// Remove the map
-			if (state.map) {
-				state.map.remove();
-				setMapInstance(state, null);
+				// Remove the map (this removes all MapLibre event listeners)
+				if (state.map) {
+					// Remove all event listeners from the map instance
+					// MapLibre's remove() method should handle this, but we ensure it
+					state.map.remove();
+					setMapInstance(state, null);
+				}
+
+				// Clear event bus (removes all event handlers)
+				eventBus.off();
+
+				// Clear container reference
+				setContainer(state, null);
+
+				// Clear manager references
+				setStyleManager(state, null);
+				setLayerRegistry(state, null);
+				setPluginManager(state, null);
+			} catch (error) {
+				// Log but don't throw - ensure cleanup continues
+				console.warn("[@mapwise/core] Error during map destruction:", error);
+			} finally {
+				// Transition to destroyed (terminal state)
+				// This prevents any further operations on the map
+				transitionState(state, eventBus, "destroyed");
 			}
-
-			// Clear event bus
-			eventBus.off();
-
-			// Clear container reference
-			setContainer(state, null);
-
-			// Clear manager references
-			setStyleManager(state, null);
-			setLayerRegistry(state, null);
-			setPluginManager(state, null);
-
-			// Transition to destroyed
-			state.lifecycleState = "destroyed";
 		},
 	};
 

@@ -147,6 +147,16 @@ export function MapProvider(props: MapProviderProps): JSX.Element {
 		// Reset unmounted flag
 		unmountedRef.current = false;
 
+		// Clean up any existing controller (for hot reload scenarios)
+		const existingController = controllerRef.current;
+		if (existingController) {
+			// Destroy existing controller to prevent memory leaks on hot reload
+			existingController.destroy().catch((error) => {
+				console.warn("[@mapwise/core] Error destroying existing controller:", error);
+			});
+			controllerRef.current = null;
+		}
+
 		// Create the controller
 		const controller = createMap(container, optionsRef.current);
 		controllerRef.current = controller;
@@ -154,21 +164,37 @@ export function MapProvider(props: MapProviderProps): JSX.Element {
 		// Force a re-render so children can access the controller
 		forceUpdate((v) => v + 1);
 
-		// Set up ready listener
-		controller.awaitReady().then(() => {
-			// Don't update if unmounted (StrictMode cleanup)
-			if (unmountedRef.current) {
-				return;
-			}
-			forceUpdate((v) => v + 1);
-			onReadyRef.current?.();
-		});
+		// Set up ready listener with proper cleanup
+		let readyCancelled = false;
+		controller
+			.awaitReady()
+			.then(() => {
+				// Don't update if unmounted or cancelled (StrictMode cleanup / hot reload)
+				if (unmountedRef.current || readyCancelled) {
+					return;
+				}
+				forceUpdate((v) => v + 1);
+				onReadyRef.current?.();
+			})
+			.catch((error) => {
+				// Only log if not cancelled (expected during cleanup)
+				if (!readyCancelled && !unmountedRef.current) {
+					console.warn("[@mapwise/core] Map ready promise rejected:", error);
+				}
+			});
 
 		// Cleanup on unmount
 		return () => {
 			unmountedRef.current = true;
-			controller.destroy();
-			controllerRef.current = null;
+			readyCancelled = true;
+
+			// Destroy controller and clean up all resources
+			if (controllerRef.current) {
+				controller.destroy().catch((error) => {
+					console.warn("[@mapwise/core] Error destroying controller:", error);
+				});
+				controllerRef.current = null;
+			}
 		};
 	}, []);
 

@@ -15,11 +15,23 @@
 	"files": ["src"],
 	"scripts": {
 		"typecheck": "tsc",
-		"clean": "rimraf .turbo"
+		"clean": "rimraf .turbo",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage"
+	},
+	"peerDependencies": {
+		"@mapwise/core": "workspace:*",
+		"maplibre-gl": "^5.0.0"
 	},
 	"devDependencies": {
-		"rimraf": "^6.0.1",
-		"typescript": "^5.7.2"
+		"@mapwise/core": "workspace:*",
+		"@types/geojson": "^7946.0.16",
+		"@vitest/coverage-v8": "^2.1.8",
+		"maplibre-gl": "^5.0.0",
+		"rimraf": "^6.0.0",
+		"typescript": "^5.0.0",
+		"vitest": "^2.1.8"
 	},
 	"publishConfig": {
 		"access": "public"

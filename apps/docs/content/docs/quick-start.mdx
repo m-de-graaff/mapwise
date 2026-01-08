@@ -1,0 +1,40 @@
+---
+title: Quick Start
+description: Get up and running with MapWise in minutes
+---
+
+# Quick Start
+
+This guide will help you get started with MapWise quickly.
+
+## Basic Example
+
+```tsx
+import { MapProvider, useMap } from "@mapwise/core/react";
+import maplibreGl from "maplibre-gl";
+
+function MapComponent() {
+  const map = useMap();
+
+  return <div ref={map.containerRef} className="w-full h-screen" />;
+}
+
+export default function App() {
+  return (
+    <MapProvider
+      options={{
+        style: "https://demotiles.maplibre.org/style.json",
+        center: [0, 0],
+        zoom: 2,
+      }}
+      maplibreGl={maplibreGl}
+    >
+      <MapComponent />
+    </MapProvider>
+  );
+}
+```
+
+## What's Next?
+
+Check out the [API Reference](./api-reference) for more detailed information about all available features.
