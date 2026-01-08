@@ -1,0 +1,17 @@
+{
+	"name": "@mapwise/docs",
+	"version": "0.0.0",
+	"private": true,
+	"description": "MapWise documentation site",
+	"type": "module",
+	"scripts": {
+		"build": "echo 'Docs build placeholder'",
+		"dev": "echo 'Docs dev placeholder'",
+		"typecheck": "tsc",
+		"clean": "rimraf .turbo"
+	},
+	"devDependencies": {
+		"rimraf": "^6.0.1",
+		"typescript": "^5.7.2"
+	}
+}

@@ -1,0 +1,16 @@
+# Default owners for everything in the repo
+* @mapwise/maintainers
+
+# Package-specific owners
+/packages/core/ @mapwise/core-team
+/packages/utils/ @mapwise/core-team
+
+# Documentation
+/docs/ @mapwise/docs-team
+*.md @mapwise/docs-team
+
+# CI/CD and configuration
+/.github/ @mapwise/devops
+/turbo.json @mapwise/devops
+/biome.json @mapwise/devops
+

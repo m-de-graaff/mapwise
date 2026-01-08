@@ -1,0 +1,5 @@
+/**
+ * MapWise UI Components
+ *
+ * @packageDocumentation
+ */

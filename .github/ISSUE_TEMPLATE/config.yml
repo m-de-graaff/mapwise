@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussions
+    url: https://github.com/mapwise/mapwise/discussions
+    about: Ask questions and discuss with the community
+  - name: Documentation
+    url: https://mapwise.dev/docs
+    about: Read the documentation
+

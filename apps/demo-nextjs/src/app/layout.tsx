@@ -1,0 +1,33 @@
+import type { Metadata } from "next";
+import { JetBrains_Mono, Outfit } from "next/font/google";
+import "maplibre-gl/dist/maplibre-gl.css";
+import "./globals.css";
+
+const outfit = Outfit({
+	subsets: ["latin"],
+	variable: "--font-outfit",
+	display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+	subsets: ["latin"],
+	variable: "--font-mono",
+	display: "swap",
+});
+
+export const metadata: Metadata = {
+	title: "MapWise Next.js Demo",
+	description: "Testing @mapwise/core with Next.js App Router",
+};
+
+export default function RootLayout({
+	children,
+}: Readonly<{
+	children: React.ReactNode;
+}>) {
+	return (
+		<html lang="en" className={`${outfit.variable} ${jetbrainsMono.variable}`}>
+			<body>{children}</body>
+		</html>
+	);
+}

@@ -1,0 +1,5 @@
+/**
+ * MapWise Plugins
+ *
+ * @packageDocumentation
+ */
