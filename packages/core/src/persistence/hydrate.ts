@@ -145,7 +145,7 @@ export async function hydrateState(
 		result.layerErrors = layerResult.errors;
 
 		if (restorePlugins) {
-			const pluginResult = restorePluginStates(
+			const pluginResult = await restorePluginStates(
 				ctx.pluginManager,
 				ctx.setPluginState,
 				migratedState.plugins,
@@ -376,11 +376,11 @@ interface PluginRestoreResult {
 	errors: Array<{ id: string; error: string }>;
 }
 
-function restorePluginStates(
+async function restorePluginStates(
 	manager: PluginManager,
-	setPluginState: (pluginId: string, key: string, value: unknown) => void,
+	_unused_setPluginState: (pluginId: string, key: string, value: unknown) => void,
 	plugins: PersistedPluginState[],
-): PluginRestoreResult {
+): Promise<PluginRestoreResult> {
 	const result: PluginRestoreResult = { restored: 0, errors: [] };
 
 	for (const persistedPlugin of plugins) {
@@ -394,10 +394,12 @@ function restorePluginStates(
 				continue;
 			}
 
-			// Restore state values
-			for (const [key, value] of Object.entries(persistedPlugin.state)) {
-				setPluginState(persistedPlugin.id, key, value);
-			}
+			// Delegate hydration to plugin manager (handles custom logic and migrations)
+			await manager.hydratePlugin(
+				persistedPlugin.id,
+				persistedPlugin.state,
+				persistedPlugin.schemaVersion,
+			);
 
 			result.restored++;
 		} catch (error) {

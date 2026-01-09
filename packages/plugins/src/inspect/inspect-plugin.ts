@@ -5,6 +5,7 @@ import { FeatureHighlighter } from "./highlight";
 import { type FeatureQueryOptions, queryFeatures } from "./feature-query";
 import type { BasePluginConfig } from "../shared/types";
 import { createPointerRouter, type NormalizedPointerEvent } from "../shared/pointer-router";
+import { throttle } from "../shared/utils";
 
 /**
  * Configuration for the Inspect plugin.
@@ -67,6 +68,17 @@ export function createInspectPlugin(config: InspectPluginConfig): PluginDefiniti
 			});
 			interactionMode.setActive("@mapwise/inspect", enabled);
 
+			// Throttled inspection handler
+			const throttledHoverInspect = throttle((e: NormalizedPointerEvent) => {
+				safePluginCall(
+					() => {
+						handleInspect(e, "hover");
+					},
+					{ pluginId: "@mapwise/inspect", context: "onMove" },
+					events,
+				);
+			}, 50); // 50ms throttle
+
 			// Setup pointer router
 			cleanupPointer = createPointerRouter(map, {
 				onClick: (e) => {
@@ -94,13 +106,7 @@ export function createInspectPlugin(config: InspectPluginConfig): PluginDefiniti
 					}
 
 					if (inspectOnHover) {
-						safePluginCall(
-							() => {
-								handleInspect(e, "hover");
-							},
-							{ pluginId: "@mapwise/inspect", context: "onMove" },
-							events,
-						);
+						throttledHoverInspect(e);
 					}
 				},
 			});

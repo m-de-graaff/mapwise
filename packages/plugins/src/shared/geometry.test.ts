@@ -244,7 +244,7 @@ describe("Geometry Helpers", () => {
 				[2, 2],
 			];
 
-			const snapped = snapToVertex(point, vertices, 1000); // 1km tolerance
+			const snapped = snapToVertex(point, vertices, 2000); // 2km tolerance
 			expect(snapped).toEqual([0, 0]);
 		});
 

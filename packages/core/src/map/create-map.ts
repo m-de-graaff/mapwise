@@ -13,6 +13,15 @@ import type {
 	PersistedMapState,
 	SerializeOptions,
 } from "../persistence/persistence-types";
+import {
+	createAuthManager,
+	createRequestManager,
+	type AuthManager,
+	type RequestManager,
+} from "../request";
+import { createCursorManager } from "../interaction/cursor-manager";
+import { createInteractionModeStore } from "../interaction/interaction-mode";
+import { createKeyboardManager } from "../interaction/keyboard-manager";
 import { type SerializationContext, serializeState } from "../persistence/serialize";
 import { type LayerRegistry, createLayerRegistry } from "../registry/layer-registry";
 import { type PluginManager, createPluginManager } from "../registry/plugin-registry";
@@ -105,6 +114,27 @@ export function createMap(container: HTMLElement, options: MapOptions = {}): Map
 	const layerRegistry = createLayerRegistry(() => state.map, eventBus);
 	setLayerRegistry(state, layerRegistry);
 
+	// Create RequestManager & AuthManager
+	const requestManager = createRequestManager();
+	const authManager = createAuthManager();
+
+	// Create Interaction Managers
+	const interactionMode = createInteractionModeStore();
+	// CursorManager needs an element. We use the container.
+	// MapLibre's canvas is inside, but setting cursor on container works as an overlay or inheritance.
+	const cursorManager = createCursorManager(container);
+	const keyboard = createKeyboardManager();
+
+	// Register auth manager as a transformer
+	requestManager.register(authManager);
+
+	// Register custom transformers from options
+	if (resolvedOptions.request?.transformers) {
+		for (const transformer of resolvedOptions.request.transformers) {
+			requestManager.register(transformer);
+		}
+	}
+
 	// Create PluginManager
 	const pluginManager = createPluginManager({
 		getMap: () => state.map,
@@ -113,6 +143,9 @@ export function createMap(container: HTMLElement, options: MapOptions = {}): Map
 		layerRegistry,
 		styleManager,
 		eventBus,
+		interactionMode,
+		cursorManager,
+		keyboard,
 	});
 	setPluginManager(state, pluginManager);
 
@@ -191,7 +224,15 @@ export function createMap(container: HTMLElement, options: MapOptions = {}): Map
 	}
 
 	// Create the controller
-	const controller = createController(state, eventBus, styleManager, layerRegistry, pluginManager);
+	const controller = createController(
+		state,
+		eventBus,
+		styleManager,
+		layerRegistry,
+		pluginManager,
+		requestManager,
+		authManager,
+	);
 
 	return controller;
 }
@@ -245,6 +286,8 @@ function createController(
 	styleManager: StyleManager,
 	layerRegistry: LayerRegistry,
 	pluginManager: PluginManager,
+	requestManager: RequestManager,
+	authManager: AuthManager,
 ): MapController {
 	// Store promise resolvers for awaitReady
 	let readyResolve: (() => void) | null = null;
@@ -339,6 +382,14 @@ function createController(
 
 		get plugins() {
 			return pluginManager;
+		},
+
+		get request() {
+			return requestManager;
+		},
+
+		get auth() {
+			return authManager;
 		},
 
 		awaitReady(): Promise<void> {

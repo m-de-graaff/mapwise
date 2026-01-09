@@ -10,6 +10,9 @@ import type { StyleManager } from "../map/style-manager";
 import type { Viewport } from "../types/map";
 import type { LayerRegistry } from "./layer-registry";
 import type { LayerState } from "./registry-types";
+import type { InteractionModeStore } from "../interaction/interaction-mode";
+import type { CursorManager } from "../interaction/cursor-manager";
+import type { KeyboardManager } from "../interaction/keyboard-manager";
 
 // =============================================================================
 // Plugin Context
@@ -61,6 +64,24 @@ export interface PluginContext {
 	 * Log a message with plugin context.
 	 */
 	log(level: "debug" | "info" | "warn" | "error", message: string): void;
+
+	/**
+	 * Interaction mode manager.
+	 * Controls tool exclusivity and priority.
+	 */
+	readonly interactionMode: InteractionModeStore;
+
+	/**
+	 * Cursor manager.
+	 * Controls map cursor.
+	 */
+	readonly cursorManager: CursorManager;
+
+	/**
+	 * Keyboard manager.
+	 * Controls keyboard shortcuts.
+	 */
+	readonly keyboard: KeyboardManager;
 }
 
 /**
@@ -193,6 +214,45 @@ export interface PluginDefinition extends PluginLifecycleHooks {
 	 * Use this for cleanup.
 	 */
 	onUnregister?(ctx: PluginContext): void | Promise<void>;
+
+	/**
+	 * Persistence configuration.
+	 */
+	readonly persistence?: PluginPersistenceDefinition;
+}
+
+/**
+ * Configuration for plugin state persistence.
+ */
+export interface PluginPersistenceDefinition {
+	/**
+	 * Current schema version (integer).
+	 * Increment this when changing the state structure.
+	 * @default 1
+	 */
+	schemaVersion?: number;
+
+	/**
+	 * Custom serializer.
+	 * If not provided, defaults to serializing all values in `ctx.state`.
+	 */
+	serialize?(ctx: PluginContext): Record<string, unknown> | undefined;
+
+	/**
+	 * Custom hydrator.
+	 * If not provided, defaults to restoring values to `ctx.state`.
+	 */
+	hydrate?(ctx: PluginContext, state: Record<string, unknown>): void | Promise<void>;
+
+	/**
+	 * Migration hook.
+	 * Called when the persisted state version is lower than the current schema version.
+	 *
+	 * @param state - The raw persisted state object
+	 * @param fromVersion - The version of the persisted state
+	 * @returns The migrated state object (matching current schema)
+	 */
+	migrate?(state: Record<string, unknown>, fromVersion: number): Record<string, unknown>;
 }
 
 // =============================================================================

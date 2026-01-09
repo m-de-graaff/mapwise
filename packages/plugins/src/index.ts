@@ -30,20 +30,20 @@ export {
 	type KeyboardManager,
 	type KeyboardHandler,
 	type KeyboardManagerOptions,
-} from "./shared/keyboard-manager";
+} from "@mapwise/core";
 
 // Cursor Manager
 export {
 	createCursorManager,
 	type CursorManager,
-} from "./shared/cursor";
+} from "@mapwise/core";
 
 // Interaction Mode Store
 export {
 	createInteractionModeStore,
 	type InteractionModeStore,
 	type InteractionModeStoreOptions,
-} from "./shared/interaction-state";
+} from "@mapwise/core";
 
 // Geometry Helpers
 export {

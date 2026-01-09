@@ -179,6 +179,21 @@ export {
 } from "./errors";
 
 // =============================================================================
+// Requests & Auth
+// =============================================================================
+
+export {
+	type RequestManager,
+	type AuthManager,
+	type RequestParameters,
+	type RequestTransform,
+	type ResourceType,
+	type TokenProvider,
+	createRequestManager,
+	createAuthManager,
+} from "./request";
+
+// =============================================================================
 // Types
 // =============================================================================
 
@@ -192,6 +207,28 @@ export type {
 	SetBasemapOptions,
 	SetBasemapResult,
 } from "./types/layer";
+
+// =============================================================================
+// Interaction
+// =============================================================================
+
+export {
+	createInteractionModeStore,
+	type InteractionModeStore,
+	type InteractionModeStoreOptions,
+} from "./interaction/interaction-mode";
+
+export {
+	createCursorManager,
+	type CursorManager,
+} from "./interaction/cursor-manager";
+
+export {
+	createKeyboardManager,
+	type KeyboardManager,
+	type KeyboardHandler,
+	type KeyboardManagerOptions,
+} from "./interaction/keyboard-manager";
 
 // =============================================================================
 // React Adapters (Optional)

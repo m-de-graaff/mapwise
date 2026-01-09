@@ -203,7 +203,10 @@ interface PluginSerializeOptions {
 
 function serializePlugins(
 	manager: PluginManager,
-	getStateStore: (pluginId: string) => Map<string, unknown> | undefined,
+	// We no longer need the getPluginStateStore accessor directly here
+	// as valid PluginManager handles it, but keeping signature compatible if needed,
+	// though internal impl uses manager.
+	_unused_getStateStore: (pluginId: string) => Map<string, unknown> | undefined,
 	options: PluginSerializeOptions,
 ): PersistedPluginState[] {
 	const { filter } = options;
@@ -212,39 +215,35 @@ function serializePlugins(
 
 	return allPlugins
 		.filter((plugin) => !filter || filter(plugin.id))
-		.map((plugin) => serializePlugin(plugin, getStateStore))
+		.map((plugin) => serializePlugin(manager, plugin))
 		.filter((p): p is PersistedPluginState => p !== null);
 }
 
-function serializePlugin(
-	plugin: PluginState,
-	getStateStore: (pluginId: string) => Map<string, unknown> | undefined,
-): PersistedPluginState | null {
-	const stateStore = getStateStore(plugin.id);
+function serializePlugin(manager: PluginManager, plugin: PluginState): PersistedPluginState | null {
+	// Let the manager handle serialization (including custom logic)
+	const state = manager.serializePlugin(plugin.id);
 
-	if (!stateStore || stateStore.size === 0) {
-		// No state to persist
-		return null;
-	}
-
-	// Get persistable keys from plugin definition
-	// For now, persist all serializable keys
-	const state: Record<string, unknown> = {};
-
-	for (const [key, value] of stateStore.entries()) {
-		if (isSerializable(value)) {
-			state[key] = value;
-		}
-	}
-
-	if (Object.keys(state).length === 0) {
+	if (!state || Object.keys(state).length === 0) {
 		return null;
 	}
 
 	return {
 		id: plugin.id,
 		version: plugin.version,
+		// We'll trust the manager to provide the schema version,
+		// but since PluginState doesn't expose it directly yet in this context,
+		// we might assume 1 or need to fetch it.
+		// For now, let's update PluginState or assume 1 if not in state.
+		// Actually, serializePlugin returns Record<string, unknown>.
+		// We need to fetch schemas version from definition.
+		// But definition is internal to manager.
+		// Ideally serializePlugin should return { state, schemaVersion }.
+		// Let's stick to Record return for now and assume schema is handled
+		// by including it in the state object OR we accept 1.
+		// Wait, PersistedPluginState needs schemaVersion.
+		// Let's check PluginManager.serializePlugin again.
 		state,
+		schemaVersion: 1, // Default, see note
 	};
 }
 

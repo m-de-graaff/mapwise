@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createKeyboardManager } from "./keyboard-manager";
+import { createKeyboardManager } from "../src/interaction/keyboard-manager";
 
 describe("Keyboard Manager", () => {
 	let manager: ReturnType<typeof createKeyboardManager>;
@@ -57,7 +57,7 @@ describe("Keyboard Manager", () => {
 
 	it("should use priority (higher priority handles first)", () => {
 		const handler1 = vi.fn(() => false); // Return false to allow propagation
-		const handler2 = vi.fn();
+		const handler2 = vi.fn(() => false);
 
 		manager.register("low", "i", handler1, 0);
 		manager.register("high", "i", handler2, 10);

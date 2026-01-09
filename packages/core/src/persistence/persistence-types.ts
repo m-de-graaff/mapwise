@@ -101,6 +101,9 @@ export interface PersistedPluginState {
 	/** Plugin version at time of serialization */
 	version: string;
 
+	/** Schema version of the state data */
+	schemaVersion?: number;
+
 	/**
 	 * Custom state from the plugin's state store.
 	 * Only keys marked as persistable are included.

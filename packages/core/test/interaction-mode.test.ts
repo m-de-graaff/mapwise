@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { createInteractionModeStore } from "./interaction-state";
+import { createInteractionModeStore } from "../src/interaction/interaction-mode";
 
 describe("Interaction Mode Store", () => {
 	let store: ReturnType<typeof createInteractionModeStore>;

@@ -12,6 +12,7 @@ import type {
 	PersistedMapState,
 	SerializeOptions,
 } from "../persistence/persistence-types";
+import type { AuthManager, RequestManager, RequestTransform } from "../request";
 import type { LayerRegistry } from "../registry/layer-registry";
 import type { PluginManager } from "../registry/plugin-registry";
 import type { SetBasemapOptions, SetBasemapResult, StyleInput } from "./layer";
@@ -55,6 +56,15 @@ export interface MapOptions extends Omit<MapLibreMapOptions, "container"> {
 	 * @default 100
 	 */
 	resizeDebounceMs?: number;
+	/**
+	 * Configuration for request handling (auth, proxies).
+	 */
+	request?: {
+		/**
+		 * Custom request transformers.
+		 */
+		transformers?: RequestTransform[];
+	};
 }
 
 /**
@@ -64,6 +74,9 @@ export interface ResolvedMapOptions extends MapOptions {
 	autoResize: boolean;
 	resizeDebounceMs: number;
 	preserveDrawingBuffer: boolean;
+	request?: {
+		transformers?: RequestTransform[];
+	};
 }
 
 // =============================================================================
@@ -158,6 +171,16 @@ export interface MapController {
 	 * ```
 	 */
 	readonly plugins: PluginManager;
+
+	/**
+	 * Access to the request manager.
+	 */
+	readonly request: RequestManager;
+
+	/**
+	 * Access to the auth manager.
+	 */
+	readonly auth: AuthManager;
 
 	/**
 	 * Wait for the map to be ready.

@@ -1,9 +1,19 @@
 import type { EventBus } from "@mapwise/core";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { safePluginCall, safePluginCallAsync } from "./error-handler";
 
 describe("Error Handler", () => {
 	describe("safePluginCall", () => {
+		beforeEach(() => {
+			vi.spyOn(console, "error").mockImplementation(() => {
+				// No-op
+			});
+		});
+
+		afterEach(() => {
+			vi.restoreAllMocks();
+		});
+
 		it("should execute function and return result", () => {
 			const result = safePluginCall(() => 42, { pluginId: "test", context: "test" });
 
@@ -42,10 +52,6 @@ describe("Error Handler", () => {
 		});
 
 		it("should include metadata in error", () => {
-			const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {
-				// No-op for testing
-			});
-
 			safePluginCall(
 				() => {
 					throw new Error("Test error");
@@ -57,12 +63,11 @@ describe("Error Handler", () => {
 				},
 			);
 
-			expect(consoleSpy).toHaveBeenCalled();
-			const call = consoleSpy.mock.calls[0];
+			expect(console.error).toHaveBeenCalled();
+			// biome-ignore lint/suspicious/noExplicitAny: accessing mock internal state
+			const call = (console.error as any).mock.calls[0];
 			expect(call?.[0]).toContain("test");
 			expect(String(call)).toContain("foo");
-
-			consoleSpy.mockRestore();
 		});
 
 		it("should handle non-Error throwables", () => {

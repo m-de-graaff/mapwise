@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { createCursorManager } from "./cursor";
+import { createCursorManager } from "../src/interaction/cursor-manager";
 
 describe("Cursor Manager", () => {
 	let element: HTMLElement;

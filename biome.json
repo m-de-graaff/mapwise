@@ -98,6 +98,16 @@
 	},
 	"overrides": [
 		{
+			"include": ["packages/ui/src/index.ts"],
+			"linter": {
+				"rules": {
+					"performance": {
+						"noReExportAll": "off"
+					}
+				}
+			}
+		},
+		{
 			"include": ["*.test.ts", "*.test.tsx", "*.spec.ts", "*.spec.tsx"],
 			"linter": {
 				"rules": {

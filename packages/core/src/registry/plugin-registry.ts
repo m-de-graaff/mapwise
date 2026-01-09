@@ -19,6 +19,9 @@ import type {
 	PluginState,
 	PluginStateStore,
 } from "./plugin-types";
+import type { InteractionModeStore } from "../interaction/interaction-mode";
+import type { CursorManager } from "../interaction/cursor-manager";
+import type { KeyboardManager } from "../interaction/keyboard-manager";
 
 // =============================================================================
 // Internal Types
@@ -113,6 +116,16 @@ export interface PluginManager {
 	 * Clear all plugins.
 	 */
 	clear(): Promise<void>;
+
+	/**
+	 * Serialize a specific plugin's state.
+	 */
+	serializePlugin(id: string): Record<string, unknown> | undefined;
+
+	/**
+	 * Hydrate a specific plugin's state.
+	 */
+	hydratePlugin(id: string, state: Record<string, unknown>, schemaVersion?: number): Promise<void>;
 }
 
 // =============================================================================
@@ -150,13 +163,26 @@ export interface PluginManagerDependencies {
 	layerRegistry: LayerRegistry;
 	styleManager: StyleManager;
 	eventBus: EventBus;
+	interactionMode: InteractionModeStore;
+	cursorManager: CursorManager;
+	keyboard: KeyboardManager;
 }
 
 /**
  * Create a new PluginManager instance.
  */
 export function createPluginManager(deps: PluginManagerDependencies): PluginManager {
-	const { getMap, getMapId, isMapReady, layerRegistry, styleManager, eventBus } = deps;
+	const {
+		getMap,
+		getMapId,
+		isMapReady,
+		layerRegistry,
+		styleManager,
+		eventBus,
+		interactionMode,
+		cursorManager,
+		keyboard,
+	} = deps;
 
 	// Ordered list of plugin entries
 	const plugins: InternalPluginEntry[] = [];
@@ -199,6 +225,18 @@ export function createPluginManager(deps: PluginManagerDependencies): PluginMana
 
 			get events() {
 				return eventBus;
+			},
+
+			get interactionMode() {
+				return interactionMode;
+			},
+
+			get cursorManager() {
+				return cursorManager;
+			},
+
+			get keyboard() {
+				return keyboard;
 			},
 
 			get state() {
@@ -573,6 +611,90 @@ export function createPluginManager(deps: PluginManagerDependencies): PluginMana
 	}
 
 	// ==========================================================================
+	// Persistence
+	// ==========================================================================
+
+	function serializePlugin(id: string): Record<string, unknown> | undefined {
+		const entry = pluginMap.get(id);
+		if (!entry) {
+			return undefined;
+		}
+
+		// Custom serializer
+		if (entry.definition.persistence?.serialize) {
+			const ctx = createPluginContext(entry);
+			return entry.definition.persistence.serialize(ctx);
+		}
+
+		// Default: serialize all state
+		if (entry.pluginState.size === 0) {
+			return undefined;
+		}
+
+		const state: Record<string, unknown> = {};
+		for (const [key, value] of entry.pluginState.entries()) {
+			// Basic JSON serializability check happens in storage layer,
+			// but we could filter here too.
+			state[key] = value;
+		}
+		return state;
+	}
+
+	function migratePluginState(
+		id: string,
+		initialState: Record<string, unknown>,
+		fromVersion: number,
+		currentVersion: number,
+		persistence: PluginDefinition["persistence"],
+	): Record<string, unknown> | null {
+		if (!persistence?.migrate || fromVersion >= currentVersion) {
+			return initialState;
+		}
+
+		try {
+			return persistence.migrate(initialState, fromVersion);
+		} catch (error) {
+			eventBus.emit("plugin:error", {
+				pluginId: id,
+				hook: "migrate",
+				message: `Migration failed: ${error instanceof Error ? error.message : String(error)}`,
+				recoverable: true,
+			});
+			return null;
+		}
+	}
+
+	async function hydratePlugin(
+		id: string,
+		rawState: Record<string, unknown>,
+		fromVersion = 1,
+	): Promise<void> {
+		const entry = pluginMap.get(id);
+		if (!entry) {
+			return; // Cannot hydrate unregistered plugin
+		}
+
+		const persistence = entry.definition.persistence;
+		const currentVersion = persistence?.schemaVersion ?? 1;
+
+		const state = migratePluginState(id, rawState, fromVersion, currentVersion, persistence);
+		if (!state) {
+			return; // Migration failed
+		}
+
+		// Hydration
+		const ctx = createPluginContext(entry);
+		if (persistence?.hydrate) {
+			await safeExecuteHook(entry, "hydrate", () => persistence.hydrate?.(ctx, state));
+		} else {
+			// Default: restore to state store
+			for (const [key, value] of Object.entries(state)) {
+				entry.pluginState.set(key, value);
+			}
+		}
+	}
+
+	// ==========================================================================
 	// Return Interface
 	// ==========================================================================
 
@@ -592,5 +714,7 @@ export function createPluginManager(deps: PluginManagerDependencies): PluginMana
 		notifyStyleChangeComplete,
 		notifyDestroy,
 		clear,
+		serializePlugin,
+		hydratePlugin,
 	};
 }

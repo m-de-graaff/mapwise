@@ -459,7 +459,7 @@ export function createStyleManager(
 		}
 
 		const validationResult = validateStyleChange();
-		if (!validationResult.valid) {
+		if (!("valid" in validationResult)) {
 			return validationResult;
 		}
 
