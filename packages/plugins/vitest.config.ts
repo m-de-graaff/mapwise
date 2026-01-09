@@ -1,6 +1,12 @@
 import { defineConfig } from "vitest/config";
+import path from "node:path";
 
 export default defineConfig({
+	resolve: {
+		alias: {
+			"@mapwise/layers": path.resolve(__dirname, "../layers/src/index.ts"),
+		},
+	},
 	test: {
 		globals: true,
 		environment: "jsdom",
