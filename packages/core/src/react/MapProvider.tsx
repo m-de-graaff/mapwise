@@ -178,7 +178,7 @@ export function MapProvider(props: MapProviderProps): JSX.Element {
 			})
 			.catch((error) => {
 				// Only log if not cancelled (expected during cleanup)
-				if (!readyCancelled && !unmountedRef.current) {
+				if (!(readyCancelled || unmountedRef.current)) {
 					console.warn("[@mapwise/core] Map ready promise rejected:", error);
 				}
 			});

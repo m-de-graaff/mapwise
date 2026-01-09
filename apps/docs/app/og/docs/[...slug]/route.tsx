@@ -5,7 +5,6 @@ import { ImageResponse } from "next/og";
 
 export const revalidate = false;
 
-// biome-ignore lint/style/useNamingConvention: Next.js route handlers must be uppercase
 export async function GET(_req: Request, { params }: RouteContext<"/og/docs/[...slug]">) {
 	const { slug } = await params;
 	const page = source.getPage(slug.slice(0, -1));

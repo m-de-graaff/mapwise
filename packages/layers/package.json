@@ -24,6 +24,11 @@
 		"@mapwise/core": "workspace:*",
 		"maplibre-gl": "^5.0.0"
 	},
+	"peerDependenciesMeta": {
+		"@protomaps/pmtiles": {
+			"optional": true
+		}
+	},
 	"devDependencies": {
 		"@mapwise/core": "workspace:*",
 		"@types/geojson": "^7946.0.16",

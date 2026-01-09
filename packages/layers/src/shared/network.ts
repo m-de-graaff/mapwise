@@ -22,6 +22,14 @@ export interface FetchOptions {
 	timeout?: number;
 	signal?: AbortSignal;
 	headers?: Record<string, string>;
+	/**
+	 * Request transform callback for modifying URL and RequestInit before fetch.
+	 * Used for authentication, signing, or other request modifications.
+	 */
+	requestTransform?: (
+		url: string,
+		init?: RequestInit,
+	) => Promise<{ url: string; init?: RequestInit }> | { url: string; init?: RequestInit };
 }
 
 // =============================================================================
@@ -37,93 +45,140 @@ export interface FetchOptions {
  * @throws NetworkError if fetch fails
  */
 export async function fetchText(url: string, options: FetchOptions = {}): Promise<string> {
-	const { timeout = 30000, signal: userSignal, headers = {} } = options;
+	const { timeout = 30000, signal: userSignal, headers = {}, requestTransform } = options;
 
-	// Create abort controller for timeout
-	const controller = new AbortController();
-	const timeoutId = timeout > 0 ? setTimeout(() => controller.abort(), timeout) : null;
-
-	// Combine signals if user provided one
-	let finalSignal = controller.signal;
-	if (userSignal) {
-		const combinedController = new AbortController();
-		finalSignal = combinedController.signal;
-
-		// Abort combined signal if either aborts
-		controller.signal.addEventListener("abort", () => {
-			combinedController.abort();
-		});
-		userSignal.addEventListener("abort", () => {
-			combinedController.abort();
-			if (timeoutId) {
-				clearTimeout(timeoutId);
-			}
-		});
-	}
+	const { finalUrl, finalInit } = await applyRequestTransform(
+		url,
+		{ signal: userSignal, headers },
+		requestTransform,
+	);
+	const { finalSignal, timeoutId } = setupAbortSignals(
+		timeout,
+		finalInit.signal as AbortSignal | undefined,
+	);
 
 	try {
-		const response = await fetch(url, {
-			signal: finalSignal,
-			headers,
-		});
-
-		if (!response.ok) {
-			const error: NetworkError = {
-				code: "HTTP_ERROR",
-				message: `HTTP ${response.status}: ${response.statusText}`,
-				url,
-				status: response.status,
-				statusText: response.statusText,
-			};
-			throw error;
-		}
-
-		const text = await response.text();
-		return text;
+		return await executeFetch(finalUrl, finalInit, finalSignal);
 	} catch (error) {
 		if (timeoutId) {
 			clearTimeout(timeoutId);
 		}
+		throw handleFetchError(error, finalUrl, timeout, userSignal);
+	}
+}
 
-		// Handle abort
-		if (error instanceof Error && error.name === "AbortError") {
-			// Check if it was a timeout or user abort
-			const wasTimeout = !userSignal?.aborted;
-			const networkError: NetworkError = {
-				code: wasTimeout ? "TIMEOUT" : "ABORTED",
-				message: wasTimeout ? `Request timeout after ${timeout}ms` : "Request aborted",
-				url,
-				context: { timeout },
-				cause: error,
-			};
-			throw networkError;
+async function applyRequestTransform(
+	url: string,
+	init: RequestInit,
+	requestTransform?: FetchOptions["requestTransform"],
+): Promise<{ finalUrl: string; finalInit: RequestInit }> {
+	if (!requestTransform) {
+		return { finalUrl: url, finalInit: init };
+	}
+
+	const transformed = await requestTransform(url, init);
+	return {
+		finalUrl: transformed.url,
+		finalInit: transformed.init ?? init,
+	};
+}
+
+function setupAbortSignals(
+	timeout: number,
+	userSignalAfterTransform?: AbortSignal,
+): { finalSignal: AbortSignal; timeoutId: ReturnType<typeof setTimeout> | null } {
+	const controller = new AbortController();
+	const timeoutId = timeout > 0 ? setTimeout(() => controller.abort(), timeout) : null;
+
+	if (!userSignalAfterTransform) {
+		return { finalSignal: controller.signal, timeoutId };
+	}
+
+	const combinedController = new AbortController();
+	const finalSignal = combinedController.signal;
+
+	controller.signal.addEventListener("abort", () => {
+		combinedController.abort();
+	});
+	userSignalAfterTransform.addEventListener("abort", () => {
+		combinedController.abort();
+		if (timeoutId) {
+			clearTimeout(timeoutId);
 		}
+	});
 
-		// Handle network errors
-		if (error instanceof TypeError && error.message.includes("fetch")) {
-			const networkError: NetworkError = {
-				code: "NETWORK_ERROR",
-				message: `Network error: ${error.message}`,
-				url,
-				cause: error,
-			};
-			throw networkError;
-		}
+	return { finalSignal, timeoutId };
+}
 
-		// Re-throw structured errors
-		if (typeof error === "object" && error !== null && "code" in error && "message" in error) {
-			throw error;
-		}
+async function executeFetch(url: string, init: RequestInit, signal: AbortSignal): Promise<string> {
+	const response = await fetch(url, {
+		...init,
+		signal,
+	});
 
-		// Wrap unexpected errors
-		const networkError: NetworkError = {
+	if (!response.ok) {
+		const error: NetworkError = {
+			code: "HTTP_ERROR",
+			message: `HTTP ${response.status}: ${response.statusText}`,
+			url,
+			status: response.status,
+			statusText: response.statusText,
+		};
+		throw error;
+	}
+
+	return response.text();
+}
+
+function handleFetchError(
+	error: unknown,
+	url: string,
+	timeout: number,
+	userSignal?: AbortSignal,
+): NetworkError {
+	if (error instanceof Error && error.name === "AbortError") {
+		return createAbortError(error, url, timeout, userSignal);
+	}
+
+	if (error instanceof TypeError && error.message.includes("fetch")) {
+		return {
 			code: "NETWORK_ERROR",
-			message: `Unexpected error: ${error instanceof Error ? error.message : String(error)}`,
+			message: `Network error: ${error.message}`,
 			url,
 			cause: error,
 		};
-		throw networkError;
 	}
+
+	if (isStructuredError(error)) {
+		throw error;
+	}
+
+	return {
+		code: "NETWORK_ERROR",
+		message: `Unexpected error: ${error instanceof Error ? error.message : String(error)}`,
+		url,
+		cause: error,
+	};
+}
+
+function createAbortError(
+	error: Error,
+	url: string,
+	timeout: number,
+	userSignal?: AbortSignal,
+): NetworkError {
+	const wasTimeout = !userSignal?.aborted;
+	return {
+		code: wasTimeout ? "TIMEOUT" : "ABORTED",
+		message: wasTimeout ? `Request timeout after ${timeout}ms` : "Request aborted",
+		url,
+		context: { timeout },
+		cause: error,
+	};
+}
+
+function isStructuredError(error: unknown): error is NetworkError {
+	return typeof error === "object" && error !== null && "code" in error && "message" in error;
 }
 
 /**
@@ -137,7 +192,6 @@ export async function fetchText(url: string, options: FetchOptions = {}): Promis
  */
 export async function fetchXml(url: string, options: FetchOptions = {}): Promise<string> {
 	const xmlHeaders = {
-		// biome-ignore lint/style/useNamingConvention: HTTP header names are uppercase by convention
 		Accept: "application/xml, text/xml, */*",
 		...options.headers,
 	};

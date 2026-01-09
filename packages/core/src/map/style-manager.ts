@@ -455,22 +455,44 @@ export function createStyleManager(
 	): Promise<SetBasemapResult> {
 		const map = getMap();
 		if (!map) {
-			return {
-				success: false,
-				durationMs: 0,
-				reappliedLayers: 0,
-				reappliedSources: 0,
-				error: new Error("Map is not available"),
-			};
+			return createErrorResult("Map is not available");
+		}
+
+		const validationResult = validateStyleChange();
+		if (!validationResult.valid) {
+			return validationResult;
 		}
 
 		const { timeout = DEFAULT_TIMEOUT_MS, diff = false, validate = true } = options;
-
 		const startTime = performance.now();
 		const previousStyle = state.currentStyle;
 		const styleIdentifier = typeof style === "string" ? style : "json";
 
-		// Prevent concurrent style changes
+		state.isChanging = true;
+		const cancelled = { value: false };
+
+		eventBus.emit("style:changeStart", {
+			previousStyle,
+			newStyle: styleIdentifier,
+		});
+
+		try {
+			return await executeStyleChange(
+				map,
+				style,
+				timeout,
+				diff,
+				validate,
+				styleIdentifier,
+				startTime,
+				cancelled,
+			);
+		} catch (error) {
+			return handleStyleChangeError(error, styleIdentifier, startTime, cancelled.value);
+		}
+	}
+
+	function validateStyleChange(): SetBasemapResult | { valid: true } {
 		if (state.isChanging) {
 			return {
 				success: false,
@@ -480,94 +502,100 @@ export function createStyleManager(
 				error: new Error("A style change is already in progress"),
 			};
 		}
+		return { valid: true };
+	}
 
-		state.isChanging = true;
+	function createErrorResult(message: string): SetBasemapResult {
+		return {
+			success: false,
+			durationMs: 0,
+			reappliedLayers: 0,
+			reappliedSources: 0,
+			error: new Error(message),
+		};
+	}
 
-		// Track if this operation was cancelled (e.g., during map destruction)
-		let cancelled = false;
+	async function executeStyleChange(
+		map: MapLibreMap,
+		style: StyleInput,
+		timeout: number,
+		diff: boolean,
+		validate: boolean,
+		styleIdentifier: string,
+		startTime: number,
+		cancelled: { value: boolean },
+	): Promise<SetBasemapResult> {
+		if (!checkMapStillValid(map)) {
+			cancelled.value = true;
+			throw new Error("Map was destroyed during style change");
+		}
 
-		// Emit start event
-		eventBus.emit("style:changeStart", {
-			previousStyle,
-			newStyle: styleIdentifier,
-		});
+		captureFeatureStates(map);
+		await setStyleWithTimeout(map, style, timeout, diff, validate);
 
-		try {
-			// Check if map is still available (may have been destroyed)
-			const currentMap = getMap();
-			if (!currentMap || currentMap !== map) {
-				cancelled = true;
-				throw new Error("Map was destroyed during style change");
-			}
+		if (!checkMapStillValid(map)) {
+			cancelled.value = true;
+			throw new Error("Map was destroyed during style change");
+		}
 
-			// Capture current feature states from map before style change
-			captureFeatureStates(map);
+		state.currentStyle = styleIdentifier;
+		const reappliedSources = reapplySources(map);
+		const reappliedLayers = reapplyLayers(map);
+		restoreFeatureStates(map);
 
-			// Set the style
-			await setStyleWithTimeout(map, style, timeout, diff, validate);
+		const durationMs = performance.now() - startTime;
 
-			// Check again if map is still available
-			if (!getMap() || getMap() !== map) {
-				cancelled = true;
-				throw new Error("Map was destroyed during style change");
-			}
-
-			// Update current style
-			state.currentStyle = styleIdentifier;
-
-			// Reapply sources in order
-			const reappliedSources = reapplySources(map);
-
-			// Reapply layers in order
-			const reappliedLayers = reapplyLayers(map);
-
-			// Restore feature states
-			restoreFeatureStates(map);
-
-			const durationMs = performance.now() - startTime;
-
-			// Emit success event (only if not cancelled)
-			if (!cancelled) {
-				eventBus.emit("style:changeComplete", {
-					style: styleIdentifier,
-					reappliedLayers,
-					reappliedSources,
-					durationMs,
-				});
-			}
-
-			state.isChanging = false;
-
-			return {
-				success: true,
-				durationMs,
+		if (!cancelled.value) {
+			eventBus.emit("style:changeComplete", {
+				style: styleIdentifier,
 				reappliedLayers,
 				reappliedSources,
-			};
-		} catch (error) {
-			state.isChanging = false;
-
-			// Only emit error event if not cancelled (cancellation is expected during cleanup)
-			if (!cancelled) {
-				const errorMessage = error instanceof Error ? error.message : String(error);
-				const errorCode = categorizeStyleError(errorMessage);
-
-				eventBus.emit("style:changeError", {
-					style: styleIdentifier,
-					code: errorCode,
-					message: errorMessage,
-					rolledBack: false,
-				});
-			}
-
-			return {
-				success: false,
-				durationMs: performance.now() - startTime,
-				reappliedLayers: 0,
-				reappliedSources: 0,
-				error: error instanceof Error ? error : new Error(String(error)),
-			};
+				durationMs,
+			});
 		}
+
+		state.isChanging = false;
+
+		return {
+			success: true,
+			durationMs,
+			reappliedLayers,
+			reappliedSources,
+		};
+	}
+
+	function checkMapStillValid(originalMap: MapLibreMap): boolean {
+		const currentMap = getMap();
+		return currentMap !== null && currentMap === originalMap;
+	}
+
+	function handleStyleChangeError(
+		error: unknown,
+		styleIdentifier: string,
+		startTime: number,
+		cancelled: boolean,
+	): SetBasemapResult {
+		state.isChanging = false;
+
+		if (!cancelled) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			const errorCode = categorizeStyleError(errorMessage);
+
+			eventBus.emit("style:changeError", {
+				style: styleIdentifier,
+				code: errorCode,
+				message: errorMessage,
+				rolledBack: false,
+			});
+		}
+
+		return {
+			success: false,
+			durationMs: performance.now() - startTime,
+			reappliedLayers: 0,
+			reappliedSources: 0,
+			error: error instanceof Error ? error : new Error(String(error)),
+		};
 	}
 
 	// =========================================================================
