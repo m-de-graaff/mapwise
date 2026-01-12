@@ -1,0 +1,77 @@
+---
+title: Utilities
+description: Helper functions for working with spatial data and services.
+---
+
+# Layer Utilities
+
+## GeoJSON Utilities
+
+### `getGeoJsonBounds(data)`
+
+Calculates the bounding box (`[minX, minY, maxX, maxY]`) of a GeoJSON object.
+
+```typescript
+import { getGeoJsonBounds } from '@mapwise/layers';
+
+const bounds = getGeoJsonBounds(myFeatureCollection);
+// Result: [-120, 30, -110, 40]
+```
+
+### `fitToGeoJson(map, data, options?)`
+
+A convenience function that gets the bounds and fits the map view to them immediately.
+
+```typescript
+import { fitToGeoJson } from '@mapwise/layers';
+
+// Inside your component
+fitToGeoJson(controller.map, featureCollection, { padding: 20 });
+```
+
+---
+
+## OGC Service Utilities
+
+### `fetchWmsCapabilities(url)`
+
+Fetches and parses the `GetCapabilities` XML from a WMS server. Useful for building UI that lets users select layers from a server.
+
+```typescript
+import { fetchWmsCapabilities } from '@mapwise/layers';
+
+const caps = await fetchWmsCapabilities('https://example.com/wms');
+console.log(caps.layers); // List of available layers
+```
+
+### `fetchWmtsCapabilities(url)`
+
+Features and parses WMTS capabilities.
+
+```typescript
+import { fetchWmtsCapabilities } from '@mapwise/layers';
+
+const caps = await fetchWmtsCapabilities('https://example.com/wmts');
+```
+
+---
+
+## URL Utilities
+
+### `normalizeUrl(url)`
+
+Ensures a URL is valid and absolute.
+
+### `buildWmsLegendUrl(baseUrl, layer, style?, format?)`
+
+Constructs a `GetLegendGraphic` request URL for a WMS layer.
+
+```typescript
+const legendUrl = buildWmsLegendUrl(
+  'https://example.com/wms',
+  'layer-name',
+  'default',
+  'image/png'
+);
+// Use as <img src={legendUrl} />
+```

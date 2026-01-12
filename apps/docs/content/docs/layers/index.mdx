@@ -1,0 +1,49 @@
+---
+title: "@mapwise/layers"
+description: Standardized layer factories and utilities for Mapwise.
+---
+
+# @mapwise/layers
+
+This package provides a collection of strongly-typed factory functions to create map layers. It abstracts away the complexity of configuring MapLibre sources and layers manually, providing a consistent API for various data formats.
+
+## Installation
+
+```bash
+npm install @mapwise/layers
+# or
+pnpm add @mapwise/layers
+```
+
+## Supported Layer Types
+
+| Type | Factory Function | Description |
+| :--- | :--- | :--- |
+| **GeoJSON** | [`createGeoJsonLayer`](/docs/layers/factories#creategeojsonlayer) | Renders points, lines, and polygons from GeoJSON data. Supports clustering. |
+| **WMS** | [`createWmsRasterLayer`](/docs/layers/factories#createwmsrasterlayer) | OGC Web Map Service (Raster). Supports WMS 1.1.1 and 1.3.0. |
+| **XYZ** | [`createXyzRasterLayer`](/docs/layers/factories#createxyzrasterlayer) | Standard XYZ tile layers (e.g., OpenStreetMap, Google Maps). |
+| **WMTS** | [`createWmtsRasterLayer`](/docs/layers/factories#createwmtsrasterlayer) | OGC Web Map Tile Service. |
+| **Vector Tile** | [`createVectorTileLayer`](/docs/layers/factories#createvectortilelayer) | Vector tiles (MVT/PBF) with styling. |
+| **3D Buildings** | [`createBuildings3DLayer`](/docs/layers/factories#createbuildings3dlayer) | Extruded 3D buildings from vector tiles. |
+| **Terrain** | [`createTerrainLayer`](/docs/layers/factories#createterrrainlayer) | 3D terrain mesh. |
+| **ArcGIS** | [`createArcGisRestRasterLayer`](/docs/layers/factories#createarcgisrestrasterlayer) | ArcGIS REST MapServer export. |
+
+## Usage Pattern
+
+All factory functions follow a similar pattern: they accept a configuration object and return a `LayerDefinition` that can be passed to the core `LayerRegistry`.
+
+```typescript
+import { createXyzRasterLayer } from '@mapwise/layers';
+import { useMapController } from '@mapwise/core/react';
+
+// 1. Create the layer definition
+const osmLayer = createXyzRasterLayer({
+  id: 'osm',
+  url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  attribution: '© OpenStreetMap contributors'
+});
+
+// 2. Register it with the controller
+const controller = useMapController();
+controller.layers.registerLayer(osmLayer);
+```
