@@ -107,6 +107,14 @@ export class MeasureStore {
 	}
 
 	/**
+	 * Clear all measurements.
+	 */
+	clear(): void {
+		this.reset();
+		this.notify();
+	}
+
+	/**
 	 * Reset state but keep mode.
 	 */
 	private resetKeepMode(): void {

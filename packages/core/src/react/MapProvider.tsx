@@ -258,6 +258,17 @@ export function MapProvider(props: MapProviderProps): JSX.Element {
 		[style],
 	);
 
+	// Debug helper
+	useEffect(() => {
+		const controller = controllerRef.current;
+		if (controller) {
+			// biome-ignore lint/suspicious/noExplicitAny: Exposing debug global
+			(window as any).__mapwise = controller;
+			// biome-ignore lint/suspicious/noExplicitAny: Exposing debug global
+			(window as any).getDebugMap = () => controller.map;
+		}
+	}, [contextValue.controller]); // Depend on contextValue.controller to react to controller creation
+
 	return (
 		<MapContext.Provider value={contextValue}>
 			<div ref={containerRef} className={className} style={containerStyle} id={id} />

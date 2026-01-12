@@ -16,6 +16,8 @@ import type { AuthManager, RequestManager, RequestTransform } from "../request";
 import type { LayerRegistry } from "../registry/layer-registry";
 import type { PluginManager } from "../registry/plugin-registry";
 import type { SetBasemapOptions, SetBasemapResult, StyleInput } from "./layer";
+import type { InteractionModeStore } from "../interaction/interaction-mode";
+import type { EventBus } from "../events/event-bus";
 
 // =============================================================================
 // Lifecycle States
@@ -181,6 +183,13 @@ export interface MapController {
 	 * Access to the auth manager.
 	 */
 	readonly auth: AuthManager;
+
+	readonly interaction: InteractionModeStore;
+
+	/**
+	 * Access to the event bus.
+	 */
+	readonly events: EventBus;
 
 	/**
 	 * Wait for the map to be ready.

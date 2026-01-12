@@ -20,7 +20,10 @@ import {
 	type RequestManager,
 } from "../request";
 import { createCursorManager } from "../interaction/cursor-manager";
-import { createInteractionModeStore } from "../interaction/interaction-mode";
+import {
+	type InteractionModeStore,
+	createInteractionModeStore,
+} from "../interaction/interaction-mode";
 import { createKeyboardManager } from "../interaction/keyboard-manager";
 import { type SerializationContext, serializeState } from "../persistence/serialize";
 import { type LayerRegistry, createLayerRegistry } from "../registry/layer-registry";
@@ -232,6 +235,7 @@ export function createMap(container: HTMLElement, options: MapOptions = {}): Map
 		pluginManager,
 		requestManager,
 		authManager,
+		interactionMode,
 	);
 
 	return controller;
@@ -288,6 +292,7 @@ function createController(
 	pluginManager: PluginManager,
 	requestManager: RequestManager,
 	authManager: AuthManager,
+	interactionMode: InteractionModeStore,
 ): MapController {
 	// Store promise resolvers for awaitReady
 	let readyResolve: (() => void) | null = null;
@@ -390,6 +395,14 @@ function createController(
 
 		get auth() {
 			return authManager;
+		},
+
+		get interaction() {
+			return interactionMode;
+		},
+
+		get events() {
+			return eventBus;
 		},
 
 		awaitReady(): Promise<void> {

@@ -17,6 +17,7 @@ export interface LayerConfig {
 	type: string;
 	name?: string;
 	source?: Record<string, unknown>;
+	keepOpen?: boolean;
 	[key: string]: unknown;
 }
 
@@ -30,7 +31,9 @@ export function AddLayerDialog({ open, onOpenChange, onLayerAdd }: AddLayerDialo
 	const handleAdd = (config: LayerConfig) => {
 		onLayerAdd(config);
 		toast.success(`Layer "${config.name}" added successfully`);
-		onOpenChange(false);
+		if (!config.keepOpen) {
+			onOpenChange(false);
+		}
 	};
 
 	return (

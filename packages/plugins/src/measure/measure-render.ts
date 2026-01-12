@@ -6,6 +6,7 @@ const SOURCE_ID = "mapwise-measure-source";
 const LAYER_FILL = "mapwise-measure-fill";
 const LAYER_LINE = "mapwise-measure-line";
 const LAYER_POINT = "mapwise-measure-point";
+const LAYER_LABEL = "mapwise-measure-label";
 
 /**
  * Manages MapLibre layers for rendering measurements.
@@ -64,8 +65,29 @@ export class MeasureRender {
 				"circle-stroke-width": 2,
 			},
 		});
+
+		// Labels
+		this.map.addLayer({
+			id: LAYER_LABEL,
+			type: "symbol",
+			source: SOURCE_ID,
+			filter: ["has", "label"],
+			layout: {
+				"text-field": ["get", "label"],
+				"text-font": ["Noto Sans Regular"],
+				"text-offset": [0, 1.5],
+				"text-anchor": "top",
+				"text-size": 14,
+			},
+			paint: {
+				"text-color": "#ffffff",
+				"text-halo-color": "#000000",
+				"text-halo-width": 2,
+			},
+		});
 	}
 
+	// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Render logic is inherently complex
 	update(state: MeasureState): void {
 		const source = this.map.getSource(SOURCE_ID) as GeoJSONSource;
 		if (!source) {
@@ -92,9 +114,6 @@ export class MeasureRender {
 				if (state.mode === "area") {
 					// Closed loop for area
 					const ring = [...state.points];
-					// If not finished, we don't necessarily close it visually unless we want to preview the close.
-					// Usually for area measurement, we show a line to the start or just valid area.
-					// Let's show the polygon as is (MapLibre fills it).
 					if (state.points.length >= 3) {
 						features.push({
 							type: "Feature",
@@ -125,6 +144,24 @@ export class MeasureRender {
 					});
 				}
 			}
+
+			// Add label if we have a result
+			if (state.result && state.points.length > 0) {
+				const lastPoint = state.points[state.points.length - 1];
+				if (lastPoint) {
+					const labelText = `${state.result.value.toFixed(2)} ${state.result.unit}`;
+					features.push({
+						type: "Feature",
+						properties: {
+							label: labelText,
+						},
+						geometry: {
+							type: "Point",
+							coordinates: lastPoint,
+						},
+					});
+				}
+			}
 		}
 
 		source.setData({
@@ -134,6 +171,9 @@ export class MeasureRender {
 	}
 
 	unmount(): void {
+		if (this.map.getLayer(LAYER_LABEL)) {
+			this.map.removeLayer(LAYER_LABEL);
+		}
 		if (this.map.getLayer(LAYER_POINT)) {
 			this.map.removeLayer(LAYER_POINT);
 		}

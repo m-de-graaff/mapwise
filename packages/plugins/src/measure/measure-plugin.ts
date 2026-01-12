@@ -154,6 +154,10 @@ export function createMeasurePlugin(config: MeasurePluginConfig): PluginDefiniti
 				}
 			});
 
+			events.on("plugin:@mapwise/measure:clear", () => {
+				store?.clear();
+			});
+
 			return () => {
 				map.off("dblclick", handleDblClick);
 				cleanupPointer?.();

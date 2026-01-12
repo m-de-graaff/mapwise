@@ -6,8 +6,21 @@ import { toast } from "sonner";
 import { Loader2, Check, Search } from "lucide-react";
 import { cn } from "../utils/cn";
 import { useDebounce } from "use-debounce";
-// @ts-ignore
-import { FixedSizeList } from "react-window";
+import type { ComponentType } from "react";
+import { List as FixedSizeListImpl } from "react-window";
+
+// Type coercion to resolve React 18/TypeScript compatibility issues
+// See: https://github.com/bvaughn/react-window/issues/654
+import {
+	fetchWmsCapabilities,
+	createWmsRasterLayer,
+	type WmsCapabilityLayer,
+} from "@mapwise/layers";
+
+// Type coercion to resolve React 18/TypeScript compatibility issues
+// See: https://github.com/bvaughn/react-window/issues/654
+// biome-ignore lint/suspicious/noExplicitAny: Library type mismatch
+const FixedSizeList = FixedSizeListImpl as unknown as ComponentType<any>;
 
 import type { LayerConfig } from "./AddLayerDialog";
 
@@ -18,6 +31,27 @@ interface WmsLayerFormProps {
 interface LayerOption {
 	name: string;
 	title: string;
+}
+
+function flattenLayers(layers: WmsCapabilityLayer[]): LayerOption[] {
+	const result: LayerOption[] = [];
+
+	function traverse(layerList: WmsCapabilityLayer[]) {
+		for (const layer of layerList) {
+			if (layer.name) {
+				result.push({
+					name: layer.name,
+					title: layer.title || layer.name,
+				});
+			}
+			if (layer.layers) {
+				traverse(layer.layers);
+			}
+		}
+	}
+
+	traverse(layers);
+	return result;
 }
 
 export function WmsLayerForm({ onAdd }: WmsLayerFormProps) {
@@ -37,23 +71,20 @@ export function WmsLayerForm({ onAdd }: WmsLayerFormProps) {
 		setSelectedLayer(null);
 
 		try {
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			const capabilities = await fetchWmsCapabilities(url);
 
-			// Simulating a parsed result with many layers to test virtualization
-			const mockLayers = Array.from({ length: 1000 }, (_, i) => ({
-				name: `layer-${i}`,
-				title: `Layer Title ${i} (Data Source)`,
-			}));
-
-			// Add some specific named ones
-			mockLayers.unshift(
-				{ name: "background", title: "Background Map" },
-				{ name: "topography", title: "Topography" },
-			);
-
-			setLayers(mockLayers);
-			toast.success("Capabilities fetched successfully");
+			if (capabilities.layer) {
+				const flatLayers = flattenLayers(
+					Array.isArray(capabilities.layer) ? capabilities.layer : [capabilities.layer],
+				);
+				setLayers(flatLayers);
+				toast.success(`Fetched ${flatLayers.length} layers`);
+			} else {
+				console.warn("No layer found in response");
+				toast.warning("No layers found in capabilities");
+			}
 		} catch (_err) {
+			console.error("WMS Fetch Error:", _err);
 			toast.error("Failed to fetch capabilities");
 		} finally {
 			setIsLoading(false);
@@ -65,14 +96,47 @@ export function WmsLayerForm({ onAdd }: WmsLayerFormProps) {
 			return;
 		}
 		const layer = layers.find((l) => l.name === selectedLayer);
-		onAdd({
-			type: "wms",
-			source: {
-				url,
-				params: { LAYERS: selectedLayer },
-			},
-			name: layer?.title || selectedLayer,
+
+		// Sanitize ID: replace invalid chars with hyphens
+		const sanitizedLayerName = selectedLayer.replace(/[^a-zA-Z0-9-_]/g, "-");
+
+		// Use factory to create proper layer definition
+		const layerDef = createWmsRasterLayer({
+			id: `wms-${sanitizedLayerName}-${Date.now()}`,
+			baseUrl: url,
+			layers: selectedLayer,
+			title: layer?.title || selectedLayer,
 		});
+
+		onAdd({
+			...layerDef,
+			name: layer?.title || selectedLayer, // Helper for UI success message
+		} as unknown as LayerConfig);
+	};
+
+	const handleAddAll = () => {
+		if (filteredLayers.length === 0) {
+			return;
+		}
+
+		for (const layer of filteredLayers) {
+			// Sanitize ID
+			const sanitizedLayerName = layer.name.replace(/[^a-zA-Z0-9-_]/g, "-");
+
+			const layerDef = createWmsRasterLayer({
+				id: `wms-${sanitizedLayerName}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+				baseUrl: url,
+				layers: layer.name,
+				title: layer.title || layer.name,
+			});
+
+			onAdd({
+				...layerDef,
+				name: layer.title || layer.name,
+				keepOpen: true,
+			} as unknown as LayerConfig);
+		}
+		toast.success(`Added ${filteredLayers.length} layers`);
 	};
 
 	const filteredLayers = useMemo(() => {
@@ -154,20 +218,23 @@ export function WmsLayerForm({ onAdd }: WmsLayerFormProps) {
 							</div>
 						) : (
 							<FixedSizeList
-								height={200}
-								itemCount={filteredLayers.length}
-								itemSize={36}
+								defaultHeight={200}
+								rowCount={filteredLayers.length}
+								rowHeight={36}
 								width="100%"
-							>
-								{Row}
-							</FixedSizeList>
+								rowComponent={Row}
+								rowProps={{}}
+							/>
 						)}
 					</div>
 				</div>
 			)}
 
 			{layers.length > 0 && (
-				<div className="flex justify-end pt-2">
+				<div className="flex justify-between pt-2">
+					<Button variant="outline" onClick={handleAddAll} disabled={filteredLayers.length === 0}>
+						Add All ({filteredLayers.length})
+					</Button>
 					<Button onClick={handleAdd} disabled={!selectedLayer}>
 						Add Layer
 					</Button>

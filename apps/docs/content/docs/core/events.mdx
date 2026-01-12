@@ -1,0 +1,65 @@
+---
+title: Events
+description: Type-safe event system.
+---
+
+# Event System
+
+Mapwise uses a strictly typed `EventBus` to manage communication. This prevents "magic string" events and ensures payloads are consistent.
+
+## API
+
+The `EventBus` is accessible via `controller.events`.
+
+```typescript
+// Subscribe
+const unsubscribe = controller.events.on('map:ready', () => {
+  console.log('Map is ready');
+});
+
+// Subscribe once
+controller.events.once('layer:added', ({ layerId }) => {
+  console.log(`First layer added: ${layerId}`);
+});
+
+// Emit (internal use mostly)
+controller.events.emit('custom:event', { foo: 'bar' });
+
+// Remove
+unsubscribe();
+```
+
+## Core Events
+
+### Map Lifecycle
+- `map:ready`: The map is fully loaded.
+- `map:error`: A recoverable or fatal error occurred.
+- `map:destroyed`: The map instance has been destroyed.
+- `map:resize`: The map container size changed.
+
+### Layer Operations
+- `layer:added`: A layer was registered and applied.
+- `layer:removed`: A layer was removed.
+- `layer:visibility`: A layer's visibility changed.
+- `layer:order-changed`: The layer stack was reordered.
+
+### Feature Interaction
+- `feature:click`: A feature on an interactive layer was clicked.
+- `feature:hover`: The cursor entered a feature.
+- `feature:hover-end`: The cursor left a feature.
+
+### Style
+- `style:changeStart`: A basemap change has initiated.
+- `style:changeComplete`: The new basemap is loaded and layers re-applied.
+
+## Debugging
+
+The Event Bus includes a debug mode that tracks event history.
+
+```typescript
+// Enable debug mode
+controller.events.setDebug(true);
+
+// Get recent history
+console.table(controller.events.getHistory());
+```

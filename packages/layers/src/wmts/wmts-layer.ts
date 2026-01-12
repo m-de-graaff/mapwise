@@ -103,6 +103,7 @@ function createWmtsSourceSpecExplicit(config: WmtsExplicitConfig): RasterSourceS
 	const {
 		tileUrlTemplate,
 		tileMatrix,
+		matrixSet, // Extract matrixSet
 		format = "image/png",
 		style,
 		dimensions = {},
@@ -110,28 +111,59 @@ function createWmtsSourceSpecExplicit(config: WmtsExplicitConfig): RasterSourceS
 		maxzoom = tileMatrix.length > 0 ? tileMatrix.length - 1 : 22,
 	} = config;
 
-	// Build tile URL function
-	// MapLibre calls this with { x, y, z } for each tile
-	const tiles = (tileCoord: { x: number; y: number; z: number }): string => {
-		const { x, y, z } = tileCoord;
+	// Check if we can use a standard MapLibre URL template
+	// This requires that for every zoom level z, the matrix identifier equals z.toString()
+	// This is true for GoogleMapsCompatible and most standard Web Mercator sets.
+	const isStandardXYZ = tileMatrix.every((m, index) => m.identifier === index.toString());
 
-		// Find tile matrix for this zoom level
-		const matrix = tileMatrix[z];
-		if (!matrix) {
-			// Fallback to last matrix if zoom is out of range
-			const fallbackMatrix = tileMatrix[tileMatrix.length - 1];
-			if (!fallbackMatrix) {
-				throw new Error(`No tile matrix found for zoom level ${z}`);
-			}
-			return buildTileUrl(tileUrlTemplate, fallbackMatrix, x, y, format, style, dimensions);
+	let tiles: string[];
+
+	if (isStandardXYZ) {
+		// Convert WMTS template to MapLibre template
+		let url = tileUrlTemplate;
+		url = url.replace(/{TileMatrix}/g, "{z}");
+		url = url.replace(/{TileCol}/g, "{x}");
+		url = url.replace(/{TileRow}/g, "{y}");
+		url = url.replace(/{TileMatrixSet}/g, matrixSet);
+		url = url.replace(/{Format}/g, format);
+		if (style) {
+			url = url.replace(/{Style}/g, style);
 		}
+		for (const [key, value] of Object.entries(dimensions)) {
+			url = url.replace(new RegExp(`{${key}}`, "g"), value);
+		}
+		tiles = [url];
+	} else {
+		console.warn(
+			"[WMTS] Tile matrix identifiers do not match zoom levels. MapLibre may not support this without custom protocol.",
+		);
+		// Build tile URL function
+		// MapLibre calls this with { x, y, z } for each tile
+		// NOTE: MapLibre GL JS standard raster source expects string[], passing a function
+		// usually doesn't work unless using a custom protocol interceptor.
+		// We will try to map it best effort or this might need a custom protocol handler.
+		const tilesFn = (tileCoord: { x: number; y: number; z: number }): string => {
+			const { x, y, z } = tileCoord;
 
-		return buildTileUrl(tileUrlTemplate, matrix, x, y, format, style, dimensions);
-	};
+			// Find tile matrix for this zoom level
+			const matrix = tileMatrix[z];
+			if (!matrix) {
+				// Fallback to last matrix if zoom is out of range
+				const fallbackMatrix = tileMatrix[tileMatrix.length - 1];
+				if (!fallbackMatrix) {
+					throw new Error(`No tile matrix found for zoom level ${z}`);
+				}
+				return buildTileUrl(tileUrlTemplate, fallbackMatrix, x, y, format, style, dimensions);
+			}
+
+			return buildTileUrl(tileUrlTemplate, matrix, x, y, format, style, dimensions);
+		};
+		tiles = tilesFn as unknown as string[];
+	}
 
 	return {
 		type: "raster",
-		tiles: tiles as unknown as string[],
+		tiles: tiles,
 		tileSize: tileMatrix[0]?.tileWidth || 256,
 		minzoom,
 		maxzoom,
@@ -153,7 +185,7 @@ function buildTileUrl(
 	let url = template;
 
 	// Replace placeholders
-	url = url.replace(/{TileMatrix}/g, matrix.zoom.toString());
+	url = url.replace(/{TileMatrix}/g, matrix.identifier || matrix.zoom.toString());
 	url = url.replace(/{TileCol}/g, x.toString());
 	url = url.replace(/{TileRow}/g, y.toString());
 	url = url.replace(/{TileMatrixSet}/g, matrix.zoom.toString()); // Fallback if used
@@ -188,8 +220,9 @@ async function createWmtsSourceSpecCapabilities(
 		maxzoom,
 	} = config;
 
-	// Fetch capabilities
-	const capabilities = await fetchWmtsCapabilities(capabilitiesUrl);
+	// Fetch capabilities or use pre-fetched
+	const capabilities =
+		config.prefetchedCapabilities || (await fetchWmtsCapabilities(capabilitiesUrl));
 
 	// Find layer
 	const layer = capabilities.layers.find((l) => l.identifier === layerId);
@@ -201,6 +234,7 @@ async function createWmtsSourceSpecCapabilities(
 
 	// Select tile matrix set
 	const selectedMatrixSetId = preferredMatrixSet || selectTileMatrixSet(layer, capabilities);
+
 	if (!selectedMatrixSetId) {
 		throw new Error(
 			`No suitable tile matrix set found for layer "${layerId}". Available matrix sets: ${layer.tileMatrixSetLinks.join(", ")}`,
@@ -238,6 +272,8 @@ async function createWmtsSourceSpecCapabilities(
 	// Convert tile matrix definitions to our format
 	const tileMatrices: WmtsTileMatrix[] = matrixSet.tileMatrix.map((matrix, index) => ({
 		zoom: index,
+		// We must preserve the original identifier for URL construction
+		identifier: matrix.identifier,
 		matrixWidth: matrix.matrixWidth,
 		matrixHeight: matrix.matrixHeight,
 		tileWidth: matrix.tileWidth,
@@ -362,7 +398,7 @@ export async function createWmtsRasterLayer(
 		id: string;
 		type: "raster";
 		source: string;
-		paint: { "raster-opacity": number };
+		paint: { "raster-opacity": number; "raster-fade-duration"?: number };
 		minzoom?: number;
 		maxzoom?: number;
 	} = {
@@ -371,6 +407,7 @@ export async function createWmtsRasterLayer(
 		source: sourceId,
 		paint: {
 			"raster-opacity": config.opacity ?? 1,
+			"raster-fade-duration": 0,
 		},
 	};
 

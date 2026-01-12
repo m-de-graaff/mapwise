@@ -1,13 +1,32 @@
 ---
-title: Hello World
-description: Your first document
+title: Mapwise Documentation
+description: Comprehensive documentation for the Mapwise monorepo.
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+# Mapwise Documentation
 
-## What is Next?
+Mapwise is a modern, modular, and high-performance mapping solution built on top of MapLibre GL JS. It is designed as a monorepo containing a core headless engine, a comprehensive UI library, specialized layer handlers, and an extensible plugin system.
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
-</Cards>
+## Architecture
+
+Mapwise is built around a headless core that manages state and logic, completely decoupled from the UI.
+
+- **[@mapwise/core](/docs/core)**: The brain of the operation. Handles map lifecycle, state management, events, and layer registration.
+- **[@mapwise/ui](/docs/ui)**: A polished React component library. Provides ready-to-use components like `MapShell`, `MapToolbar`, and `LayerPanel`.
+- **[@mapwise/layers](/docs/layers)**: Specialized logic for different layer types (WMS, GeoJSON, PMTiles, etc.).
+- **[@mapwise/plugins](/docs/plugins)**: Extensions that add functional capabilities like drawing, measuring, and more.
+
+## Key Concepts
+
+### Headless Core
+The core engine is framework-agnostic (though it provides React adapters). It acts as a wrapper around MapLibre GL JS, adding robust state management, a strictly typed event bus, and a layer registry that abstracts away the complexity of raw map manipulation.
+
+### Declarative Layers
+Layers are defined as data objects, not imperative code. The `LayerRegistry` takes care of adding, removing, ordering, and updating layers on the map, preventing common synchronization issues.
+
+### Plugin System
+Functionality is additive. Core is lean, and features are added via plugins that have full access to the map controller and event bus.
+
+## Getting Started
+
+Check out the package-specific documentation to dive deep into each part of the system.

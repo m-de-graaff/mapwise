@@ -34,10 +34,15 @@ export function MapShell({
 	const setOpen = onSidebarOpenChange || setInternalOpen;
 
 	return (
-		<div className={cn("flex flex-col h-screen w-screen overflow-hidden bg-background", className)}>
+		<div
+			className={cn(
+				"flex flex-col h-screen w-screen overflow-hidden bg-transparent pointer-events-none",
+				className,
+			)}
+		>
 			{/* Top Bar Area */}
 			{topBar && (
-				<header className="flex-none z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+				<header className="flex-none z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pointer-events-auto">
 					{/* Mobile Menu Toggle integrated into TopBar flow usually, but we can also expose it inside MapTopBar if needed. 
                For now, we render the passed topBar. If the user wants a toggle, they put it in the TopBar slot. */}
 					{topBar}
@@ -49,7 +54,7 @@ export function MapShell({
 				{!isMobile && sidebar && (
 					<aside
 						className={cn(
-							"flex-none border-r border-border bg-card transition-all duration-300 ease-in-out z-40",
+							"flex-none border-r border-border bg-card transition-all duration-300 ease-in-out z-40 pointer-events-auto",
 							isOpen ? "w-80" : "w-0 overflow-hidden border-none",
 						)}
 					>
@@ -60,7 +65,7 @@ export function MapShell({
 				{/* Mobile Sidebar (Drawer) */}
 				{isMobile && sidebar && (
 					<Sheet open={isOpen} onOpenChange={setOpen}>
-						<SheetContent side="left" className="w-[85vw] sm:w-[380px] p-0">
+						<SheetContent side="left" className="w-[85vw] sm:w-[380px] p-0 pointer-events-auto">
 							{sidebar}
 						</SheetContent>
 					</Sheet>
@@ -81,7 +86,9 @@ export function MapShell({
 
 			{/* Status Bar */}
 			{statusBar && (
-				<footer className="flex-none border-t border-border bg-background z-50">{statusBar}</footer>
+				<footer className="flex-none border-t border-border bg-background z-50 pointer-events-auto">
+					{statusBar}
+				</footer>
 			)}
 		</div>
 	);

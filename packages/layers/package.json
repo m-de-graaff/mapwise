@@ -40,5 +40,8 @@
 	},
 	"publishConfig": {
 		"access": "public"
+	},
+	"dependencies": {
+		"pmtiles": "^4.3.2"
 	}
 }

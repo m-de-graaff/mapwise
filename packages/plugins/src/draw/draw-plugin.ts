@@ -158,6 +158,24 @@ export function createDrawPlugin(config: DrawPluginConfig): PluginDefinition {
 				},
 			});
 
+			// Listen for external mode control
+			events.on("plugin:@mapwise/draw:setMode", (data: unknown) => {
+				if (typeof data === "object" && data !== null && "mode" in data) {
+					// biome-ignore lint/suspicious/noExplicitAny: Dynamic event dispatch
+					store?.setMode((data as any).mode);
+				}
+			});
+
+			// Listen for delete command
+			events.on("plugin:@mapwise/draw:deleteSelected", () => {
+				store?.deleteSelected();
+			});
+
+			// Listen for clear all command
+			events.on("plugin:@mapwise/draw:clearAll", () => {
+				store?.clearAll();
+			});
+
 			// MapLibre native double click for finishing
 			if (finishOnDoubleClick) {
 				map.on("dblclick", handleDblClick);

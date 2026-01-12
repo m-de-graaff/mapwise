@@ -72,11 +72,29 @@ export function useLayerState(layerId: string): LayerState | undefined {
 		// Initial fetch
 		setLayerState(controller.layers.getLayerState(layerId));
 
-		// TODO: Subscribe to layer events via the event bus when exposed
-		// For a full implementation, we'd subscribe to layer:added, layer:removed, layer:visibility events
-		// Since the event bus is not yet exposed on the controller, we rely on React re-renders
+		// Subscribe to events
+		const onUpdate = (event: { layerId: string }) => {
+			if (event.layerId === layerId) {
+				setLayerState(controller.layers.getLayerState(layerId));
+			}
+		};
+
+		// Cast to any to bypass strict generic inference issues that might be causing the 0-1 arg error
+		// (This usually happens if TS confuses .on with .off or similar due to union types)
+		// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+		(controller.events as any).on("layer:added", onUpdate);
+		// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+		(controller.events as any).on("layer:removed", onUpdate);
+		// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+		(controller.events as any).on("layer:visibility", onUpdate);
+
 		return () => {
-			/* cleanup placeholder for future event subscription */
+			// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+			(controller.events as any).off("layer:added", onUpdate);
+			// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+			(controller.events as any).off("layer:removed", onUpdate);
+			// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+			(controller.events as any).off("layer:visibility", onUpdate);
 		};
 	}, [controller, isReady, layerId]);
 
@@ -87,24 +105,6 @@ export function useLayerState(layerId: string): LayerState | undefined {
  * Hook to get all layers in the registry.
  *
  * @returns Array of all layer states
- *
- * @example
- * ```tsx
- * function LayerList() {
- *   const layers = useAllLayers();
- *
- *   return (
- *     <ul>
- *       {layers.map(layer => (
- *         <li key={layer.id}>
- *           {layer.metadata?.title ?? layer.id}
- *           {layer.visible ? ' (visible)' : ' (hidden)'}
- *         </li>
- *       ))}
- *     </ul>
- *   );
- * }
- * ```
  */
 export function useAllLayers(): LayerState[] {
 	const { controller, isReady } = useMap();
@@ -120,9 +120,26 @@ export function useAllLayers(): LayerState[] {
 		// Initial fetch
 		setLayers(controller.layers.getAllLayers());
 
-		// For a full implementation, we'd subscribe to layer:added, layer:removed events
+		// Subscribe to global layer list changes
+		const onListUpdate = () => {
+			setLayers(controller.layers.getAllLayers());
+			setLayers(controller.layers.getAllLayers());
+		};
+
+		// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+		(controller.events as any).on("layer:added", onListUpdate);
+		// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+		(controller.events as any).on("layer:removed", onListUpdate);
+		// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+		(controller.events as any).on("layer:visibility", onListUpdate);
+
 		return () => {
-			/* cleanup placeholder for future event subscription */
+			// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+			(controller.events as any).off("layer:added", onListUpdate);
+			// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+			(controller.events as any).off("layer:removed", onListUpdate);
+			// biome-ignore lint/suspicious/noExplicitAny: Event emitter type mismatch
+			(controller.events as any).off("layer:visibility", onListUpdate);
 		};
 	}, [controller, isReady]);
 

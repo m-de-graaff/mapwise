@@ -206,6 +206,16 @@ export class DrawStore {
 	}
 
 	/**
+	 * Clear all features.
+	 */
+	clearAll(): void {
+		this.state.features = [];
+		this.state.currentFeature = null;
+		this.state.selectedFeatureId = null;
+		this.notify();
+	}
+
+	/**
 	 * Select a feature.
 	 */
 	select(id: string | null): void {

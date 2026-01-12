@@ -3,6 +3,7 @@ import { Button } from "../shadcn/button";
 import { Input } from "../shadcn/input";
 import { Label } from "../shadcn/label";
 
+import { createXyzRasterLayer } from "@mapwise/layers";
 import type { LayerConfig } from "./AddLayerDialog";
 
 interface XyzLayerFormProps {
@@ -18,14 +19,24 @@ export function XyzLayerForm({ onAdd }: XyzLayerFormProps) {
 		if (!(url && name)) {
 			return;
 		}
-		onAdd({
-			type: "xyz",
-			source: {
-				url,
-				attribution,
-			},
-			name,
+
+		// Sanitize name for ID
+		const sanitizedName = name.replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase();
+		const id = `xyz-${sanitizedName}-${Date.now()}`;
+
+		const layerDef = createXyzRasterLayer({
+			id,
+			tiles: url,
+			title: name,
+			attribution,
+			opacity: 1,
 		});
+
+		onAdd({
+			...layerDef,
+			name,
+			keepOpen: true,
+		} as unknown as LayerConfig);
 	};
 
 	return (

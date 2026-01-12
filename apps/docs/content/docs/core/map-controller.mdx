@@ -1,0 +1,85 @@
+---
+title: MapController
+description: The central interface for controlling the map.
+---
+
+# MapController
+
+`MapController` is the primary interface for interacting with Mapwise. It is returned by `createMap` and provides access to all sub-systems.
+
+## Interface
+
+```typescript
+interface MapController {
+  // Properties
+  readonly id: string;
+  readonly state: MapLifecycleState; // 'creating' | 'ready' | 'error' | 'destroyed'
+  readonly isReady: boolean;
+  readonly map: MapLibreMap; // The underlying MapLibre instance (throws if not ready)
+  
+  // Sub-managers
+  readonly style: StyleManager;
+  readonly layers: LayerRegistry;
+  readonly plugins: PluginManager;
+  readonly request: RequestManager;
+  readonly auth: AuthManager;
+  readonly interaction: InteractionModeStore;
+  readonly events: EventBus;
+  
+  // Methods
+  awaitReady(): Promise<void>;
+  setBasemap(style: StyleInput, options?: SetBasemapOptions): Promise<SetBasemapResult>;
+  invalidateSize(): void;
+  destroy(): Promise<void>;
+  
+  // State Persistence
+  serialize(options?: SerializeOptions): PersistedMapState;
+  hydrate(state: PersistedMapState, options?: HydrateOptions): Promise<HydrateResult>;
+}
+```
+
+## Lifecycle Management
+
+### `createMap(container, options)`
+Initializes the map.
+
+- **container**: `HTMLElement`
+- **options**: `MapOptions` (extends MapLibre options)
+
+### `awaitReady()`
+Returns a Promise that resolves when the map is fully loaded and ready for interaction.
+
+```typescript
+await controller.awaitReady();
+// Safe to use controller.map
+```
+
+### `destroy()`
+Cleanly disposes of the map, removing all event listeners, clearing the registry, and destroying the internal MapLibre instance.
+
+## Basemap Management
+
+### `setBasemap(style, options)`
+Switches the map's style while preserving registered layers.
+
+```typescript
+await controller.setBasemap('https://styles.example.com/dark-mode.json');
+```
+
+Mapwise automatically:
+1. Unapplies all operational layers.
+2. Switches the style.
+3. Reapplies all operational layers on top of the new style.
+
+## Accessing MapLibre
+
+The underlying MapLibre instance is available via `controller.map`, but **only when the map is ready**. Accessing it before readiness throws an error.
+
+```typescript
+// Unsafe
+// controller.map.flyTo(...) // MIGHT THROW
+
+// Safe
+await controller.awaitReady();
+controller.map.flyTo({ center: [0, 0], zoom: 10 });
+```

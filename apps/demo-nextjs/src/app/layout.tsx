@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Outfit } from "next/font/google";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 const outfit = Outfit({
 	subsets: ["latin"],
@@ -26,8 +27,16 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className={`${outfit.variable} ${jetbrainsMono.variable}`}>
-			<body>{children}</body>
+		<html
+			lang="en"
+			className={`${outfit.variable} ${jetbrainsMono.variable}`}
+			suppressHydrationWarning
+		>
+			<body>
+				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+					{children}
+				</ThemeProvider>
+			</body>
 		</html>
 	);
 }

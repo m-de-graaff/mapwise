@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "../utils/cn";
-import { useMap } from "@mapwise/core/react";
+import { useMap } from "../map/Map";
 
 interface MapStatusBarProps {
 	className?: string;
@@ -18,20 +18,20 @@ export function MapStatusBar({
 	attribution,
 	message,
 }: MapStatusBarProps) {
-	const { controller } = useMap();
+	const { map, isLoaded } = useMap();
 	const [viewState, setViewState] = React.useState<{
 		zoom: number;
 		center: { lat: number; lng: number };
 	} | null>(null);
 
 	React.useEffect(() => {
-		if (!controller) {
+		if (!(map && isLoaded)) {
 			return;
 		}
 
 		const updateState = () => {
-			const z = controller.map.getZoom();
-			const c = controller.map.getCenter();
+			const z = map.getZoom();
+			const c = map.getCenter();
 			setViewState({
 				zoom: z,
 				center: { lat: c.lat, lng: c.lng },
@@ -42,13 +42,12 @@ export function MapStatusBar({
 		updateState();
 
 		// Subscribe to move events
-		// Using 'move' covers both zoom and pan
-		controller.map.on("move", updateState);
+		map.on("move", updateState);
 
 		return () => {
-			controller.map.off("move", updateState);
+			map.off("move", updateState);
 		};
-	}, [controller]);
+	}, [map, isLoaded]);
 
 	const zoom = propZoom ?? viewState?.zoom;
 	const center = propCenter ?? viewState?.center;

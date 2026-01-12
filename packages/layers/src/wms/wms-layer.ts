@@ -106,8 +106,8 @@ function createWmsSourceSpec(config: WmsRasterLayerConfig): RasterSourceSpecific
 		version = "1.3.0",
 		crs = "EPSG:3857",
 		extraParams = {},
-		tileWidth = 256,
-		tileHeight = 256,
+		tileWidth = 512,
+		tileHeight = 512,
 		minzoom = 0,
 		maxzoom = 22,
 		tileUrlTransform,
@@ -148,6 +148,41 @@ function createWmsSourceSpec(config: WmsRasterLayerConfig): RasterSourceSpecific
 		baseParams["TRANSPARENT"] = "TRUE";
 	}
 
+	// MapLibre supports {bbox-epsg-3857} template for raster sources
+	// This is more robust than a custom tile function if we are in 3857
+	const isWebMercator = crs === "EPSG:3857" || crs === "EPSG:900913";
+
+	if (isWebMercator && !tileUrlTransform) {
+		const dummyBbox: [number, number, number, number] = [0, 0, 0, 0];
+		const baseUrlWithParams = buildTileUrl(
+			baseUrl,
+			layers,
+			dummyBbox,
+			tileWidth,
+			tileHeight,
+			version,
+			format,
+			transparent,
+			extraParams,
+			styles,
+			crs,
+		);
+
+		// Replace the dummy bbox with the template
+		// Note: The buildTileUrl puts BBOX=0,0,0,0 in the string
+		// We replace it with BBOX={bbox-epsg-3857}
+		const templateUrl = baseUrlWithParams.replace(/BBOX=[^&]*/, "BBOX={bbox-epsg-3857}");
+
+		return {
+			type: "raster",
+			tiles: [templateUrl],
+			tileSize: Math.max(tileWidth, tileHeight),
+			minzoom,
+			maxzoom,
+		};
+	}
+
+	// Legacy/Custom projection fallback (Relies on internal MapLibre behavior or custom protocol)
 	// Create tiles function that MapLibre will call with tile coordinates
 	// This function converts tile coordinates to WMS GetMap bbox requests
 	// MapLibre calls this with an object like { x: 0, y: 0, z: 0 }
@@ -171,7 +206,7 @@ function createWmsSourceSpec(config: WmsRasterLayerConfig): RasterSourceSpecific
 	};
 
 	// MapLibre's TypeScript types say tiles is string[], but it actually supports
-	// a function at runtime. We use a type assertion here.
+	// a function at runtime in some contexts. We use a type assertion here.
 	return {
 		type: "raster",
 		tiles: tilesFunction as unknown as string[],

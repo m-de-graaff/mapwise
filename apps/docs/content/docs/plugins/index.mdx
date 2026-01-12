@@ -1,0 +1,65 @@
+---
+title: "@mapwise/plugins"
+description: Extend map functionality with plugins.
+---
+
+# @mapwise/plugins
+
+The `@mapwise/plugins` package contains functional extensions for the map. Plugins are self-contained modules that integrate with the `MapController` to add interaction modes, UI controls, or background logic.
+
+## Installation
+
+```bash
+pnpm add @mapwise/plugins
+```
+
+## Available Plugins
+
+### standard-plugins
+
+#### Inspect
+[Inspect](/docs/plugins/inspect) allows users to click features to view their attributes.
+- **Factory**: `createInspectPlugin`
+- **Events**: Emits `feature:click` with properties.
+
+#### Draw
+[Draw](/docs/plugins/draw) provides tools for drawing geometries on the map.
+- **Factory**: `createDrawPlugin`
+- **Modes**: Point, LineString, Polygon.
+- **Output**: Returns standard GeoJSON.
+
+#### Measure
+[Measure](/docs/plugins/measure) allows measuring distances and areas.
+- **Factory**: `createMeasurePlugin`
+- **Modes**: Distance (Line), Area (Polygon).
+- **Display**: Renders dynamic tooltips with measurements.
+
+#### SyncView
+[SyncView](/docs/plugins/sync) synchronizes multiple maps.
+- **Factory**: `createSyncViewPlugin`
+- **Usage**: Useful for side-by-side comparison.
+
+#### Geocoder
+[Geocoder](/docs/plugins/geocoder) provides address search and placement.
+- **Factory**: `createGeocoderPlugin`
+
+#### LayerIngestion
+[LayerIngestion](/docs/plugins/ingest) handles drag-and-drop file uploads (GeoJSON, KML, GPX).
+- **Factory**: `createLayerIngestionPlugin`
+
+## Usage
+
+Plugins are registered on the controller:
+
+```typescript
+import { createDrawPlugin } from '@mapwise/plugins';
+
+const drawPlugin = createDrawPlugin({
+  defaultMode: 'simple_select'
+});
+
+await controller.plugins.register(drawPlugin);
+
+// Later, activate a mode
+// (Usually handled via UI components, but can be done programmatically)
+```

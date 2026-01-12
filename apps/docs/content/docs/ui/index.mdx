@@ -1,0 +1,70 @@
+---
+title: "@mapwise/ui"
+description: A polished React component library for Mapwise.
+---
+
+# @mapwise/ui
+
+The `@mapwise/ui` package provides a comprehensive set of React components to build map applications quickly. It includes a layout shell, toolbars, panels, and dialogs, all styled with Tailwind CSS and accessible by default.
+
+## Installation
+
+```bash
+pnpm add @mapwise/ui
+```
+
+## Styling & Theming
+
+Mapwise UI uses Tailwind CSS and CSS variables for theming. It supports both light and dark modes out of the box.
+
+### Tailwind Configuration
+Ensure your `tailwind.config.js` includes the Mapwise UI content paths if you are compiling it within your app (though the package ships with `styles.css`).
+
+### Global Styles
+Import the pre-compiled styles in your root layout:
+
+```tsx
+import '@mapwise/ui/styles.css';
+```
+
+### Customizing the Theme
+You can customize the look by overriding CSS variables in your global CSS file.
+
+```css
+:root {
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+}
+```
+
+See [colors and spacing](/docs/ui/design-tokens) for full details.
+
+## Layout System
+
+The recommended way to build an app is using the `MapShell` component, which handles the complex positioning of map controls, sidebars, and overlays.
+
+```tsx
+import { MapShell, LayerPanel, MapToolbar } from '@mapwise/ui';
+import { createMap } from '@mapwise/core';
+
+const controller = createMap(...);
+
+export default function App() {
+  return (
+    <MapProvider controller={controller}>
+      <MapShell
+        sidebar={<LayerPanel />}
+        toolbar={<MapToolbar />}
+      >
+        {/* Additional children rendered on top of map */}
+      </MapShell>
+    </MapProvider>
+  );
+}
+```

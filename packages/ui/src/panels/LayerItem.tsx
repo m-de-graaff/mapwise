@@ -5,7 +5,7 @@ import { Button } from "../shadcn/button";
 import { Slider } from "../shadcn/slider";
 import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover";
 
-import type { Layer } from "../hooks/useLayerList";
+import type { Layer } from "./LayerPanel";
 
 interface LayerItemProps {
 	layer: Layer;

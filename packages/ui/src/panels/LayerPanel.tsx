@@ -14,18 +14,40 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { useLayerList } from "../hooks/useLayerList";
-import { useLayerActions } from "../hooks/useLayerActions";
 import { LayerItem } from "./LayerItem";
 import { cn } from "../utils/cn";
 
-interface LayerPanelProps {
-	className?: string;
+import { useId } from "react";
+
+export interface Layer {
+	id: string;
+	name: string;
+	type: "wms" | "geojson" | "xyz";
+	visible: boolean;
+	opacity: number;
+	url?: string;
+	// biome-ignore lint/suspicious/noExplicitAny: Style object can be complex
+	style?: any;
 }
 
-export function LayerPanel({ className }: LayerPanelProps) {
-	const { layers, overlayLayers, setLayers } = useLayerList();
-	const { toggleVisibility, setOpacity, removeLayer, reorderLayers } = useLayerActions(setLayers);
+interface LayerPanelProps {
+	className?: string;
+	layers: Layer[];
+	onToggle: (id: string) => void;
+	onOpacityChange: (id: string, val: number) => void;
+	onRemove: (id: string) => void;
+	onReorder: (newOrder: Layer[]) => void;
+}
+
+export function LayerPanel({
+	className,
+	layers,
+	onToggle,
+	onOpacityChange,
+	onRemove,
+	onReorder,
+}: LayerPanelProps) {
+	const dndId = useId();
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -43,7 +65,7 @@ export function LayerPanel({ className }: LayerPanelProps) {
 
 			if (oldIndex !== -1 && newIndex !== -1) {
 				const newOrder = arrayMove(layers, oldIndex, newIndex);
-				reorderLayers(newOrder);
+				onReorder(newOrder);
 			}
 		}
 	}
@@ -54,24 +76,26 @@ export function LayerPanel({ className }: LayerPanelProps) {
 				Layers
 			</h3>
 
-			<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-				<SortableContext
-					items={overlayLayers.map((l) => l.id)}
-					strategy={verticalListSortingStrategy}
-				>
+			<DndContext
+				id={dndId}
+				sensors={sensors}
+				collisionDetection={closestCenter}
+				onDragEnd={handleDragEnd}
+			>
+				<SortableContext items={layers.map((l) => l.id)} strategy={verticalListSortingStrategy}>
 					<div className="flex flex-col gap-1">
-						{overlayLayers.length === 0 && (
+						{layers.length === 0 && (
 							<div className="text-sm text-muted-foreground italic p-2 border border-dashed rounded text-center">
 								No overlay layers
 							</div>
 						)}
-						{overlayLayers.map((layer) => (
+						{layers.map((layer) => (
 							<LayerItem
 								key={layer.id}
 								layer={layer}
-								onToggle={toggleVisibility}
-								onOpacityChange={setOpacity}
-								onRemove={removeLayer}
+								onToggle={onToggle}
+								onOpacityChange={onOpacityChange}
+								onRemove={onRemove}
 							/>
 						))}
 					</div>

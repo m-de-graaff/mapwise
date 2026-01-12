@@ -1,20 +1,19 @@
 "use client";
 
-import { MapDemo } from "@/components/MapDemo";
+import { MapProvider } from "@mapwise/core/react";
+import { MinimalDemo } from "@/components/demos/MinimalDemo";
 
 export default function Home() {
 	return (
-		<div className="app">
-			<header className="header">
-				<div className="header-brand">
-					<div className="header-logo">M</div>
-					<h1 className="header-title">MapWise Demo</h1>
-				</div>
-				<span className="header-subtitle">Next.js App Router</span>
-			</header>
-			<main className="main">
-				<MapDemo />
-			</main>
-		</div>
+		<MapProvider
+			className="w-full h-full"
+			options={{
+				style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+				center: [-73.935773, 40.71575],
+				zoom: 9.898,
+			}}
+		>
+			<MinimalDemo />
+		</MapProvider>
 	);
 }

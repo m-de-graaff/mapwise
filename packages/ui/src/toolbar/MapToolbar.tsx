@@ -2,7 +2,7 @@ import { MousePointer2, Ruler, PenTool, Trash2 } from "lucide-react";
 import { ToolButton } from "./ToolButton";
 import { cn } from "../utils/cn";
 
-export type ToolId = "inspect" | "measure" | "draw" | null;
+export type ToolId = "inspect" | "measure" | "draw" | "trash" | null;
 
 export interface MapToolbarProps {
 	activeTool: ToolId;

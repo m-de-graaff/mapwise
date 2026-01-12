@@ -66,11 +66,21 @@ export function selectTileMatrixSet(
 		return crsMatch.identifier;
 	}
 
-	// Fallback: try to find Web Mercator variants
-	const webMercatorVariants = ["EPSG:3857", "EPSG:900913", "EPSG:102113", "EPSG:102100"];
+	// Fallback: try to find Web Mercator variants and GoogleMapsCompatible
+	const webMercatorVariants = [
+		"GoogleMapsCompatible",
+		"EPSG:3857",
+		"EPSG:900913",
+		"EPSG:102113",
+		"EPSG:102100",
+		"3857",
+	];
 	for (const variant of webMercatorVariants) {
 		const match = availableMatrixSets.find(
-			(set) => set.supportedCRS === variant || set.supportedCRS.includes(variant),
+			(set) =>
+				set.identifier === variant ||
+				set.supportedCRS === variant ||
+				set.supportedCRS.includes(variant),
 		);
 		if (match) {
 			return match.identifier;

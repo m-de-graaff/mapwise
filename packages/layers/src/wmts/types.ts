@@ -14,6 +14,8 @@ import type { BaseLayerConfig } from "../shared/types";
  * Tile matrix configuration for explicit WMTS setup.
  */
 export interface WmtsTileMatrix {
+	/** Matrix identifier (e.g. "0", "1", "EPSG:3857:0") */
+	identifier?: string;
 	/** Zoom level */
 	zoom: number;
 	/** Matrix width (number of tiles) */
@@ -64,6 +66,8 @@ export interface WmtsCapabilitiesConfig extends BaseLayerConfig {
 	format?: string;
 	/** Optional dimension values */
 	dimensions?: Record<string, string>;
+	/** Optional pre-fetched capabilities object to avoid network requests */
+	prefetchedCapabilities?: WmtsCapabilities;
 }
 
 /**

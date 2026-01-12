@@ -73,11 +73,40 @@ export function useLayerActions(
 		[controller, setLayers],
 	);
 
+	const addLayer = useCallback(
+		// biome-ignore lint/suspicious/noExplicitAny: Dynamic layer config
+		(config: any) => {
+			if (controller) {
+				// Core registration
+				try {
+					controller.layers.registerLayer(config);
+				} catch (err) {
+					console.error("Failed to add layer", err);
+				}
+			} else {
+				// Mock fallback - simplistic
+				setLayers((prev) => [
+					...prev,
+					{
+						id: config.id,
+						title: config.metadata?.title || config.id,
+						name: config.metadata?.title || config.id,
+						visible: true,
+						opacity: 1,
+						type: config.type,
+					},
+				]);
+			}
+		},
+		[controller, setLayers],
+	);
+
 	return {
 		toggleVisibility,
 		setOpacity,
 		removeLayer,
 		renameLayer,
 		reorderLayers,
+		addLayer,
 	};
 }

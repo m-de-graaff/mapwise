@@ -125,6 +125,15 @@ export function createPointerRouter(
 	};
 
 	const handleDown = (e: MapMouseEvent | MapTouchEvent): void => {
+		// Filter out non-left clicks (e.g. right click)
+		if (
+			"originalEvent" in e &&
+			e.originalEvent instanceof MouseEvent &&
+			e.originalEvent.button !== 0
+		) {
+			return;
+		}
+
 		const normalized =
 			"points" in e ? normalizeTouchEvent("down", e) : normalizeMouseEvent("down", e);
 		isDragging = false;
@@ -241,14 +250,19 @@ export function createPointerRouter(
 	// Attach down handlers
 	const mouseDownHandler = (e: MapMouseEvent) => handleDown(e);
 	const touchStartHandler = (e: MapTouchEvent) => handleDown(e);
+	const dragStartHandler = () => {
+		isDragging = true;
+	};
 
 	map.on("mousedown", mouseDownHandler);
 	map.on("touchstart", touchStartHandler);
+	map.on("dragstart", dragStartHandler);
 
 	// Return cleanup function
 	return () => {
 		map.off("mousedown", mouseDownHandler);
 		map.off("touchstart", touchStartHandler);
+		map.off("dragstart", dragStartHandler);
 		if (moveHandler) {
 			map.off("mousemove", moveHandler);
 			map.off("touchmove", moveHandler);

@@ -11,7 +11,6 @@
 export type {
 	BaseLayerConfig,
 	LayerCapabilities,
-	LayerValidationError,
 	LayerValidationResult,
 } from "./shared/types";
 export {
@@ -55,6 +54,8 @@ export { createTerrainLayer, enableTerrain } from "./terrain/terrain-layer";
 export { createArcGisRestRasterLayer } from "./arcgis/arcgis-raster-layer";
 // TODO: Export layer factories as they are implemented
 // export { createPmtilesLayer } from "./pmtiles/pmtiles-layer";
+export { createPmtilesLayer } from "./pmtiles/pmtiles-layer";
+export { getPmtilesInfo } from "./pmtiles/pmtiles-adapter";
 
 // =============================================================================
 // Layer Types
@@ -108,6 +109,8 @@ export type { PersistedXyzRasterLayerConfig } from "./xyz/persistence";
 export type { PersistedArcGisRestRasterLayerConfig } from "./arcgis/persistence";
 // TODO: Export layer config types as they are implemented
 // export type { PmtilesLayerConfig } from "./pmtiles/types";
+export type { PmtilesHeader, PmtilesMetadata, PmtilesVectorLayer } from "./pmtiles/pmtiles-adapter";
+export type { PmtilesLayerConfig } from "./pmtiles/types";
 
 // =============================================================================
 // Layer Utilities

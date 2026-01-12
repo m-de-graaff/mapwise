@@ -84,3 +84,11 @@ export { createMeasurePlugin } from "./measure/measure-plugin";
 export type { MeasurePluginConfig } from "./measure/measure-plugin";
 
 // Note: Additional plugins (geocoder, sync, etc.) will be exported here as they are implemented.
+export { createSyncViewPlugin } from "./sync/sync-plugin";
+export type { SyncViewPluginConfig } from "./sync/sync-plugin";
+
+export { createGeocoderPlugin } from "./geocoder/geocoder-plugin";
+export type { GeocoderConfig as GeocoderPluginConfig } from "./geocoder/geocoder-plugin";
+
+export { createLayerIngestionPlugin } from "./ingest/ingest-plugin";
+export type { IngestPluginConfig as LayerIngestionPluginConfig } from "./ingest/ingest-plugin";
