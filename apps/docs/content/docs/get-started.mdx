@@ -1,0 +1,90 @@
+---
+title: Get Started
+description: Build your first map with Mapwise
+---
+
+# Get Started
+
+This guide will walk you through creating a basic map application using Mapwise components.
+
+## Basic Setup
+
+Wrap your application (or the specific route) with the `MapwiseProvider`. This context manages the map state, authentication (if needed in future), and global configurations.
+
+```tsx title="app/page.tsx"
+"use client";
+
+import { MapwiseProvider } from "@mapwise/core";
+import { Map, MapControls } from "@mapwise/ui";
+
+export default function Page() {
+  return (
+    <MapwiseProvider>
+      <div className="h-screen w-full relative">
+        <Map
+          initialViewState={{
+            longitude: -74.006,
+            latitude: 40.7128,
+            zoom: 12
+          }}
+          mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+        >
+          <MapControls position="bottom-right" />
+        </Map>
+      </div>
+    </MapwiseProvider>
+  );
+}
+```
+
+## Adding a Layer
+
+To add data to your map, use the `useLayerState` hook or pre-built components like `GeoJsonLayer` (if available in your version) or manually register layers via the controller.
+
+Here is an example of adding a simple GeoJSON source:
+
+```tsx
+import { useEffect } from "react";
+import { useMap } from "@mapwise/core";
+
+function MyDataLayer() {
+  const { controller } = useMap();
+
+  useEffect(() => {
+    if (!controller) return;
+
+    controller.addLayer({
+      id: "my-data",
+      type: "circle",
+      source: {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              geometry: { type: "Point", coordinates: [-74.006, 40.7128] },
+              properties: { name: "New York City" }
+            }
+          ]
+        }
+      },
+      paint: {
+        "circle-color": "#ff0000",
+        "circle-radius": 10
+      }
+    });
+
+    return () => {
+      controller.removeLayer("my-data");
+    };
+  }, [controller]);
+
+  return null;
+}
+```
+
+## Next Steps
+
+- Explore [Core Concepts](./core) to understand the architecture.
+- Check out the [UI Components](./ui) for available interface elements.

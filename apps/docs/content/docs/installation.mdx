@@ -1,0 +1,60 @@
+---
+title: Installation
+description: How to install and configure Mapwise in your application
+---
+
+# Installation
+
+Mapwise is built as a modular set of packages. You can install the core and UI packages independently, but for a standard React application, we recommend installing the full suite.
+
+## Prerequisites
+
+- **Node.js**: v18 or higher
+- **Package Manager**: pnpm (recommended), npm, or yarn
+- **Framework**: React 18+ (Next.js 14+ recommended for full features)
+
+## Install Packages
+
+Install the core dependencies:
+
+```bash
+pnpm add @mapwise/core @mapwise/ui @mapwise/layers maplibre-gl
+```
+
+If you plan to use the drawing or measuring tools, add the plugins package:
+
+```bash
+pnpm add @mapwise/plugins
+```
+
+## Styling Setup
+
+Mapwise UI components rely on Tailwind CSS. Ensure your project is configured with Tailwind.
+
+### 1. Update Tailwind Config
+
+Add the Mapwise content paths to your `tailwind.config.ts` (or `.js`):
+
+```ts title="tailwind.config.ts"
+import type { Config } from "tailwindcss";
+
+const config = {
+  content: [
+    "./src/**/*.{ts,tsx}",
+    // Add Mapwise UI package to content sources
+    "./node_modules/@mapwise/ui/src/**/*.{ts,tsx}",
+  ],
+  // ... rest of your config
+} satisfies Config;
+
+export default config;
+```
+
+### 2. Import CSS
+
+In your root layout or entry file (e.g., `app/layout.tsx` or `src/main.tsx`), import the Mapwise core styles and MapLibre styles:
+
+```tsx
+import "maplibre-gl/dist/maplibre-gl.css";
+import "@mapwise/ui/styles/globals.css"; // If available, otherwise ensure your global CSS covers basics
+```
