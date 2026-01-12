@@ -20,31 +20,20 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 	width = 482,
 	height = 300,
 	className = "",
-	theme = "dark",
 }) => {
 	// Design tokens (derived from Figma local variables)
-	const themeVars =
-		theme === "light"
-			? {
-					"--yws-surface": "#ffffff",
-					"--yws-text-primary": "#37322f",
-					"--yws-text-secondary": "#6b7280",
-					"--yws-bubble-light": "#e8e5e3",
-					"--yws-bubble-dark": "#37322f",
-					"--yws-bubble-white": "#ffffff",
-					"--yws-border": "rgba(0,0,0,0.08)",
-					"--yws-shadow": "rgba(0,0,0,0.08)",
-				}
-			: ({
-					"--yws-surface": "#1f2937",
-					"--yws-text-primary": "#f9fafb",
-					"--yws-text-secondary": "#d1d5db",
-					"--yws-bubble-light": "#374151",
-					"--yws-bubble-dark": "#111827",
-					"--yws-bubble-white": "#ffffff",
-					"--yws-border": "rgba(255,255,255,0.12)",
-					"--yws-shadow": "rgba(0,0,0,0.24)",
-				} as React.CSSProperties);
+	// Design tokens (mapped to semantic Tailwind/shadcn variables)
+	const themeVars = {
+		"--yws-surface": "hsl(var(--card))",
+		"--yws-text-primary": "hsl(var(--foreground))",
+		"--yws-text-secondary": "hsl(var(--muted-foreground))",
+		"--yws-bubble-light": "hsl(var(--muted))",
+		"--yws-bubble-dark": "hsl(var(--primary))",
+		"--yws-bubble-white": "hsl(var(--card))",
+		"--yws-border": "hsl(var(--border))",
+		"--yws-shadow": "hsl(var(--shadow))",
+		"--yws-primary-fg": "hsl(var(--primary-foreground))",
+	} as React.CSSProperties;
 
 	// Figma-exported assets
 	// Public domain avatars
@@ -113,7 +102,7 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 						{/* Message bubble */}
 						<div
 							style={{
-								background: theme === "light" ? "#e8e5e3" : "var(--yws-bubble-light)",
+								background: "var(--yws-bubble-light)",
 								borderRadius: "999px",
 								padding: "0px 12px",
 								height: "36px",
@@ -129,7 +118,7 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 									fontSize: "13px",
 									lineHeight: "16px",
 									letterSpacing: "-0.4px",
-									color: theme === "light" ? "#37322f" : "var(--yws-text-primary)",
+									color: "var(--yws-text-primary)",
 									whiteSpace: "nowrap",
 								}}
 							>
@@ -153,7 +142,7 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 						{/* Message bubble */}
 						<div
 							style={{
-								background: theme === "light" ? "#37322f" : "var(--yws-bubble-dark)",
+								background: "var(--yws-bubble-dark)",
 								borderRadius: "999px",
 								padding: "0px 12px",
 								height: "36px",
@@ -169,7 +158,7 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 									fontSize: "13px",
 									lineHeight: "16px",
 									letterSpacing: "-0.4px",
-									color: "#ffffff",
+									color: "var(--yws-primary-fg)",
 									whiteSpace: "nowrap",
 								}}
 							>
@@ -220,7 +209,7 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 						{/* Message bubble */}
 						<div
 							style={{
-								background: theme === "light" ? "#e8e5e3" : "var(--yws-bubble-light)",
+								background: "var(--yws-bubble-light)",
 								borderRadius: "999px",
 								padding: "0px 12px",
 								height: "36px",
@@ -236,7 +225,7 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 									fontSize: "13px",
 									lineHeight: "16px",
 									letterSpacing: "-0.4px",
-									color: theme === "light" ? "#37322f" : "var(--yws-text-primary)",
+									color: "var(--yws-text-primary)",
 									whiteSpace: "nowrap",
 								}}
 							>
@@ -260,7 +249,7 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 						{/* Message bubble */}
 						<div
 							style={{
-								background: "#ffffff",
+								background: "var(--yws-bubble-white)",
 								borderRadius: "16px",
 								padding: "0px 12px",
 								height: "36px",
@@ -277,7 +266,7 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 									fontWeight: 400,
 									fontSize: "14px",
 									lineHeight: "20px",
-									color: "#030712",
+									color: "var(--yws-text-primary)",
 									whiteSpace: "nowrap",
 								}}
 							>
@@ -290,7 +279,7 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 								width: "36px",
 								height: "36px",
 								borderRadius: "44px",
-								background: theme === "light" ? "#37322f" : "var(--yws-bubble-dark)",
+								background: "var(--yws-bubble-dark)",
 								display: "flex",
 								alignItems: "center",
 								justifyContent: "center",
@@ -305,7 +294,7 @@ const YourWorkInSync: React.FC<YourWorkInSyncProps> = ({
 								style={{
 									width: "20px",
 									height: "20px",
-									filter: "brightness(0) invert(1)",
+									filter: "invert(1) grayscale(1)",
 								}}
 							/>
 						</div>

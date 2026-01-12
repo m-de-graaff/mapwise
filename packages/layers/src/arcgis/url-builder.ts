@@ -81,12 +81,12 @@ export function buildArcGisExportUrl(params: ArcGisExportParams): string {
 
 	// Add layer ID if specified (using layers parameter with "show:")
 	if (layerId !== undefined && layerId !== null) {
-		queryParams.layers = `show:${layerId}`;
+		queryParams["layers"] = `show:${layerId}`;
 	}
 
 	// Add transparency if supported by format
 	if (transparent && (format.includes("png") || format === "gif")) {
-		queryParams.transparent = "true";
+		queryParams["transparent"] = "true";
 	}
 
 	// Build final URL

@@ -5,6 +5,7 @@ const withMDX = createMDX();
 /** @type {import('next').NextConfig} */
 const config = {
 	reactStrictMode: true,
+	transpilePackages: ["@mapwise/core", "@mapwise/ui", "@mapwise/layers", "@mapwise/plugins"],
 	async rewrites() {
 		return [
 			{

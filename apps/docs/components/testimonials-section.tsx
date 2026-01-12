@@ -58,7 +58,7 @@ export default function TestimonialsSection() {
 	};
 
 	return (
-		<div className="w-full border-b border-[rgba(55,50,47,0.12)] flex flex-col justify-center items-center">
+		<div className="w-full border-b border-border flex flex-col justify-center items-center">
 			{/* Header Section */}
 
 			{/* Testimonial Content */}
@@ -75,9 +75,9 @@ export default function TestimonialsSection() {
 							src={testimonials[activeTestimonial].image || "/placeholder.svg"}
 							alt={testimonials[activeTestimonial].name}
 						/>
-						<div className="flex-1 px-6 py-6 shadow-[0px_0px_0px_0.75px_rgba(50,45,43,0.12)] overflow-hidden flex flex-col justify-start items-start gap-6 shadow-none pb-0 pt-0">
+						<div className="flex-1 px-6 py-6 shadow-[0px_0px_0px_0.75px_inset] shadow-border overflow-hidden flex flex-col justify-start items-start gap-6 pb-0 pt-0">
 							<div
-								className="self-stretch justify-start flex flex-col text-[#49423D] text-2xl md:text-[32px] font-medium leading-10 md:leading-[42px] font-sans h-[200px] md:h-[210px] overflow-hidden line-clamp-5 transition-all duration-700 ease-in-out tracking-tight"
+								className="self-stretch justify-start flex flex-col text-foreground text-2xl md:text-[32px] font-medium leading-10 md:leading-[42px] font-sans h-[200px] md:h-[210px] overflow-hidden line-clamp-5 transition-all duration-700 ease-in-out tracking-tight"
 								style={{
 									filter: isTransitioning ? "blur(4px)" : "blur(0px)",
 									transition: "filter 0.7s ease-in-out",
@@ -92,10 +92,10 @@ export default function TestimonialsSection() {
 									transition: "filter 0.7s ease-in-out",
 								}}
 							>
-								<div className="self-stretch justify-center flex flex-col text-[rgba(73,66,61,0.90)] text-lg font-medium leading-[26px] font-sans">
+								<div className="self-stretch justify-center flex flex-col text-muted-foreground text-lg font-medium leading-[26px] font-sans">
 									{testimonials[activeTestimonial].name}
 								</div>
-								<div className="self-stretch justify-center flex flex-col text-[rgba(73,66,61,0.70)] text-lg font-medium leading-[26px] font-sans">
+								<div className="self-stretch justify-center flex flex-col text-muted-foreground/80 text-lg font-medium leading-[26px] font-sans">
 									{testimonials[activeTestimonial].company}
 								</div>
 							</div>
@@ -111,7 +111,7 @@ export default function TestimonialsSection() {
 									(activeTestimonial - 1 + testimonials.length) % testimonials.length,
 								)
 							}
-							className="w-9 h-9 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] overflow-hidden rounded-full border border-[rgba(0,0,0,0.15)] justify-center items-center gap-2 flex hover:bg-gray-50 transition-colors"
+							className="w-9 h-9 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] overflow-hidden rounded-full border border-border justify-center items-center gap-2 flex hover:bg-muted/50 transition-colors text-foreground"
 						>
 							<div className="w-6 h-6 relative overflow-hidden">
 								<svg
@@ -124,7 +124,7 @@ export default function TestimonialsSection() {
 								>
 									<path
 										d="M15 18L9 12L15 6"
-										stroke="#46413E"
+										stroke="currentColor"
 										strokeWidth="2"
 										strokeLinecap="round"
 										strokeLinejoin="round"
@@ -135,7 +135,7 @@ export default function TestimonialsSection() {
 						<button
 							type="button"
 							onClick={() => handleNavigationClick((activeTestimonial + 1) % testimonials.length)}
-							className="w-9 h-9 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] overflow-hidden rounded-full border border-[rgba(0,0,0,0.15)] justify-center items-center gap-2 flex hover:bg-gray-50 transition-colors"
+							className="w-9 h-9 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] overflow-hidden rounded-full border border-border justify-center items-center gap-2 flex hover:bg-muted/50 transition-colors text-foreground"
 						>
 							<div className="w-6 h-6 relative overflow-hidden">
 								<svg
@@ -148,7 +148,7 @@ export default function TestimonialsSection() {
 								>
 									<path
 										d="M9 18L15 12L9 6"
-										stroke="#46413E"
+										stroke="currentColor"
 										strokeWidth="2"
 										strokeLinecap="round"
 										strokeLinejoin="round"

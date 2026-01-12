@@ -7,8 +7,6 @@ interface SmartSimpleBrilliantProps {
 	height?: number | string;
 	/** Optional className to pass to root */
 	className?: string;
-	/** Theme palette */
-	theme?: "light" | "dark";
 }
 
 /**
@@ -20,26 +18,7 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 	width = 482,
 	height = 300,
 	className = "",
-	theme = "dark",
 }) => {
-	// Design tokens (derived from Figma local variables)
-	const themeVars =
-		theme === "light"
-			? {
-					"--ssb-surface": "#ffffff",
-					"--ssb-text": "#1b1919",
-					"--ssb-border": "rgba(0,0,0,0.08)",
-					"--ssb-inner-border": "rgba(0,0,0,0.12)",
-					"--ssb-shadow": "rgba(0,0,0,0.12)",
-				}
-			: ({
-					"--ssb-surface": "#333937",
-					"--ssb-text": "#f8f8f8",
-					"--ssb-border": "rgba(255,255,255,0.16)",
-					"--ssb-inner-border": "rgba(255,255,255,0.12)",
-					"--ssb-shadow": "rgba(0,0,0,0.28)",
-				} as React.CSSProperties);
-
 	// Public domain avatars
 	const img = "https://i.pravatar.cc/150?u=1";
 	const img1 = "https://i.pravatar.cc/150?u=2";
@@ -58,7 +37,6 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
-					...themeVars,
 				} as React.CSSProperties
 			}
 			role="img"
@@ -76,12 +54,13 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 				<div style={{ position: "absolute", left: "123.248px", top: "0px", width: 0, height: 0 }}>
 					<div style={{ transform: "rotate(5deg)", transformOrigin: "center" }}>
 						<div
+							className="bg-card shadow-sm border border-border/10"
 							style={{
 								width: "155.25px",
-								background: "#ffffff",
 								borderRadius: "9px",
 								padding: "6px",
-								boxShadow: "0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 4px rgba(0,0,0,0.07)",
+								boxShadow:
+									"0px 0px 0px 1px hsl(var(--border) / 0.5), 0px 2px 4px hsl(var(--foreground) / 0.05)",
 							}}
 						>
 							{/* Amber event */}
@@ -99,21 +78,21 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 								<div style={{ padding: "4.5px", width: "100%" }}>
 									<div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
 										<span
+											className="text-amber-900 dark:text-amber-200"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#92400E",
 											}}
 										>
 											2:00
 										</span>
 										<span
+											className="text-amber-900 dark:text-amber-200"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#92400E",
 											}}
 										>
 											PM
@@ -136,11 +115,11 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 										</div>
 									</div>
 									<div
+										className="text-amber-900 dark:text-amber-200"
 										style={{
 											fontFamily: "Inter, sans-serif",
 											fontWeight: 600,
 											fontSize: "9px",
-											color: "#92400E",
 										}}
 									>
 										Map Initialization
@@ -164,21 +143,21 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 								<div style={{ padding: "4.5px", width: "100%" }}>
 									<div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
 										<span
+											className="text-sky-900 dark:text-sky-200"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#0C4A6E",
 											}}
 										>
 											2:00
 										</span>
 										<span
+											className="text-sky-900 dark:text-sky-200"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#0C4A6E",
 											}}
 										>
 											PM
@@ -201,11 +180,11 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 										</div>
 									</div>
 									<div
+										className="text-sky-900 dark:text-sky-200"
 										style={{
 											fontFamily: "Inter, sans-serif",
 											fontWeight: 600,
 											fontSize: "9px",
-											color: "#0C4A6E",
 										}}
 									>
 										Layer Hydration
@@ -229,32 +208,32 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 								<div style={{ padding: "4.5px", width: "100%" }}>
 									<div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
 										<span
+											className="text-emerald-900 dark:text-emerald-200"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#064E3B",
 											}}
 										>
 											9:00
 										</span>
 										<span
+											className="text-emerald-900 dark:text-emerald-200"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#064E3B",
 											}}
 										>
 											AM
 										</span>
 									</div>
 									<div
+										className="text-emerald-900 dark:text-emerald-200"
 										style={{
 											fontFamily: "Inter, sans-serif",
 											fontWeight: 600,
 											fontSize: "9px",
-											color: "#064E3B",
 										}}
 									>
 										Plugin Registration
@@ -269,13 +248,13 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 				<div style={{ position: "absolute", left: "0px", top: "6.075px", width: "155.25px" }}>
 					<div style={{ transform: "rotate(-5deg)", transformOrigin: "center" }}>
 						<div
+							className="bg-card shadow-sm border border-border/10"
 							style={{
 								width: "155.25px",
-								background: "#ffffff",
 								borderRadius: "9px",
 								padding: "6px",
 								boxShadow:
-									"-8px 6px 11.3px rgba(0,0,0,0.12), 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 4px rgba(0,0,0,0.06)",
+									"-8px 6px 11.3px hsl(var(--foreground) / 0.1), 0px 0px 0px 1px hsl(var(--border) / 0.5), 0px 2px 4px hsl(var(--foreground) / 0.05)",
 							}}
 						>
 							{/* Violet event */}
@@ -293,21 +272,21 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 								<div style={{ padding: "4.5px", width: "100%" }}>
 									<div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
 										<span
+											className="text-violet-900 dark:text-violet-200"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#581C87",
 											}}
 										>
 											11:00
 										</span>
 										<span
+											className="text-violet-900 dark:text-violet-200"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#581C87",
 											}}
 										>
 											AM
@@ -330,11 +309,11 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 										</div>
 									</div>
 									<div
+										className="text-violet-900 dark:text-violet-200"
 										style={{
 											fontFamily: "Inter, sans-serif",
 											fontWeight: 600,
 											fontSize: "9px",
-											color: "#581C87",
 										}}
 									>
 										Render Cycle
@@ -358,21 +337,21 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 								<div style={{ padding: "4.5px", width: "100%" }}>
 									<div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
 										<span
+											className="text-rose-900 dark:text-rose-900"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#BE123C",
 											}}
 										>
 											4:00
 										</span>
 										<span
+											className="text-rose-900 dark:text-rose-900"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#BE123C",
 											}}
 										>
 											PM
@@ -395,11 +374,11 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 										</div>
 									</div>
 									<div
+										className="text-rose-900 dark:text-rose-900"
 										style={{
 											fontFamily: "Inter, sans-serif",
 											fontWeight: 600,
 											fontSize: "9px",
-											color: "#BE123C",
 										}}
 									>
 										🎨 Style Update
@@ -423,32 +402,32 @@ const SmartSimpleBrilliant: React.FC<SmartSimpleBrilliantProps> = ({
 								<div style={{ padding: "4.5px", width: "100%" }}>
 									<div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
 										<span
+											className="text-violet-900 dark:text-violet-200"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#581C87",
 											}}
 										>
 											11:00
 										</span>
 										<span
+											className="text-violet-900 dark:text-violet-200"
 											style={{
 												fontFamily: "Inter, sans-serif",
 												fontWeight: 500,
 												fontSize: "9px",
-												color: "#581C87",
 											}}
 										>
 											AM
 										</span>
 									</div>
 									<div
+										className="text-violet-900 dark:text-violet-200"
 										style={{
 											fontFamily: "Inter, sans-serif",
 											fontWeight: 600,
 											fontSize: "9px",
-											color: "#581C87",
 										}}
 									>
 										🚀 Production Deploy

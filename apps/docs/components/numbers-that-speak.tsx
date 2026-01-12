@@ -20,27 +20,18 @@ const NumbersThatSpeak: React.FC<NumbersThatSpeakProps> = ({
 	width = 482,
 	height = 300,
 	className = "",
-	theme = "dark",
 }) => {
 	// Design tokens (derived from Figma local variables)
-	const themeVars =
-		theme === "light"
-			? {
-					"--nts-surface": "#ffffff",
-					"--nts-text-primary": "#2f3037",
-					"--nts-text-secondary": "rgba(47,48,55,0.8)",
-					"--nts-text-muted": "rgba(55,50,47,0.7)",
-					"--nts-border": "rgba(47,48,55,0.12)",
-					"--nts-shadow": "rgba(47,48,55,0.06)",
-				}
-			: ({
-					"--nts-surface": "#ffffff",
-					"--nts-text-primary": "#2f3037",
-					"--nts-text-secondary": "rgba(47,48,55,0.8)",
-					"--nts-text-muted": "rgba(55,50,47,0.7)",
-					"--nts-border": "rgba(47,48,55,0.12)",
-					"--nts-shadow": "rgba(47,48,55,0.06)",
-				} as React.CSSProperties);
+	// Design tokens (mapped to semantic Tailwind/shadcn variables)
+	const themeVars = {
+		"--nts-surface": "hsl(var(--card))",
+		"--nts-text-primary": "hsl(var(--card-foreground))",
+		"--nts-text-secondary": "hsl(var(--muted-foreground))",
+		"--nts-text-muted": "hsl(var(--muted-foreground) / 0.7)",
+		"--nts-border": "hsl(var(--border))",
+		"--nts-shadow": "hsl(var(--foreground) / 0.05)",
+		"--nts-chart-bar": "hsl(var(--primary))",
+	} as React.CSSProperties;
 
 	// Figma-exported assets
 	// Placeholder logic
@@ -412,7 +403,7 @@ const NumbersThatSpeak: React.FC<NumbersThatSpeakProps> = ({
 																			style={{
 																				width: "100%",
 																				height: "1px",
-																				backgroundColor: "rgba(0,0,0,0.05)",
+																				backgroundColor: "hsl(var(--border))",
 																			}}
 																		/>
 																	</div>
@@ -428,7 +419,7 @@ const NumbersThatSpeak: React.FC<NumbersThatSpeakProps> = ({
 																			style={{
 																				width: "100%",
 																				height: "1px",
-																				backgroundColor: "rgba(0,0,0,0.05)",
+																				backgroundColor: "hsl(var(--border))",
 																			}}
 																		/>
 																	</div>
@@ -444,7 +435,7 @@ const NumbersThatSpeak: React.FC<NumbersThatSpeakProps> = ({
 																			style={{
 																				width: "100%",
 																				height: "1px",
-																				backgroundColor: "rgba(0,0,0,0.05)",
+																				backgroundColor: "hsl(var(--border))",
 																			}}
 																		/>
 																	</div>
@@ -460,7 +451,7 @@ const NumbersThatSpeak: React.FC<NumbersThatSpeakProps> = ({
 																			style={{
 																				width: "100%",
 																				height: "1px",
-																				backgroundColor: "rgba(0,0,0,0.05)",
+																				backgroundColor: "hsl(var(--border))",
 																			}}
 																		/>
 																	</div>
@@ -476,7 +467,7 @@ const NumbersThatSpeak: React.FC<NumbersThatSpeakProps> = ({
 																			style={{
 																				width: "100%",
 																				height: "1px",
-																				backgroundColor: "rgba(0,0,0,0.05)",
+																				backgroundColor: "hsl(var(--border))",
 																			}}
 																		/>
 																	</div>
@@ -492,7 +483,7 @@ const NumbersThatSpeak: React.FC<NumbersThatSpeakProps> = ({
 																			style={{
 																				width: "100%",
 																				height: "1px",
-																				backgroundColor: "rgba(0,0,0,0.05)",
+																				backgroundColor: "hsl(var(--border))",
 																			}}
 																		/>
 																	</div>
@@ -555,17 +546,17 @@ const NumbersThatSpeak: React.FC<NumbersThatSpeakProps> = ({
 															}}
 														>
 															{[
-																{ height: "83px", color: "#5D4E37" },
-																{ height: "108px", color: "#5D4E37" },
-																{ height: "58px", color: "#5D4E37" },
-																{ height: "89px", color: "#5D4E37" },
-																{ height: "83px", color: "#5D4E37" },
-																{ height: "89px", color: "#5D4E37" },
-																{ height: "83px", color: "#5D4E37" },
-																{ height: "95px", color: "#5D4E37" },
-																{ height: "108px", color: "#5D4E37" },
-																{ height: "76px", color: "#5D4E37" },
-																{ height: "89px", color: "#5D4E37" },
+																{ height: "83px", color: "var(--nts-chart-bar)" },
+																{ height: "108px", color: "var(--nts-chart-bar)" },
+																{ height: "58px", color: "var(--nts-chart-bar)" },
+																{ height: "89px", color: "var(--nts-chart-bar)" },
+																{ height: "83px", color: "var(--nts-chart-bar)" },
+																{ height: "89px", color: "var(--nts-chart-bar)" },
+																{ height: "83px", color: "var(--nts-chart-bar)" },
+																{ height: "95px", color: "var(--nts-chart-bar)" },
+																{ height: "108px", color: "var(--nts-chart-bar)" },
+																{ height: "76px", color: "var(--nts-chart-bar)" },
+																{ height: "89px", color: "var(--nts-chart-bar)" },
 															].map((item, index) => (
 																<div
 																	// biome-ignore lint/suspicious/noArrayIndexKey: Static chart bars

@@ -58,3 +58,18 @@ In your root layout or entry file (e.g., `app/layout.tsx` or `src/main.tsx`), im
 import "maplibre-gl/dist/maplibre-gl.css";
 import "@mapwise/ui/styles/globals.css"; // If available, otherwise ensure your global CSS covers basics
 ```
+
+## Next.js Configuration
+
+If you are using Next.js (especially with Turbopack), you may need to transpile the Mapwise packages to avoid "failed to create whole tree" or module resolution errors.
+
+Update your `next.config.mjs` (or `.js`):
+
+```javascript title="next.config.mjs"
+const config = {
+  transpilePackages: ["@mapwise/core", "@mapwise/ui", "@mapwise/layers", "@mapwise/plugins"],
+  // ... other config
+};
+
+export default config;
+```

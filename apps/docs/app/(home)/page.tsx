@@ -410,20 +410,20 @@ export default function LandingPage() {
 											<div
 												// biome-ignore lint/suspicious/noArrayIndexKey: Decorative pattern
 												key={i}
-												className="self-stretch h-3 sm:h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+												className="self-stretch h-3 sm:h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-border outline-offset-[-0.25px]"
 											/>
 										))}
 									</div>
 								</div>
 
-								<div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-0 border-l border-r border-[rgba(55,50,47,0.12)]">
+								<div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-0 border-l border-r border-border">
 									{/* Top Left - Smart. Simple. Brilliant. */}
-									<div className="border-b border-r-0 md:border-r border-[rgba(55,50,47,0.12)] p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-start items-start gap-4 sm:gap-6">
+									<div className="border-b border-r-0 md:border-r border-border p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-start items-start gap-4 sm:gap-6">
 										<div className="flex flex-col gap-2">
-											<h3 className="text-[#37322F] text-lg sm:text-xl font-semibold leading-tight font-sans">
+											<h3 className="text-foreground text-lg sm:text-xl font-semibold leading-tight font-sans">
 												Core Controller
 											</h3>
-											<p className="text-[#605A57] text-sm md:text-base font-normal leading-relaxed font-sans">
+											<p className="text-muted-foreground text-sm md:text-base font-normal leading-relaxed font-sans">
 												State management and event handling suitable for complex apps.
 											</p>
 										</div>
@@ -431,19 +431,18 @@ export default function LandingPage() {
 											<SmartSimpleBrilliant
 												width="100%"
 												height="100%"
-												theme="light"
 												className="scale-50 sm:scale-65 md:scale-75 lg:scale-90"
 											/>
 										</div>
 									</div>
 
 									{/* Top Right - Your work, in sync */}
-									<div className="border-b border-[rgba(55,50,47,0.12)] p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-start items-start gap-4 sm:gap-6">
+									<div className="border-b border-border p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-start items-start gap-4 sm:gap-6">
 										<div className="flex flex-col gap-2">
-											<h3 className="text-[#37322F] font-semibold leading-tight font-sans text-lg sm:text-xl">
+											<h3 className="text-foreground font-semibold leading-tight font-sans text-lg sm:text-xl">
 												UI Library
 											</h3>
-											<p className="text-[#605A57] text-sm md:text-base font-normal leading-relaxed font-sans">
+											<p className="text-muted-foreground text-sm md:text-base font-normal leading-relaxed font-sans">
 												Beautiful, accessible components built with Tailwind CSS.
 											</p>
 										</div>
@@ -451,19 +450,18 @@ export default function LandingPage() {
 											<YourWorkInSync
 												width="400"
 												height="250"
-												theme="light"
 												className="scale-60 sm:scale-75 md:scale-90"
 											/>
 										</div>
 									</div>
 
 									{/* Bottom Left - Effortless integration */}
-									<div className="border-r-0 md:border-r border-[rgba(55,50,47,0.12)] p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-start items-start gap-4 sm:gap-6 bg-transparent">
+									<div className="border-r-0 md:border-r border-border p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-start items-start gap-4 sm:gap-6 bg-transparent">
 										<div className="flex flex-col gap-2">
-											<h3 className="text-[#37322F] text-lg sm:text-xl font-semibold leading-tight font-sans">
+											<h3 className="text-foreground text-lg sm:text-xl font-semibold leading-tight font-sans">
 												Layer System
 											</h3>
-											<p className="text-[#605A57] text-sm md:text-base font-normal leading-relaxed font-sans">
+											<p className="text-muted-foreground text-sm md:text-base font-normal leading-relaxed font-sans">
 												Support for GeoJSON, WMS, Tiles, and custom layer types.
 											</p>
 										</div>
@@ -483,10 +481,10 @@ export default function LandingPage() {
 									{/* Bottom Right - Numbers that speak */}
 									<div className="p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col justify-start items-start gap-4 sm:gap-6">
 										<div className="flex flex-col gap-2">
-											<h3 className="text-[#37322F] text-lg sm:text-xl font-semibold leading-tight font-sans">
+											<h3 className="text-foreground text-lg sm:text-xl font-semibold leading-tight font-sans">
 												Performance
 											</h3>
-											<p className="text-[#605A57] text-sm md:text-base font-normal leading-relaxed font-sans">
+											<p className="text-muted-foreground text-sm md:text-base font-normal leading-relaxed font-sans">
 												Optimized for large datasets and smooth interactions.
 											</p>
 										</div>
@@ -495,12 +493,11 @@ export default function LandingPage() {
 												<NumbersThatSpeak
 													width="100%"
 													height="100%"
-													theme="light"
 													className="w-full h-full object-contain"
 												/>
 											</div>
 											{/* Gradient mask for soft bottom edge */}
-											<div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#F7F5F3] to-transparent pointer-events-none" />
+											<div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-background to-transparent pointer-events-none" />
 											{/* Fallback content if component doesn't render */}
 											<div className="absolute inset-0 flex items-center justify-center opacity-20 hidden">
 												<div className="flex flex-col items-center gap-2 p-4">
@@ -519,7 +516,7 @@ export default function LandingPage() {
 											<div
 												// biome-ignore lint/suspicious/noArrayIndexKey: Decorative pattern
 												key={i}
-												className="self-stretch h-3 sm:h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+												className="self-stretch h-3 sm:h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-border outline-offset-[-0.25px]"
 											/>
 										))}
 									</div>
