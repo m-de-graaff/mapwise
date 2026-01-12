@@ -632,7 +632,7 @@ export function createPluginManager(deps: PluginManagerDependencies): PluginMana
 		}
 
 		const state: Record<string, unknown> = {};
-		for (const [key, value] of entry.pluginState.entries()) {
+		for (const [key, value] of Array.from(entry.pluginState.entries())) {
 			// Basic JSON serializability check happens in storage layer,
 			// but we could filter here too.
 			state[key] = value;

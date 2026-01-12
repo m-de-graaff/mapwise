@@ -135,7 +135,7 @@ export function createInteractionModeStore(
 
 			if (active && mode.exclusive) {
 				// Deactivate other exclusive modes
-				for (const otherMode of modes.values()) {
+				for (const otherMode of Array.from(modes.values())) {
 					if (otherMode.id !== id && otherMode.exclusive && otherMode.active) {
 						otherMode.active = false;
 					}

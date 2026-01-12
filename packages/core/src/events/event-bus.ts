@@ -220,7 +220,7 @@ export function createEventBus(options: EventBusOptions = {}): EventBus {
 			payloadSummary: summarizePayload(entry.payload),
 		};
 
-		for (const handler of [...debugHandlers]) {
+		for (const handler of Array.from(debugHandlers)) {
 			try {
 				(handler as EventHandler<typeof debugPayload>)(debugPayload);
 			} catch {
@@ -343,7 +343,7 @@ export function createEventBus(options: EventBusOptions = {}): EventBus {
 		}
 
 		// Copy the set to avoid issues if handlers modify subscriptions
-		const handlerList = [...set];
+		const handlerList = Array.from(set);
 		for (let i = 0; i < handlerList.length; i++) {
 			const handler = handlerList[i];
 			try {
@@ -375,7 +375,7 @@ export function createEventBus(options: EventBusOptions = {}): EventBus {
 	}
 
 	function eventNames(): EventName[] {
-		return [...handlers.keys()];
+		return Array.from(handlers.keys());
 	}
 
 	function hasListeners<E extends EventName>(event: E): boolean {

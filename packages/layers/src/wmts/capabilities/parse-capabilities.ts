@@ -80,7 +80,7 @@ function parseTileMatrixSets(doc: Document): WmtsTileMatrixSet[] {
 	const matrixSets: WmtsTileMatrixSet[] = [];
 	const matrixSetElements = doc.getElementsByTagName("TileMatrixSet");
 
-	for (const matrixSetEl of matrixSetElements) {
+	for (const matrixSetEl of Array.from(matrixSetElements)) {
 		if (!(matrixSetEl instanceof Element)) {
 			continue;
 		}
@@ -120,7 +120,7 @@ function parseTileMatrices(matrixSetEl: Element): WmtsTileMatrixDefinition[] {
 	const tileMatrices: WmtsTileMatrixDefinition[] = [];
 	const matrixElements = matrixSetEl.getElementsByTagName("TileMatrix");
 
-	for (const matrixEl of matrixElements) {
+	for (const matrixEl of Array.from(matrixElements)) {
 		if (!(matrixEl instanceof Element)) {
 			continue;
 		}
@@ -187,7 +187,7 @@ function parseLayers(doc: Document): WmtsCapabilityLayer[] {
 	const layers: WmtsCapabilityLayer[] = [];
 	const layerElements = doc.getElementsByTagName("Layer");
 
-	for (const layerEl of layerElements) {
+	for (const layerEl of Array.from(layerElements)) {
 		if (!(layerEl instanceof Element)) {
 			continue;
 		}
@@ -246,7 +246,7 @@ function parseLayer(layerEl: Element): WmtsCapabilityLayer | null {
 function parseLayerFormats(layerEl: Element): string[] {
 	const formats: string[] = [];
 	const formatElements = layerEl.getElementsByTagName("Format");
-	for (const formatEl of formatElements) {
+	for (const formatEl of Array.from(formatElements)) {
 		const format = formatEl.textContent?.trim();
 		if (format) {
 			formats.push(format);
@@ -258,7 +258,7 @@ function parseLayerFormats(layerEl: Element): string[] {
 function parseLayerMatrixSetLinks(layerEl: Element): string[] {
 	const links: string[] = [];
 	const linkElements = layerEl.getElementsByTagName("TileMatrixSetLink");
-	for (const linkEl of linkElements) {
+	for (const linkEl of Array.from(linkElements)) {
 		if (!(linkEl instanceof Element)) {
 			continue;
 		}
@@ -276,7 +276,7 @@ function parseLayerMatrixSetLinks(layerEl: Element): string[] {
 function parseLayerStyles(layerEl: Element): WmtsStyle[] {
 	const styles: WmtsStyle[] = [];
 	const styleElements = layerEl.getElementsByTagName("Style");
-	for (const styleEl of styleElements) {
+	for (const styleEl of Array.from(styleElements)) {
 		if (!(styleEl instanceof Element)) {
 			continue;
 		}
@@ -324,7 +324,7 @@ function parseLegendURL(styleEl: Element): string | undefined {
 function parseLayerResourceURLs(layerEl: Element): WmtsResourceUrl[] {
 	const resourceURLs: WmtsResourceUrl[] = [];
 	const resourceElements = layerEl.getElementsByTagName("ResourceURL");
-	for (const resourceEl of resourceElements) {
+	for (const resourceEl of Array.from(resourceElements)) {
 		if (!(resourceEl instanceof Element)) {
 			continue;
 		}
@@ -347,7 +347,7 @@ function parseLayerResourceURLs(layerEl: Element): WmtsResourceUrl[] {
 function parseLayerDimensions(layerEl: Element): WmtsDimension[] {
 	const dimensions: WmtsDimension[] = [];
 	const dimensionElements = layerEl.getElementsByTagName("Dimension");
-	for (const dimEl of dimensionElements) {
+	for (const dimEl of Array.from(dimensionElements)) {
 		if (!(dimEl instanceof Element)) {
 			continue;
 		}
@@ -382,7 +382,7 @@ function parseLayerDimensions(layerEl: Element): WmtsDimension[] {
 function parseDimensionValues(dimEl: Element): string[] {
 	const values: string[] = [];
 	const valueElements = dimEl.getElementsByTagName("Value");
-	for (const valueEl of valueElements) {
+	for (const valueEl of Array.from(valueElements)) {
 		const value = valueEl.textContent?.trim();
 		if (value) {
 			values.push(value);

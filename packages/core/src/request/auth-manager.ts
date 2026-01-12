@@ -26,7 +26,7 @@ export function createAuthManager(): AuthManager {
 
 	// Helper to find matching provider
 	function findProvider(url: string): TokenProvider | undefined {
-		for (const [pattern, provider] of providers) {
+		for (const [pattern, provider] of Array.from(providers)) {
 			if (pattern.test(url)) {
 				return provider;
 			}

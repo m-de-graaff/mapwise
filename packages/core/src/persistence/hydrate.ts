@@ -305,7 +305,7 @@ function removeUnpersistedLayers(
 	persistedLayerIds: Set<string>,
 	errors: Array<{ id: string; error: string }>,
 ): void {
-	for (const existingId of existingLayers) {
+	for (const existingId of Array.from(existingLayers)) {
 		if (persistedLayerIds.has(existingId)) {
 			continue;
 		}

@@ -92,7 +92,7 @@ export function WmtsLayerForm({ onAdd }: WmtsLayerFormProps) {
 		let successCount = 0;
 		const errors: string[] = [];
 
-		for (const identifier of selectedLayers) {
+		for (const identifier of Array.from(selectedLayers)) {
 			try {
 				const layer = layers.find((l) => l.identifier === identifier);
 				if (!layer) {

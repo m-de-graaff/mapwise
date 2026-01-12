@@ -1,5 +1,11 @@
 # @mapwise/core
 
+## 1.0.1
+
+### Patch Changes
+
+- Release update.
+
 ## 1.0.0
 
 ### Major Changes

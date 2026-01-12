@@ -4,7 +4,10 @@
 		"outDir": "./dist",
 		"rootDir": "./src",
 		"composite": true,
-		"jsx": "react-jsx"
+		"jsx": "react-jsx",
+		"noEmit": false,
+		"declaration": true,
+		"declarationMap": true
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "dist"]

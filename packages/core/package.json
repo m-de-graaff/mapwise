@@ -1,24 +1,25 @@
 {
 	"name": "@mapwise/core",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"private": false,
 	"description": "MapWise headless map engine",
 	"type": "module",
-	"main": "./src/index.ts",
-	"types": "./src/index.ts",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./src/index.ts",
-			"import": "./src/index.ts"
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
 		},
 		"./react": {
-			"types": "./src/react/index.ts",
-			"import": "./src/react/index.ts"
+			"types": "./dist/react/index.d.ts",
+			"import": "./dist/react/index.js"
 		}
 	},
-	"files": ["src"],
+	"files": ["dist", "src"],
 	"scripts": {
 		"typecheck": "tsc",
+		"build": "tsc",
 		"clean": "rimraf .turbo",
 		"test": "vitest run",
 		"test:watch": "vitest",
@@ -26,7 +27,7 @@
 	},
 	"peerDependencies": {
 		"maplibre-gl": "^5.0.0",
-		"react": "^19.0.0"
+		"react": "^18.0.0 || ^19.0.0"
 	},
 	"peerDependenciesMeta": {
 		"react": {

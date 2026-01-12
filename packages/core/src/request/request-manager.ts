@@ -52,7 +52,7 @@ export function createRequestManager(): RequestManager {
 			let currentUrl = url;
 			let currentInit = init || {};
 
-			for (const mod of modifiers.values()) {
+			for (const mod of Array.from(modifiers.values())) {
 				if (mod.transformFetch) {
 					const result = await mod.transformFetch(currentUrl, currentInit);
 					currentUrl = result.url;
@@ -66,7 +66,7 @@ export function createRequestManager(): RequestManager {
 		transformMapRequest(url: string, resourceType: ResourceType): RequestParameters {
 			let params: RequestParameters = { url };
 
-			for (const mod of modifiers.values()) {
+			for (const mod of Array.from(modifiers.values())) {
 				if (mod.transformMapRequest) {
 					const result = mod.transformMapRequest(params.url, resourceType);
 					if (result) {
