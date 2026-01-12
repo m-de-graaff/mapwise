@@ -52,6 +52,7 @@ export {
 } from "./buildings3d/buildings-3d-layer";
 export { createTerrainLayer, enableTerrain } from "./terrain/terrain-layer";
 export { createArcGisRestRasterLayer } from "./arcgis/arcgis-raster-layer";
+export { createHeatmapLayer } from "./heatmap/heatmap-layer";
 // TODO: Export layer factories as they are implemented
 // export { createPmtilesLayer } from "./pmtiles/pmtiles-layer";
 export { createPmtilesLayer } from "./pmtiles/pmtiles-layer";
@@ -111,6 +112,7 @@ export type { PersistedArcGisRestRasterLayerConfig } from "./arcgis/persistence"
 // export type { PmtilesLayerConfig } from "./pmtiles/types";
 export type { PmtilesHeader, PmtilesMetadata, PmtilesVectorLayer } from "./pmtiles/pmtiles-adapter";
 export type { PmtilesLayerConfig } from "./pmtiles/types";
+export type { HeatmapLayerConfig, HeatmapInputData, HeatmapStyle } from "./heatmap/heatmap-layer";
 
 // =============================================================================
 // Layer Utilities

@@ -1272,6 +1272,9 @@ function MapClusterLayer<P extends GeoJSON.GeoJsonProperties = GeoJSON.GeoJsonPr
 	return null;
 }
 
+// Export StickyTooltip from separate file
+import { StickyTooltip } from "./StickyTooltip";
+
 export {
 	MapComponent as Map,
 	useMap,
@@ -1284,6 +1287,7 @@ export {
 	MapControls,
 	MapRoute,
 	MapClusterLayer,
+	StickyTooltip,
 };
 
 export type { MapRef };

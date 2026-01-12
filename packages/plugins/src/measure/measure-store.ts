@@ -158,11 +158,8 @@ export class MeasureStore {
 	private calculateArea(points: [number, number][]): void {
 		const ring = [...points];
 		const start = ring[0];
-		if (
-			ring.length >= 3 &&
-			start &&
-			(start[0] !== ring[ring.length - 1][0] || start[1] !== ring[ring.length - 1][1])
-		) {
+		const end = ring[ring.length - 1];
+		if (ring.length >= 3 && start && end && (start[0] !== end[0] || start[1] !== end[1])) {
 			ring.push(start);
 		}
 

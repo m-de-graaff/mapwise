@@ -1,0 +1,34 @@
+{
+	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+		"target": "ES2022",
+		"useDefineForClassFields": true,
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"types": ["vite/client"],
+		"skipLibCheck": true,
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+		"jsx": "react-jsx",
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"erasableSyntaxOnly": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true,
+		"paths": {
+			"@mapwise/core": ["../../packages/core/src/index.ts"],
+			"@mapwise/core/*": ["../../packages/core/src/*"],
+			"@mapwise/ui": ["../../packages/ui/src/index.ts"],
+			"@mapwise/ui/*": ["../../packages/ui/src/*"],
+			"@mapwise/layers": ["../../packages/layers/src/index.ts"],
+			"@mapwise/layers/*": ["../../packages/layers/src/*"],
+			"@mapwise/plugins": ["../../packages/plugins/src/index.ts"],
+			"@mapwise/plugins/*": ["../../packages/plugins/src/*"]
+		}
+	},
+	"include": ["src", "../../packages/*/src"]
+}

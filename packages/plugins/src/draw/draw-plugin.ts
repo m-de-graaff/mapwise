@@ -155,7 +155,7 @@ export function createDrawPlugin(config: DrawPluginConfig): PluginDefinition {
 					if (!interactionMode.isActive("@mapwise/draw")) {
 						return;
 					}
-					// store!.updateLastVertex(e.lngLat); // Preview logic if we implemented it
+					store?.updateLastVertex(e.lngLat);
 				},
 			});
 

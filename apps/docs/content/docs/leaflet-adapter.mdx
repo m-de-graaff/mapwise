@@ -1,0 +1,77 @@
+---
+title: Leaflet Adapter (Experimental)
+description: Use Leaflet plugins with Mapwise via a compatibility adapter.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout title="Experimental Example" type="warn">
+  This documentation covers the `LeafletMapAdapter` found in `examples/leaflet-adapter`.
+  It is **not** shipped as a standard package in `@mapwise`. This serves as a reference for migrating legacy Leaflet plugins.
+</Callout>
+
+## Overview
+
+The `LeafletMapAdapter` is a compatibility bridge that allows you to use Leaflet plugins—specifically those that rely on DOM manipulation like `leaflet.markercluster`—on top of a Mapwise (MapLibre) map.
+
+It works by mocking the internal Leaflet `Map` API and syncing the state between MapLibre and a fake Leaflet container.
+
+## How It Works
+
+### DOM Structure
+Leaflet plugins expect a specific DOM hierarchy (`mapPane`, `markerPane`, etc.). The adapter creates a transparent overlay container `div` on top of the MapLibre canvas and exposes it as these panes.
+
+```typescript
+// LeafletMapAdapter.ts
+getPanes() {
+    if (!this._panes) {
+        const leafletContainer = document.createElement('div');
+        // ... positioned absolute, z-index above map ...
+        this._panes = {
+            markerPane: leafletContainer,
+            mapPane: leafletContainer, // Critical for animations
+            // ... all panes alias to this container
+        };
+    }
+    return this._panes;
+}
+```
+
+### Event Bridging
+Events are forwarded from MapLibre to Leaflet listeners. Crucially, the adapter handles the high-frequency event loop carefully to avoid crashing MapLibre if a plugin throws an error.
+
+```typescript
+map.on('move', () => {
+    try {
+        this.fire('move');
+        // Update layer positions manually since we don't have real Leaflet map panes moving
+        Object.values(this._layers).forEach(layer => layer.update?.());
+    } catch (e) {
+        console.error("Adapter error", e);
+    }
+});
+```
+
+### MarkerCluster Support
+To support `leaflet.markercluster`, specific internal shims were required:
+
+1.  **Spiderfy**: Requires `fitBounds` to zoom into clusters.
+2.  **Animations**: Requires `_mapPane` and `_latLngToNewLayerPoint` to calculate CSS transitions.
+3.  **Stability**: Requires robust error handling during the `move` event to prevent "Attempting to run(), but is already running" errors in MapLibre.
+
+## Usage
+
+Define the adapter in your React component and add it to the map.
+
+```tsx
+useEffect(() => {
+    const adapter = new LeafletMapAdapter(map);
+    const markers = L.markerClusterGroup();
+    
+    // Add markers
+    markers.addLayer(L.marker([52.3676, 4.9041]));
+
+    // Add clustering to the adapter (bridge)
+    markers.addTo(adapter as any);
+}, [map]);
+```

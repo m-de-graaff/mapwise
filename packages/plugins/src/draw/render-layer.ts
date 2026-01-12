@@ -6,7 +6,7 @@ const LAYER_POLYGON_FILL = "mapwise-draw-polygon-fill";
 const LAYER_POLYGON_STROKE = "mapwise-draw-polygon-stroke";
 const LAYER_LINE = "mapwise-draw-line";
 const LAYER_POINT = "mapwise-draw-point";
-const _LAYER_VERTEX = "mapwise-draw-vertex"; // Coordinates for editing
+// const LAYER_VERTEX = "mapwise-draw-vertex"; // TODO: Add vertex layer for editing
 
 /**
  * Manages MapLibre layers for rendering drawn features.

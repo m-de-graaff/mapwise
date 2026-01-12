@@ -28,7 +28,7 @@ export class FeatureHighlighter {
 
 		this.highlightedFeature = {
 			source: feature.source,
-			sourceLayer: feature.sourceLayer,
+			...(feature.sourceLayer !== undefined && { sourceLayer: feature.sourceLayer }),
 			id: feature.id,
 		};
 

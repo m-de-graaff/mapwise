@@ -20,7 +20,20 @@ export function KitchenSink() {
 
 	// Mock layer data
 	const { layers, setLayers } = useLayerList();
-	useLayerActions(setLayers); // Hooks must be called, but we don't use the actions here directly yet
+	const { toggleVisibility, setOpacity, removeLayer, reorderLayers } = useLayerActions(setLayers);
+
+	// Adapter for LayerPanel types
+	// biome-ignore lint/suspicious/noExplicitAny: Temporary mismatch adaptation
+	const panelLayers: any[] = layers.map((l) => ({
+		...l,
+		type: "geojson", // Default for UI, as KitchenSink uses mocked types
+	}));
+
+	// biome-ignore lint/suspicious/noExplicitAny: Demo mock data
+	const handleReorder = (newOrder: any[]) => {
+		// Map back to hook layer type if needed, or just pass if structure matches enough
+		reorderLayers(newOrder);
+	};
 
 	return (
 		<MapShell
@@ -54,8 +67,16 @@ export function KitchenSink() {
 						</button>
 					</div>
 					<div className="flex-1 overflow-hidden p-2">
-						{activePanel === "layers" && <LayerPanel />}
-						{activePanel === "legend" && <LegendPanel layers={layers} />}
+						{activePanel === "layers" && (
+							<LayerPanel
+								layers={panelLayers}
+								onToggle={toggleVisibility}
+								onOpacityChange={setOpacity}
+								onRemove={removeLayer}
+								onReorder={handleReorder}
+							/>
+						)}
+						{activePanel === "legend" && <LegendPanel layers={panelLayers} />}
 					</div>
 				</div>
 			}

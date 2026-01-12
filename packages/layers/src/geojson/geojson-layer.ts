@@ -123,7 +123,67 @@ function createPointLayers(
 			createUnclusteredPointLayer(layerId, sourceId, simpleStyle),
 		];
 	}
+
+	// If iconImage or textField is present, create a symbol layer
+	if (simpleStyle.iconImage || simpleStyle.textField) {
+		return [createSymbolLayer(layerId, sourceId, simpleStyle)];
+	}
+
 	return [createPointLayer(layerId, sourceId, simpleStyle)];
+}
+
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Factory complexity is inherent
+function createSymbolLayer(
+	layerId: string,
+	sourceId: string,
+	simpleStyle: GeoJsonStyle,
+): LayerSpecification {
+	// biome-ignore lint/suspicious/noExplicitAny: MapLibre layout is loose
+	const layout: any = {};
+	// biome-ignore lint/suspicious/noExplicitAny: MapLibre paint is loose
+	const paint: any = {};
+
+	if (simpleStyle.iconImage) {
+		layout["icon-image"] = simpleStyle.iconImage;
+		if (simpleStyle.iconSize !== undefined) {
+			layout["icon-size"] = simpleStyle.iconSize;
+		}
+		if (simpleStyle.iconRotate !== undefined) {
+			layout["icon-rotate"] = simpleStyle.iconRotate;
+		}
+		if (simpleStyle.iconAllowOverlap !== undefined) {
+			layout["icon-allow-overlap"] = simpleStyle.iconAllowOverlap;
+		}
+		if (simpleStyle.iconIgnorePlacement !== undefined) {
+			layout["icon-ignore-placement"] = simpleStyle.iconIgnorePlacement;
+		}
+	}
+
+	if (simpleStyle.textField) {
+		layout["text-field"] = simpleStyle.textField;
+		layout["text-font"] = ["DIN Offc Pro Medium", "Arial Unicode MS Bold"];
+		if (simpleStyle.textSize !== undefined) {
+			layout["text-size"] = simpleStyle.textSize;
+		}
+		if (simpleStyle.textAnchor !== undefined) {
+			layout["text-anchor"] = simpleStyle.textAnchor;
+		}
+		if (simpleStyle.textOffset !== undefined) {
+			layout["text-offset"] = simpleStyle.textOffset;
+		}
+
+		paint["text-color"] = simpleStyle.textColor || "#000000";
+		paint["text-halo-color"] = simpleStyle.textHaloColor || "#ffffff";
+		paint["text-halo-width"] = simpleStyle.textHaloWidth || 0;
+	}
+
+	return {
+		id: `${layerId}-symbols`,
+		type: "symbol",
+		source: sourceId,
+		layout,
+		paint,
+	};
 }
 
 function createClusterLayer(

@@ -61,6 +61,42 @@ export interface GeoJsonStyle {
 	circleColor?: string;
 	/** Circle opacity (0-1) */
 	circleOpacity?: number;
+
+	// Symbol options
+	/** Icon image name (sprite) */
+	iconImage?: string;
+	/** Icon size (scale factor, default 1) */
+	iconSize?: number;
+	/** Icon rotation in degrees */
+	iconRotate?: number | ["get", string];
+	/** Allow icon overlap (default false) */
+	iconAllowOverlap?: boolean;
+	/** Ignore icon placement (default false) */
+	iconIgnorePlacement?: boolean;
+
+	/** Text field (label) */
+	textField?: string;
+	/** Text size (default 12) */
+	textSize?: number;
+	/** Text color (default #000000) */
+	textColor?: string;
+	/** Text halo color (default #ffffff) */
+	textHaloColor?: string;
+	/** Text halo width (default 0) */
+	textHaloWidth?: number;
+	/** Text anchor (default center) */
+	textAnchor?:
+		| "center"
+		| "left"
+		| "right"
+		| "top"
+		| "bottom"
+		| "top-left"
+		| "top-right"
+		| "bottom-left"
+		| "bottom-right";
+	/** Text offset (ems) */
+	textOffset?: [number, number];
 }
 
 /**

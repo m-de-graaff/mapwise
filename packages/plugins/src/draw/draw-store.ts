@@ -1,6 +1,12 @@
 import type { Feature, FeatureCollection, LineString, Polygon } from "geojson";
 
-export type DrawMode = "static" | "draw_point" | "draw_line" | "draw_polygon" | "select";
+export type DrawMode =
+	| "static"
+	| "draw_point"
+	| "draw_line"
+	| "draw_polygon"
+	| "draw_rectangle"
+	| "select";
 
 export interface DrawState {
 	mode: DrawMode;
@@ -64,6 +70,7 @@ export class DrawStore {
 	/**
 	 * Add a vertex to the current feature.
 	 */
+	// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Branching logic for draw modes
 	addVertex(lngLat: [number, number]): void {
 		if (!this.isDrawingMode(this.state.mode)) {
 			return;
@@ -117,6 +124,42 @@ export class DrawStore {
 					},
 				};
 			}
+		} else if (this.state.mode === "draw_rectangle") {
+			if (this.state.currentFeature) {
+				// Second point: Finalize the rectangle
+				const geom = this.state.currentFeature.geometry as Polygon;
+				// Ensure outer ring exists and has points
+				if (!geom.coordinates[0] || geom.coordinates[0].length === 0) {
+					this.cancelDrawing();
+					return;
+				}
+				const start = geom.coordinates[0][0] as [number, number];
+				if (!start) {
+					return;
+				}
+
+				// Create box from start to current
+				const box = [
+					start, // start is now [number, number]
+					[lngLat[0], start[1]],
+					lngLat,
+					[start[0], lngLat[1]],
+					start,
+				];
+
+				geom.coordinates[0] = box;
+				this.finishDrawing();
+			} else {
+				// First point: Start rectangle
+				this.state.currentFeature = {
+					type: "Feature",
+					properties: {},
+					geometry: {
+						type: "Polygon",
+						coordinates: [[lngLat, lngLat, lngLat, lngLat, lngLat]], // Placeholder box
+					},
+				};
+			}
 		}
 		this.notify();
 	}
@@ -133,15 +176,28 @@ export class DrawStore {
 		const geom = this.state.currentFeature.geometry;
 		if (geom.type === "LineString") {
 			const coords = geom.coordinates;
-			if (coords.length > 0) {
+			if (coords && coords.length > 0) {
 				// If we want a "ghost" line segment, we actually add a temporary vertex
 				// But for now, let's assume the UI handles preview or we handle it by *adding* a temporary point?
 				// Standard approach: The currentFeature contains committed points.
 				// We typically render the "current" feature + a dynamic segment to the mouse.
-				// For simplicity here, let's assume we don't mutate the store for mouse move preview
 				// unless we want to render it via the same layer source.
-				// Let's Skip implementing "rubber band" effect in the store for now to keep it simple,
+				// Let's Skip implementing "rubber band" effect in the store for now for lines,
 				// or we can add a transient "cursorVertex".
+			}
+		} else if (geom.type === "Polygon" && this.state.mode === "draw_rectangle") {
+			const coords = geom.coordinates[0];
+			if (coords && coords.length === 5) {
+				const start = coords[0] as [number, number];
+				if (!start) {
+					return;
+				}
+				const lngLat = _lngLat;
+
+				// Update box preview
+				const box = [start, [lngLat[0], start[1]], lngLat, [start[0], lngLat[1]], start];
+				geom.coordinates[0] = box;
+				this.notify();
 			}
 		}
 	}
@@ -254,7 +310,7 @@ export class DrawStore {
 	}
 
 	private isDrawingMode(mode: DrawMode): boolean {
-		return ["draw_point", "draw_line", "draw_polygon"].includes(mode);
+		return ["draw_point", "draw_line", "draw_polygon", "draw_rectangle"].includes(mode);
 	}
 
 	private generateId(): string {

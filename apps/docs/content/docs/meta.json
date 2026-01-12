@@ -1,3 +1,13 @@
 {
-	"pages": ["index", "installation", "get-started", "core", "ui", "layers", "plugins", "debugging"]
+	"pages": [
+		"index",
+		"installation",
+		"get-started",
+		"core",
+		"ui",
+		"layers",
+		"plugins",
+		"debugging",
+		"leaflet-adapter"
+	]
 }
