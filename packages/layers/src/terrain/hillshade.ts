@@ -56,7 +56,6 @@ export function createHillshadeLayer(config: HillshadeLayerConfig): MapLibreLaye
 	const highlightColor = options.highlightColor ?? "#FFFFFF";
 	const azimuth = options.azimuth ?? 335;
 	const altitude = options.altitude ?? 45;
-	const _opacity = options.opacity ?? 0.6;
 
 	// Create hillshade layer specification
 	const layerSpec: HillshadeLayerSpecification = {

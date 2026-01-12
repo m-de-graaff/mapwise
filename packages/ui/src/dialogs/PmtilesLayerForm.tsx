@@ -37,8 +37,9 @@ export function PmtilesLayerForm({ onAdd }: PmtilesLayerFormProps) {
 				if (metadata.vector_layers && metadata.vector_layers.length > 0) {
 					setDetectedLayers(metadata.vector_layers);
 					// Auto-select first layer if not already set
-					if (!sourceLayer) {
-						setSourceLayer(metadata.vector_layers[0].id);
+					const firstLayer = metadata.vector_layers?.[0];
+					if (firstLayer && !sourceLayer) {
+						setSourceLayer(firstLayer.id);
 					}
 				} else {
 					setDetectedLayers([]);

@@ -56,7 +56,7 @@ export function WmtsLayerForm({ onAdd }: WmtsLayerFormProps) {
 					capabilities.layers.map((l) => ({
 						identifier: l.identifier,
 						title: l.title || l.identifier,
-						abstract: l.abstract,
+						...(l.abstract ? { abstract: l.abstract } : {}),
 					})),
 				);
 				setWmtsCapabilities(capabilities);

@@ -62,7 +62,7 @@ export async function fetchWmsCapabilities(
 
 	// Fetch and parse XML
 	const xmlString = await fetchXml(getCapabilitiesUrl, {
-		requestTransform: options?.requestTransform,
+		...(options?.requestTransform ? { requestTransform: options.requestTransform } : {}),
 	});
 	const xmlDoc = parseXml(xmlString);
 

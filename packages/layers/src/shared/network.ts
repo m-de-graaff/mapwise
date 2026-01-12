@@ -49,12 +49,12 @@ export async function fetchText(url: string, options: FetchOptions = {}): Promis
 
 	const { finalUrl, finalInit } = await applyRequestTransform(
 		url,
-		{ signal: userSignal, headers },
+		{ ...(userSignal ? { signal: userSignal } : {}), headers },
 		requestTransform,
 	);
 	const { finalSignal, timeoutId } = setupAbortSignals(
 		timeout,
-		finalInit.signal as AbortSignal | undefined,
+		(finalInit.signal ?? undefined) as AbortSignal | undefined,
 	);
 
 	try {
