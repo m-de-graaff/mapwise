@@ -1,0 +1,244 @@
+
+> mapwise@0.0.0 lint:fix D:\hobby\mapwise
+> biome check . --write
+
+.\apps\docs\app\(home)\page.tsx:290:13 lint/a11y/noSvgWithoutTitle ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Alternative text title element cannot be empty
+  
+    288 │ 										<Badge
+    289 │ 											icon={
+  > 290 │ 												<svg
+        │ 												^^^^
+  > 291 │ 													width="12"
+         ...
+  > 295 │ 													xmlns="http://www.w3.org/2000/svg"
+  > 296 │ 												>
+        │ 												^
+    297 │ 													<rect
+    298 │ 														x="1"
+  
+  i For accessibility purposes, SVGs should have an alternative text, provided via title element. If the svg element has role="img", you should add the aria-label or aria-labelledby attribute.
+  
+
+.\apps\docs\app\(home)\page.tsx:421:13 lint/a11y/noSvgWithoutTitle ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Alternative text title element cannot be empty
+  
+    419 │ 										<Badge
+    420 │ 											icon={
+  > 421 │ 												<svg
+        │ 												^^^^
+  > 422 │ 													width="12"
+         ...
+  > 426 │ 													xmlns="http://www.w3.org/2000/svg"
+  > 427 │ 												>
+        │ 												^
+    428 │ 													<rect
+    429 │ 														x="1"
+  
+  i For accessibility purposes, SVGs should have an alternative text, provided via title element. If the svg element has role="img", you should add the aria-label or aria-labelledby attribute.
+  
+
+.\apps\docs\app\(home)\page.tsx:654:6 lint/a11y/useSemanticElements ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × The elements with the following roles can be changed to the following elements:
+    <button>
+    <input type="button">
+  
+  
+    652 │ 					onClick();
+    653 │ 				}
+  > 654 │ 			}}
+        │ 			  
+  > 655 │ 			role="button"
+        │ 			^^^^^^^^^^^^^
+    656 │ 			tabIndex={0}
+    657 │ 		>
+  
+  i For examples and more information, see WAI-ARIA Roles
+  
+
+.\apps\docs\app\(home)\page.tsx:238:18 lint/suspicious/noArrayIndexKey ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Avoid using the index of an array as key property in an element.
+  
+    236 │ 										{Array.from({ length: 50 }).map((_, i) => (
+    237 │ 											<div
+  > 238 │ 												key={i}
+        │ 												     ^
+    239 │ 												className="self-stretch h-3 sm:h-4 rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+    240 │ 											/>
+  
+  i This is the source of the key value.
+  
+    234 │ 									{/* Left decorative pattern */}
+    235 │ 									<div className="w-[120px] sm:w-[140px] md:w-[162px] left-[-40px] sm:left-[-50px] md:left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
+  > 236 │ 										{Array.from({ length: 50 }).map((_, i) => (
+        │ 										                                    ^
+    237 │ 											<div
+    238 │ 												key={i}
+  
+  i The order of the items may change, and this also affects performances and component state.
+  
+  i Check the React documentation. 
+  
+
+.\apps\docs\components\documentation-section.tsx:87:9 lint/a11y/useKeyWithClickEvents ━━━━━━━━━━━━━━
+
+  × Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.
+  
+    86 │ 							return (
+  > 87 │ 								<div
+       │ 								^^^^
+  > 88 │ 									key={index}
+        ...
+  > 94 │ 									}`}
+  > 95 │ 								>
+       │ 								^
+    96 │ 									<div
+    97 │ 										className={`w-full h-0.5 bg-[rgba(50,45,43,0.08)] overflow-hidden ${isActive ? "opacity-100" : "opacity-0"}`}
+  
+  i Actions triggered using mouse events should have corresponding keyboard events to account for keyboard-only navigation.
+  
+
+.\apps\docs\components\documentation-section.tsx:88:15 lint/suspicious/noArrayIndexKey ━━━━━━━━━━━━━
+
+  × Avoid using the index of an array as key property in an element.
+  
+    86 │ 							return (
+    87 │ 								<div
+  > 88 │ 									key={index}
+       │ 									     ^^^^^
+    89 │ 									onClick={() => handleCardClick(index)}
+    90 │ 									className={`w-full overflow-hidden flex flex-col justify-start items-start transition-all duration-300 cursor-pointer ${
+  
+  i This is the source of the key value.
+  
+    81 │ 					{/* Left Column - Feature Cards */}
+    82 │ 					<div className="w-full md:w-auto md:max-w-[400px] flex flex-col justify-center items-center gap-4 order-2 md:order-1">
+  > 83 │ 						{cards.map((card, index) => {
+       │ 						                  ^^^^^
+    84 │ 							const isActive = index === activeCard;
+    85 │ 
+  
+  i The order of the items may change, and this also affects performances and component state.
+  
+  i Check the React documentation. 
+  
+
+.\apps\docs\components\footer-section.tsx:22:9 lint/a11y/noSvgWithoutTitle ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Alternative text title element cannot be empty
+  
+    20 │ 						<div className="w-6 h-6 relative overflow-hidden">
+    21 │ 							<div className="w-6 h-6 left-0 top-0 absolute flex items-center justify-center">
+  > 22 │ 								<svg
+       │ 								^^^^
+  > 23 │ 									width="16"
+        ...
+  > 27 │ 									xmlns="http://www.w3.org/2000/svg"
+  > 28 │ 								>
+       │ 								^
+    29 │ 									<path
+    30 │ 										d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+  
+  i For accessibility purposes, SVGs should have an alternative text, provided via title element. If the svg element has role="img", you should add the aria-label or aria-labelledby attribute.
+  
+
+.\apps\docs\components\footer-section.tsx:40:9 lint/a11y/noSvgWithoutTitle ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Alternative text title element cannot be empty
+  
+    38 │ 						<div className="w-6 h-6 relative overflow-hidden">
+    39 │ 							<div className="w-6 h-6 left-0 top-0 absolute flex items-center justify-center">
+  > 40 │ 								<svg
+       │ 								^^^^
+  > 41 │ 									width="16"
+        ...
+  > 45 │ 									xmlns="http://www.w3.org/2000/svg"
+  > 46 │ 								>
+       │ 								^
+    47 │ 									<path
+    48 │ 										d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"
+  
+  i For accessibility purposes, SVGs should have an alternative text, provided via title element. If the svg element has role="img", you should add the aria-label or aria-labelledby attribute.
+  
+
+.\apps\docs\components\footer-section.tsx:58:9 lint/a11y/noSvgWithoutTitle ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Alternative text title element cannot be empty
+  
+    56 │ 						<div className="w-6 h-6 relative overflow-hidden">
+    57 │ 							<div className="w-6 h-6 left-0 top-0 absolute flex items-center justify-center">
+  > 58 │ 								<svg
+       │ 								^^^^
+  > 59 │ 									width="16"
+        ...
+  > 63 │ 									xmlns="http://www.w3.org/2000/svg"
+  > 64 │ 								>
+       │ 								^
+    65 │ 									<path
+    66 │ 										d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.300 24 12c0-6.627-5.374-12-12-12z"
+  
+  i For accessibility purposes, SVGs should have an alternative text, provided via title element. If the svg element has role="img", you should add the aria-label or aria-labelledby attribute.
+  
+
+.\apps\docs\components\footer-section.tsx:150:14 lint/suspicious/noArrayIndexKey ━━━━━━━━━━━━━━━━━━━
+
+  × Avoid using the index of an array as key property in an element.
+  
+    148 │ 						{Array.from({ length: 400 }).map((_, i) => (
+    149 │ 							<div
+  > 150 │ 								key={i}
+        │ 								     ^
+    151 │ 								className="absolute w-[300px] h-16 border border-[rgba(3,7,18,0.08)]"
+    152 │ 								style={{
+  
+  i This is the source of the key value.
+  
+    146 │ 				<div className="absolute inset-0 w-full h-full overflow-hidden">
+    147 │ 					<div className="w-full h-full relative">
+  > 148 │ 						{Array.from({ length: 400 }).map((_, i) => (
+        │ 						                                     ^
+    149 │ 							<div
+    150 │ 								key={i}
+  
+  i The order of the items may change, and this also affects performances and component state.
+  
+  i Check the React documentation. 
+  
+
+.\apps\docs\components\cta-section.tsx:12:14 lint/suspicious/noArrayIndexKey ━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Avoid using the index of an array as key property in an element.
+  
+    10 │ 						{Array.from({ length: 300 }).map((_, i) => (
+    11 │ 							<div
+  > 12 │ 								key={i}
+       │ 								     ^
+    13 │ 								className="absolute h-4 w-full rotate-[-45deg] origin-top-left outline outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px]"
+    14 │ 								style={{
+  
+  i This is the source of the key value.
+  
+     8 │ 				<div className="absolute inset-0 w-full h-full overflow-hidden">
+     9 │ 					<div className="w-full h-full relative">
+  > 10 │ 						{Array.from({ length: 300 }).map((_, i) => (
+       │ 						                                     ^
+    11 │ 							<div
+    12 │ 								key={i}
+  
+  i The order of the items may change, and this also affects performances and component state.
+  
+  i Check the React documentation. 
+  
+
+Checked 297 files in 2s. No fixes applied.
+Found 11 errors.
+check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while applying fixes.
+  
+
+ ELIFECYCLE  Command failed with exit code 1.
