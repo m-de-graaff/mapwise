@@ -1,0 +1,74 @@
+---
+title: MapController
+description: The central controller for managing the map instance.
+---
+
+# MapController
+
+The `MapController` is the primary interface for programmatically interacting with the map. It wraps the MapLibre instance and provides high-level APIs for state management, layers, and plugins.
+
+You can access the controller via [`useMap`](/docs/core/hooks/map-hooks#usemap) or [`useMapController`](/docs/core/hooks/map-hooks#usemapcontroller).
+
+## Properties
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `id` | `string` | Unique identifier for this map instance. |
+| `isReady` | `boolean` | `true` if the map lifecycle state is 'ready'. |
+| `map` | `MapLibreMap` | Access the underlying MapLibre instance. **Throws an error** if the map is not ready. |
+| `layers` | [`LayerRegistry`](/docs/core/api/layer-registry) | Manager for adding, removing, and updating layers. |
+| `events` | `EventBus` | System for subscribing to and emitting typed events. |
+| `style` | `StyleManager` | Manager for map styles and basemaps. |
+| `plugins` | `PluginManager` | Manager for registered plugins. |
+| `interaction` | `InteractionModeStore` | Manager for interaction modes (e.g., drawing vs panning). |
+
+## Methods
+
+### `awaitReady()`
+
+Waits for the map to fully initialize and load its style. It is safe to await this multiple times.
+
+```typescript
+await controller.awaitReady();
+console.log('Map is ready to use');
+```
+
+**Returns:** `Promise<void>`
+
+---
+
+### `setBasemap(style, options?)`
+
+Changes the map's basemap style while preserving registered layers.
+
+```typescript
+await controller.setBasemap('https://demotiles.maplibre.org/style.json');
+```
+
+**Parameters:**
+
+- `style` (`string | object`): The style URL or JSON object.
+- `options` (`object`, optional):
+  - `transformStyle` (`function`): A function to modify the style before application.
+
+**Returns:** `Promise<SetBasemapResult>`
+
+---
+
+### `invalidateSize()`
+
+Forces the map to recalculate its container size. Call this if the container is resized programmatically (though `ResizeObserver` handles most cases automatically).
+
+```typescript
+controller.invalidateSize();
+```
+
+---
+
+### `destroy()`
+
+Cleanly destroys the map instance, removing all event listeners and DOM elements.
+
+```typescript
+await controller.destroy();
+```

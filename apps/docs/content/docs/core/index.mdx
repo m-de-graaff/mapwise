@@ -1,56 +1,59 @@
 ---
-title: "@mapwise/core"
-description: The headless map engine and state manager.
+title: @mapwise/core
+description: The headless map engine powering Mapwise.
 ---
 
 # @mapwise/core
 
-The `@mapwise/core` package is the foundation of the Mapwise system. It provides a stable, type-safe abstraction over MapLibre GL JS, managing the map lifecycle, layer state, and application events.
+The foundation of the Mapwise architecture. This package provides a stable, framework-safe mapping engine built on MapLibre GL JS. It handles map state, layers, events, and interaction, while remaining UI-agnostic.
 
 ## Installation
 
 ```bash
+npm install @mapwise/core maplibre-gl
+# or
 pnpm add @mapwise/core maplibre-gl
 ```
 
-## Core Components
+## Setup
 
-The core package exposes several key modules:
-
-### MapController
-[MapController](/docs/core/map-controller) is the main entry point. `MapController` is the interface you use to interact with the map. It does not extend the MapLibre Map class but *controls* it. It exposes sub-managers for layers, plugins, events, etc.
-
-### LayerRegistry
-[LayerRegistry](/docs/core/layer-registry) manages the list of layers. It ensures that the state of layers (visibility, opacity, order) is preserved independently of the map instance, and reapplies them automatically when the style changes or the map reloads.
-
-### EventBus
-[EventBus](/docs/core/events) is a strictly typed event emitter that decoupling components. Instead of listening to raw MapLibre events, you listen to Mapwise events (`map:ready`, `layer:added`, `plugin:error`).
-
-### React Integration
-While the core is framework-agnostic, it includes first-class React support via `@mapwise/core/react`.
+Wrap your application (or the map-specific part of it) in the `MapProvider`. This provides the `MapController` context to all child components.
 
 ```tsx
-import { MapProvider, useMap, useLayerState } from '@mapwise/core/react';
+import { MapProvider } from '@mapwise/core/react';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
-function MyComponent() {
-  const { controller } = useMap();
-  const layers = useLayerState();
-  
-  return <div>Layers: {layers.length}</div>;
+function App() {
+  return (
+    <MapProvider>
+      <MyMapApp />
+    </MapProvider>
+  );
 }
 ```
 
-## Basic Usage
+## Core Concepts
 
-```typescript
-import { createMap } from '@mapwise/core';
+### MapController
 
-const controller = createMap(document.getElementById('map'), {
-  style: 'https://demotiles.maplibre.org/style.json',
-  center: [0, 0],
-  zoom: 2
-});
+The `MapController` is the central brain of the library. It wraps the MapLibre instance and provides a cleaner, state-driven API for:
+- Managing layers (`controller.layers`)
+- Handling events (`controller.events`)
+- Managing interaction modes (`controller.interaction`)
 
-await controller.awaitReady();
-console.log('Map is ready!');
-```
+### Layer Registry
+
+Mapwise uses a registry system to manage layers. Unlike standard MapLibre layers, Mapwise layers have:
+- Consistent IDs
+- High-level state (visibility, opacity, ordering)
+- Type-safe configuration
+
+### Event Bus
+
+A strictly typed event system allows components to communicate without tight coupling.
+
+## API Reference
+
+- [Hooks](/docs/core/hooks) - React hooks for interacting with the map.
+- [MapController](/docs/core/api/map-controller) - The main controller class.
+- [LayerRegistry](/docs/core/api/layer-registry) - Layer management API.

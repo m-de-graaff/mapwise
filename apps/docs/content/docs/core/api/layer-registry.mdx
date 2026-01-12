@@ -1,0 +1,108 @@
+---
+title: LayerRegistry
+description: API for managing map layers.
+---
+
+# LayerRegistry
+
+The `LayerRegistry` manages the lifecycle, ordering, and state of map layers. It abstracts away the complexity of keeping MapLibre layers and sources in sync.
+
+Access it via `controller.layers`.
+
+## Methods
+
+### `registerLayer(definition, options?)`
+
+Adds a new layer to the map.
+
+```typescript
+controller.layers.registerLayer({
+  id: 'my-layer',
+  type: 'geojson',
+  source: {
+    id: 'my-source',
+    spec: { type: 'geojson', data: geojsonData }
+  },
+  layers: [
+    { id: 'my-layer-fill', type: 'fill', paint: { 'fill-color': 'red' } }
+  ]
+});
+```
+
+**Parameters:**
+- `definition` (`LayerDefinition`): The layer configuration.
+- `options` (`object`):
+  - `position`: Where to insert the layer (e.g., `{ type: 'top' }`).
+  - `visible`: Initial visibility override.
+  - `opacity`: Initial opacity override.
+
+---
+
+### `removeLayer(id)`
+
+Removes a layer and its associated sources (if not used by other layers).
+
+```typescript
+controller.layers.removeLayer('my-layer');
+```
+
+**Returns:** `boolean` (true if removed, false if not found)
+
+---
+
+### `setVisibility(id, visible)`
+
+Toggles layer visibility.
+
+```typescript
+controller.layers.setVisibility('my-layer', false);
+```
+
+---
+
+### `setOpacity(id, opacity)`
+
+Sets the opacity of the layer (0 to 1). This automatically applies to all sub-layers (fill, stroke, text) in a smart way.
+
+```typescript
+controller.layers.setOpacity('my-layer', 0.5);
+```
+
+---
+
+### `moveLayer(id, position)`
+
+Moves a layer to a new Z-index position.
+
+```typescript
+// Move to top
+controller.layers.moveLayer('my-layer', { type: 'top' });
+
+// Move below another layer
+controller.layers.moveLayer('my-layer', { 
+  type: 'below', 
+  layerId: 'labels' 
+});
+```
+
+---
+
+### `getAllLayers()`
+
+Returns an ordered array of all registered layers and their current state.
+
+```typescript
+const allLayers = controller.layers.getAllLayers();
+console.log(allLayers.map(l => l.id));
+```
+
+### `getLayerState(id)`
+
+Gets the state of a specific layer (visibility, opacity, applied status).
+
+```typescript
+const state = controller.layers.getLayerState('my-layer');
+if (state?.visible) {
+  // ...
+}
+```

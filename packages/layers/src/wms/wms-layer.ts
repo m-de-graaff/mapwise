@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * WMS raster layer factory function.
  *
@@ -10,7 +9,7 @@ import type { RasterSourceSpecification } from "maplibre-gl";
 import { validateSafeUrl } from "../shared/url";
 import { validateBaseLayerConfig } from "../shared/validation";
 import { toPersistedConfig } from "./persistence";
-import type { WmsGetMapParams, WmsRasterLayerConfig } from "./types";
+import type { WmsGetMapParams, WmsRasterLayerConfig, WmsVersion } from "./types";
 import { buildWmsTileUrl } from "./url-builder";
 
 // =============================================================================
@@ -104,7 +103,7 @@ function createWmsSourceSpec(config: WmsRasterLayerConfig): RasterSourceSpecific
 		styles,
 		format = "image/png",
 		transparent = true,
-		version = "1.3.0",
+		version = "1.3.0" as WmsVersion,
 		crs = "EPSG:3857",
 		extraParams = {},
 		tileWidth = 512,
@@ -320,7 +319,7 @@ function buildTileUrl(
 		bbox,
 		width: tileWidth,
 		height: tileHeight,
-		version,
+		version: version as WmsVersion,
 		format,
 		transparent,
 		extraParams,
@@ -330,8 +329,10 @@ function buildTileUrl(
 		urlParams.styles = styles;
 	}
 	if (version === "1.3.0") {
-		urlParams.crs = crs;
-	} else {
+		if (crs !== undefined) {
+			urlParams.crs = crs;
+		}
+	} else if (crs !== undefined) {
 		urlParams.srs = crs;
 	}
 

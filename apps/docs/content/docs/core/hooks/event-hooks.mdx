@@ -1,0 +1,78 @@
+---
+title: Event Hooks
+description: Hooks to listen to map interactions and lifecycle events.
+---
+
+# Event Hooks
+
+The Mapwise event system allows you to react to user interactions (clicks, hovers) and system events (map loaded, layers changed).
+
+---
+
+## `useMapEvent`
+
+Subscribes to a single specific event. The handler is automatically attached on mount and detached on unmount.
+
+```tsx
+useMapEvent(eventName, handler);
+```
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `event` | `EventName` | The name of the event (e.g., `'feature:click'`, `'map:ready'`). |
+| `handler` | `(payload) => void` | The function to call when the event triggers. |
+
+### Usage
+
+```tsx
+import { useMapEvent } from '@mapwise/core/react';
+
+function ClickLogger() {
+  useMapEvent('feature:click', (event) => {
+    console.log('Clicked feature properties:', event.properties);
+    console.log('At coordinates:', event.lngLat);
+  });
+
+  return null;
+}
+```
+
+---
+
+## `useMapEvents`
+
+Subscribes to multiple events at once using a map object. This is cleaner than calling `useMapEvent` multiple times if you have related handlers.
+
+```tsx
+useMapEvents({
+  'event:name': handler,
+  'another:event': handler2
+});
+```
+
+### Usage
+
+```tsx
+import { useMapEvents } from '@mapwise/core/react';
+
+function MapLogger() {
+  useMapEvents({
+    'map:ready': () => console.log('Map Loaded'),
+    'layer:added': ({ layerId }) => console.log('New layer:', layerId),
+    'error': (error) => console.error('Map error:', error)
+  });
+
+  return null;
+}
+```
+
+### Common Events
+
+| Event Name | Description | Payload |
+| :--- | :--- | :--- |
+| `map:ready` | Map has finished loading styles. | `{ map: MapLibreInstance }` |
+| `feature:click` | User clicked a vector feature. | `{ featureId, layerId, properties, lngLat }` |
+| `feature:hover` | Mouse moved over a vector feature. | `{ featureId, layerId, properties }` |
+| `layer:visibility` | A layer was hidden/shown. | `{ layerId, visible }` |

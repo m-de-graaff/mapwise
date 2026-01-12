@@ -1,0 +1,118 @@
+---
+title: Map Hooks
+description: Hooks for accessing the Mapwise controller and context.
+---
+
+# Map Hooks
+
+These hooks allow you to access the `MapController` and the state of the map engine. They are the entry point for most interactions with the `@mapwise/core` library.
+
+---
+
+## `useMap`
+
+Accesess the [`MapContext`](/docs/core/api/context). This is the safest way to access the map, as it gives you both the controller and the readiness state.
+
+```tsx
+const { controller, isReady } = useMap();
+```
+
+### Usage
+
+```tsx
+import { useMap } from '@mapwise/core/react';
+
+function MyComponent() {
+  const { controller, isReady } = useMap();
+
+  if (!isReady) {
+    return <div>Loading map...</div>;
+  }
+
+  return (
+    <button onClick={() => controller.setPitch(45)}>
+      Tilt Map
+    </button>
+  );
+}
+```
+
+### Returns
+
+Returns a `MapContextValue` object with:
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `controller` | `MapController \| undefined` | The map controller instance. Undefined during initial load. |
+| `isReady` | `boolean` | `true` when the map is fully loaded and styles are ready. |
+
+### Troubleshooting
+
+> **Error: useMap must be used within a MapProvider**
+
+This error happens if you try to use the hook in a component that is not a child of `<MapProvider>`. Make sure your app structure looks like this:
+
+```tsx
+<MapProvider>
+  <YourComponent /> {/* Can use useMap */}
+</MapProvider>
+```
+
+---
+
+## `useMapController`
+
+A convenience hook that returns the `MapController` directly. It throws an error if the map is not ready.
+
+```tsx
+const controller = useMapController();
+```
+
+### Usage
+
+Use this hook in components that are conditionally rendered **only after** the map is ready.
+
+```tsx
+function MapTools() {
+  // We assume this component is only mounted when map is ready
+  const controller = useMapController();
+
+  const handleReset = () => {
+    controller.resetNorth();
+  };
+
+  return <button onClick={handleReset}>Reset North</button>;
+}
+```
+
+### Troubleshooting
+
+> **Error: useMapController called but map is not ready**
+
+If you use this hook in a component that renders immediately on page load, it will crash. You should either:
+1. Use `useMap` instead and check `if (!isReady) return ...`
+2. Only render the component that uses `useMapController` after checking readiness in a parent.
+
+---
+
+## `useMapReady`
+
+Returns a boolean indicating if the map is ready. This is useful for disabling UI elements during the loading phase.
+
+```tsx
+const isReady = useMapReady();
+```
+
+### Usage
+
+```tsx
+function SubmitButton() {
+  const isReady = useMapReady();
+
+  return (
+    <button disabled={!isReady}>
+      Submit Location
+    </button>
+  );
+}
+```

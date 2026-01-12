@@ -1,0 +1,123 @@
+---
+title: Layer Hooks
+description: Hooks to subscribe to layer states and lists.
+---
+
+# Layer Hooks
+
+Mapwise maps are composed of multiple layers. These hooks allow your React components to stay in sync with the layer registry.
+
+---
+
+## `useLayerState`
+
+Subscribes to the state of a single specific layer. It triggers a re-render whenever that layer's properties (visibility, opacity, etc.) change.
+
+```tsx
+const layer = useLayerState(layerId);
+```
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `layerId` | `string` | The unique identifier of the layer. |
+
+### Returns
+
+Returns a `LayerState` object if the layer exists, or `undefined` if it doesn't.
+
+### Usage
+
+```tsx
+import { useLayerState, useMapController } from '@mapwise/core/react';
+
+function LayerOpacitySlider({ layerId }) {
+  const layer = useLayerState(layerId);
+  const controller = useMapController();
+
+  if (!layer) return null;
+
+  return (
+    <input
+      type="range"
+      min="0"
+      max="1"
+      step="0.1"
+      value={layer.opacity}
+      onChange={(e) => {
+        controller.layers.setOpacity(layerId, parseFloat(e.target.value));
+      }}
+    />
+  );
+}
+```
+
+---
+
+## `useAllLayers`
+
+Returns an array of all layers currently registered in the map. This is useful for building layer lists or legends.
+
+```tsx
+const layers = useAllLayers();
+```
+
+### Returns
+
+Returns `LayerState[]`. The array is sorted by the z-index/rendering order defined in the registry.
+
+### Usage
+
+```tsx
+import { useAllLayers } from '@mapwise/core/react';
+
+function LayerList() {
+  const layers = useAllLayers();
+
+  return (
+    <ul>
+      {layers.map((layer) => (
+        <li key={layer.id}>
+          {layer.id} ({layer.visible ? 'Visible' : 'Hidden'})
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+---
+
+## `useLayersByCategory`
+
+Returns a list of layers filtered by a specific category. Categories are defined when registering layers (e.g., `'base'`, `'overlay'`, `'label'`).
+
+```tsx
+const baseLayers = useLayersByCategory('base');
+```
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `category` | `LayerCategory` | The category to filter by (e.g., `'base'`, `'overlay'`). |
+
+### Usage
+
+```tsx
+function BaseMapSwitcher() {
+  const baseLayers = useLayersByCategory('base');
+  const controller = useMapController();
+
+  return (
+    <select onChange={(e) => controller.layers.setVisibility(e.target.value, true)}>
+      {baseLayers.map(layer => (
+        <option key={layer.id} value={layer.id}>
+          {layer.metadata?.title || layer.id}
+        </option>
+      ))}
+    </select>
+  );
+}
+```

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * 3D buildings layer factory function.
  *
@@ -115,26 +114,24 @@ function createFillExtrusionLayerSpec(
 		type: "fill-extrusion",
 		source: sourceId,
 		"source-layer": sourceLayer,
-		minzoom: minZoom,
 		paint: {
-			"fill-extrusion-height": heightValue as
-				| number
-				| [
-						string,
-						...unknown[],
-				  ] as unknown as FillExtrusionLayerSpecification["paint"]["fill-extrusion-height"],
+			"fill-extrusion-height": heightValue as NonNullable<
+				NonNullable<FillExtrusionLayerSpecification["paint"]>["fill-extrusion-height"]
+			>,
 			"fill-extrusion-opacity": opacity ?? 0.8,
 			"fill-extrusion-color": color || "#aaaaaa",
 		},
 	};
 
+	if (minZoom !== undefined) {
+		layer.minzoom = minZoom;
+	}
+
 	if (baseValue !== undefined && layer.paint) {
-		layer.paint["fill-extrusion-base"] = baseValue as
-			| number
-			| [
-					string,
-					...unknown[],
-			  ] as unknown as FillExtrusionLayerSpecification["paint"]["fill-extrusion-base"];
+		const paint = layer.paint;
+		paint["fill-extrusion-base"] = baseValue as NonNullable<
+			NonNullable<FillExtrusionLayerSpecification["paint"]>["fill-extrusion-base"]
+		>;
 	}
 
 	return layer;
@@ -421,11 +418,17 @@ function detectProperties(
 		detectedBaseProperty = baseProperties[0]; // Use first common base property as guess
 	}
 
-	return {
-		heightProperty: detectedHeightProperty,
-		baseProperty: detectedBaseProperty,
+	const result: { heightProperty?: string; baseProperty?: string; confidenceBoost: number } = {
 		confidenceBoost,
 	};
+	if (detectedHeightProperty !== undefined) {
+		result.heightProperty = detectedHeightProperty;
+	}
+	if (detectedBaseProperty !== undefined) {
+		result.baseProperty = detectedBaseProperty;
+	}
+
+	return result;
 }
 
 function createCandidate(
@@ -442,10 +445,10 @@ function createCandidate(
 		confidence: Math.min(1.0, baseConfidence + properties.confidenceBoost),
 	};
 
-	if (properties.heightProperty) {
+	if (properties.heightProperty !== undefined) {
 		candidate.heightProperty = properties.heightProperty;
 	}
-	if (properties.baseProperty) {
+	if (properties.baseProperty !== undefined) {
 		candidate.baseProperty = properties.baseProperty;
 	}
 

@@ -1,35 +1,60 @@
 ---
-title: React Hooks
-description: Hooks for using Mapwise with React.
+title: Built-in React Hooks
+description: Hooks let you use different Mapwise features from your components.
 ---
 
-# React Hooks
+# Built-in React Hooks
 
-The `@mapwise/core` package provides a set of hooks to interact with the map state in a React application.
+Hooks let you use different Mapwise features from your components. This page lists all built-in Hooks in `@mapwise/core`.
 
-## useMap
+## Map Hooks
 
-Access the `MapController` and current map state.
+Map hooks allow you to access the central `MapController` and check the map's readiness state.
 
-<AutoTypeTable
-  path="../../packages/core/src/react/useMap.ts"
-  name="useMap"
-/>
+- [`useMap`](/docs/core/hooks/map-hooks#usemap) reads the current map context.
+- [`useMapController`](/docs/core/hooks/map-hooks#usemapcontroller) returns the controller directly, useful when you are sure the map is ready.
+- [`useMapReady`](/docs/core/hooks/map-hooks#usemapready) returns a boolean indicating if the map is fully loaded.
 
-## useLayerState
+## Layer Hooks
 
-Manage the state of a specific layer.
+Layer hooks allow you to subscribe to the state of layers. Using these hooks ensures your UI updates automatically when layers are added, removed, or modified.
 
-<AutoTypeTable
-  path="../../packages/core/src/react/useLayerState.ts"
-  name="useLayerState"
-/>
+- [`useLayerState`](/docs/core/hooks/layer-hooks#uselayerstate) subscribes to the state of a specific layer (visibility, opacity, etc.).
+- [`useAllLayers`](/docs/core/hooks/layer-hooks#usealllayers) subscribes to the list of all registered layers.
+- [`useLayersByCategory`](/docs/core/hooks/layer-hooks#uselayersbycategory) subscribes to layers filtered by their category (e.g., 'base', 'overlay').
 
-## useMapEvents
+## Event Hooks
 
-Subscribe to map events within a component.
+Event hooks let you listen to map events like clicks, moves, or layer changes.
 
-<AutoTypeTable
-  path="../../packages/core/src/react/useMapEvents.ts"
-  name="useMapEvents"
-/>
+- [`useMapEvent`](/docs/core/hooks/event-hooks#usemapevent) subscribes to a single map event.
+- [`useMapEvents`](/docs/core/hooks/event-hooks#usemapevents) subscribes to multiple map events at once.
+
+---
+
+## Usage Example
+
+Here is a simple example showing how to combine these hooks:
+
+```tsx
+import { useMap, useLayerState } from '@mapwise/core/react';
+
+function LayerControl({ layerId }) {
+  const { isReady } = useMap();
+  const layer = useLayerState(layerId);
+
+  if (!isReady) return <div>Loading...</div>;
+  if (!layer) return <div>Layer not found</div>;
+
+  return (
+    <div>
+      <input 
+        type="checkbox" 
+        checked={layer.visible} 
+        onChange={/* update logic */} 
+      />
+      {layer.id}
+    </div>
+  );
+}
+```
