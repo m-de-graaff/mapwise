@@ -1,0 +1,51 @@
+---
+title: Debugging
+description: Tools for inspecting and debugging the map at runtime.
+---
+
+# Debugging
+
+When developing with Mapwise, you often need to inspect the internal state of the map or the controller. The library exposes global variables in the browser environment to help with this.
+
+## Global Helpers
+
+These helpers are available on the `window` object when the `MapProvider` is mounted.
+
+### `window.__mapwise`
+
+Access the global [MapController](/docs/core/api/map-controller) instance.
+
+```javascript
+// Check registered layers
+console.log(window.__mapwise.layers.getAllLayers());
+
+// Manually trigger an event
+window.__mapwise.events.emit('my-event', { data: 123 });
+
+// Inspect plugins
+console.log(window.__mapwise.plugins);
+```
+
+### `window.getDebugMap()`
+
+Returns the underlying [MapLibre GL JS map instance](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/). This is useful for checking the raw style, sources, or native event listeners.
+
+```javascript
+const map = window.getDebugMap();
+
+// Check current zoom
+console.log(map.getZoom());
+
+// Inspect the raw style spec
+console.log(map.getStyle());
+
+// Fly to a location manually
+map.flyTo({ center: [0, 0], zoom: 4 });
+```
+
+## React DevTools
+
+Since Mapwise state is managed via standard React hooks/context, the React DevTools extension is the best way to debug component state.
+
+- Inspect the `MapProvider` to see the current `controller` and `isReady` state.
+- Inspect `LayerPanel` or your custom components to see which layers are currently passed down.

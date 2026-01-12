@@ -1,0 +1,51 @@
+---
+title: "@mapwise/plugins"
+description: Extensible functionality modules that plug into the core controller.
+---
+
+# @mapwise/plugins
+
+The plugins package provides optional, interactive features that extend the core map functionality. Plugins can add new interaction modes (like drawing), overlays (like measurement tools), or analysis tools (like feature inspection).
+
+## Installation
+
+```bash
+npm install @mapwise/plugins
+# or
+pnpm add @mapwise/plugins
+```
+
+## Available Plugins
+
+| Plugin | Factory | Description |
+| :--- | :--- | :--- |
+| **Draw** | [`createDrawPlugin`](/docs/plugins/draw-plugin) | Draw points, lines, and polygons on the map. |
+| **Measure** | [`createMeasurePlugin`](/docs/plugins/measure-plugin) | Measure distances and areas. |
+| **Inspect** | [`createInspectPlugin`](/docs/plugins/inspect-plugin) | Query and highlight features on click/hover. |
+
+## Usage
+
+Plugins are registered with the `MapController` using the `plugins.register` method.
+
+```typescript
+import { createDrawPlugin } from '@mapwise/plugins';
+import { useMapController } from '@mapwise/core/react';
+
+// In your component
+const controller = useMapController();
+
+useEffect(() => {
+  // Register the plugin
+  const drawPlugin = createDrawPlugin({
+    enabled: true,
+    cursor: 'crosshair'
+  });
+
+  controller.plugins.register(drawPlugin);
+
+  // Cleanup on unmount
+  return () => {
+    controller.plugins.unregister('@mapwise/draw');
+  };
+}, [controller]);
+```

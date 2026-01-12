@@ -1,0 +1,50 @@
+---
+title: Measure Plugin
+description: Measure distances and areas.
+---
+
+# Measure Plugin
+
+The Measure plugin allows users to interactively measure distances (lines) and areas (polygons).
+
+## Usage
+
+```typescript
+import { createMeasurePlugin } from '@mapwise/plugins';
+
+const measurePlugin = createMeasurePlugin({
+  enabled: true
+});
+
+controller.plugins.register(measurePlugin);
+```
+
+## Configuration
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `enabled` | `boolean` | `true` | Whether the plugin is active upon registration. |
+| `cursor` | `string` | `'crosshair'` | CSS cursor to use when measuring. |
+
+## Events
+
+| Event Name | Payload | Description |
+| :--- | :--- | :--- |
+| `plugin:@mapwise/measure:update` | `{ result, points, mode }` | Emitted as the user adds points or moves the cursor. |
+| `plugin:@mapwise/measure:complete` | `{ result, points, mode }` | Emitted when the measurement is finished (e.g., via double-click or Enter). |
+
+## Controlling the Plugin
+
+### Set Mode
+
+```typescript
+controller.events.emit('plugin:@mapwise/measure:setMode', { 
+  mode: 'distance' // 'idle' | 'distance' | 'area'
+});
+```
+
+### Clear
+
+```typescript
+controller.events.emit('plugin:@mapwise/measure:clear', {});
+```

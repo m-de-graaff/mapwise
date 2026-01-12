@@ -1,0 +1,61 @@
+---
+title: Map
+description: The core map component.
+---
+
+# Map
+
+The `<Map>` component renders a MapLibre GL JS map instance. It acts as the `MapProvider` for its children, allowing them to access the map controller via hooks.
+
+## Usage
+
+```tsx
+import { Map } from '@mapwise/ui';
+
+function MyMap() {
+  return (
+    <div className="h-screen w-full">
+      <Map
+        initialViewState={{
+          longitude: -122.4,
+          latitude: 37.8,
+          zoom: 14
+        }}
+        styles={{
+            light: 'https://demotiles.maplibre.org/style.json',
+            dark: 'https://demotiles.maplibre.org/style.json'
+        }}
+      >
+        {/* Child components like markers or popups go here */}
+      </Map>
+    </div>
+  );
+}
+```
+
+## Props
+
+The component accepts all standard [MapLibre MapOptions](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/) as props (e.g., `minZoom`, `maxZoom`, `antialias`), plus:
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `styles` | `{ light: string, dark: string }` | Style URLs for light and dark modes. Automatically switches based on system theme. |
+| `className` | `string` | className for the map container. |
+
+## Markers and Popups
+
+The package exports helpers for markers and popups that work declaratively.
+
+```tsx
+import { Map, MapMarker, MapPopup } from '@mapwise/ui';
+
+<Map>
+  <MapMarker longitude={-122.4} latitude={37.8}>
+    <div className="bg-red-500 rounded-full w-4 h-4" />
+  </MapMarker>
+  
+  <MapPopup longitude={-122.4} latitude={37.8}>
+    <div>Hello San Francisco!</div>
+  </MapPopup>
+</Map>
+```

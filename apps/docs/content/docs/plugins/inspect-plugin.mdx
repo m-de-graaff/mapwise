@@ -1,0 +1,39 @@
+---
+title: Inspect Plugin
+description: Query and inspect map features on click or hover.
+---
+
+# Inspect Plugin
+
+The Inspect plugin allows you to identify features on the map. It supports highlighting features on hover and retrieving feature properties on click.
+
+## Usage
+
+```typescript
+import { createInspectPlugin } from '@mapwise/plugins';
+
+const inspectPlugin = createInspectPlugin({
+  enabled: true,
+  highlight: true,
+  inspectOnHover: true
+});
+
+controller.plugins.register(inspectPlugin);
+```
+
+## Configuration
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `enabled` | `boolean` | `true` | Whether the plugin is active upon registration. |
+| `highlight` | `boolean` | `true` | Whether to visually highlight the hovered feature. |
+| `inspectOnHover` | `boolean` | `false` | If true, emits events on hover in addition to click. |
+| `layers` | `string[]` | `undefined` | Optional list of layer IDs to restrict queries to. |
+
+## Events
+
+| Event Name | Payload | Description |
+| :--- | :--- | :--- |
+| `plugin:@mapwise/inspect:click` | `{ features, lngLat, point }` | Emitted when a user clicks on the map. `features` is an array of MapLibre features under the cursor. |
+| `plugin:@mapwise/inspect:hover` | `{ features, lngLat, point }` | Emitted on mouse move (if `inspectOnHover` is true). |
+

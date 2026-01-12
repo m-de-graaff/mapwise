@@ -1,0 +1,62 @@
+---
+title: Draw Plugin
+description: Draw points, lines, and polygons on the map.
+---
+
+# Draw Plugin
+
+The Draw plugin enables users to create and edit geometry directly on the map. It manages an internal state of drawn features (GeoJSON) and handles rendering them.
+
+## Usage
+
+```typescript
+import { createDrawPlugin } from '@mapwise/plugins';
+
+const drawPlugin = createDrawPlugin({
+  enabled: true,
+  finishOnDoubleClick: true
+});
+
+controller.plugins.register(drawPlugin);
+```
+
+## Configuration
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `enabled` | `boolean` | `true` | Whether the plugin is active upon registration. |
+| `cursor` | `string` | `'crosshair'` | CSS cursor to use when drawing. |
+| `finishOnDoubleClick` | `boolean` | `true` | If true, double-clicking finishes the current line/polygon. |
+
+## Events
+
+The plugin emits events through the `MapController` event bus.
+
+| Event Name | Payload | Description |
+| :--- | :--- | :--- |
+| `plugin:@mapwise/draw:change` | `{ featureCollection }` | Emitted whenever features are added, updated, or deleted. |
+| `plugin:@mapwise/draw:modeChange` | `{ mode }` | Emitted when the drawing mode changes (e.g., from 'static' to 'draw_line'). |
+
+## Controlling the Plugin
+
+You can control the plugin via events.
+
+### Set Mode
+
+```typescript
+controller.events.emit('plugin:@mapwise/draw:setMode', { 
+  mode: 'draw_polygon' // 'static' | 'draw_point' | 'draw_line' | 'draw_polygon' | 'select'
+});
+```
+
+### Clear All
+
+```typescript
+controller.events.emit('plugin:@mapwise/draw:clearAll', {});
+```
+
+### Delete Selected
+
+```typescript
+controller.events.emit('plugin:@mapwise/draw:deleteSelected', {});
+```

@@ -1,0 +1,42 @@
+---
+title: Panels
+description: Pre-built UI panels for layer management and more.
+---
+
+# Panels
+
+## `LayerPanel`
+
+A drag-and-drop enabled list of layers. It allows users to toggle visibility, adjust opacity, and reorder layers.
+
+### Usage
+
+```tsx
+import { LayerPanel, useLayerList, useLayerActions } from '@mapwise/ui';
+
+function MyLayerPanel() {
+  // Helpers to get state and actions from the controller
+  const layers = useLayerList();
+  const { setVisibility, setOpacity, removeLayer, reorderLayers } = useLayerActions();
+
+  return (
+    <LayerPanel
+      layers={layers}
+      onToggle={setVisibility}
+      onOpacityChange={setOpacity}
+      onRemove={removeLayer}
+      onReorder={reorderLayers}
+    />
+  );
+}
+```
+
+### Props
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `layers` | `PanelLayer[]` | List of layer objects to display. |
+| `onToggle` | `(id) => void` | Callback for visibility toggle. |
+| `onOpacityChange` | `(id, val) => void` | Callback for opacity slider. |
+| `onRemove` | `(id) => void` | Callback for layer removal. |
+| `onReorder` | `(layers) => void` | Callback when drag-and-drop finishes. |

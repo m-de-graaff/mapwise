@@ -1,0 +1,42 @@
+---
+title: MapShell
+description: Application layout shell.
+---
+
+# MapShell
+
+`MapShell` provides a standard layout for GIS applications. It manages:
+- A full-screen map area.
+- A collapsible sidebar (responsive).
+- A top bar for search/branding.
+- A status bar at the bottom.
+- Floating panels.
+
+## Usage
+
+```tsx
+import { MapShell, Map } from '@mapwise/ui';
+
+function App() {
+  return (
+    <MapShell
+      topBar={<div className="p-4 bg-white border-b">My GIS App</div>}
+      sidebar={<div className="p-4">My Tools</div>}
+      statusBar={<div className="p-2 bg-gray-100 text-xs">Ready</div>}
+    >
+      <Map />
+    </MapShell>
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `sidebar` | `ReactNode` | Content for the left sidebar. |
+| `topBar` | `ReactNode` | Content for the header. |
+| `panel` | `ReactNode` | Content for a floating right panel. |
+| `statusBar` | `ReactNode` | Content for the footer. |
+| `sidebarOpen` | `boolean` | Control sidebar visibility state. |
+| `onSidebarOpenChange` | `(open: boolean) => void` | Callback when sidebar state changes (e.g. mobile drawer close). |

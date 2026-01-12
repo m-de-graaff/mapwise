@@ -1,0 +1,43 @@
+---
+title: "@mapwise/ui"
+description: A comprehensive UI component library built for Mapwise.
+---
+
+# @mapwise/ui
+
+The UI package provides ready-to-use React components for building map applications. It uses [Tailwind CSS](https://tailwindcss.com/) for styling and [shadcn/ui](https://ui.shadcn.com/) for base components.
+
+## Installation
+
+```bash
+npm install @mapwise/ui
+# or
+pnpm add @mapwise/ui
+```
+
+## Core Components
+
+| Component | Description |
+| :--- | :--- |
+| **[`Map`](/docs/ui/components/map)** | The main map component. Wraps MapLibre GL JS. |
+| **[`MapShell`](/docs/ui/components/map-shell)** | An application shell layout with sidebars and panels. |
+| **[`LayerPanel`](/docs/ui/components/panels)** | A sortable list of layers with controls. |
+| **[`MapToolbar`](/docs/ui/components/toolbar)** | A toolbar for map interactions. |
+
+## Usage
+
+Most components are designed to work inside the `MapProvider` context, but the `Map` component itself initializes that context.
+
+```tsx
+import { Map, MapShell, LayerPanel } from '@mapwise/ui';
+
+export default function App() {
+  return (
+    <MapShell
+       sidebar={<LayerPanel ... />}
+    >
+      <Map />
+    </MapShell>
+  );
+}
+```
