@@ -1,0 +1,159 @@
+---
+title: Custom Plugins
+description: Learn how to create your own plugins for Mapwise.
+---
+
+# Creating Custom Plugins
+
+Mapwise is designed to be extensible. You can build plugins to add custom tools, map interactions, data visualizations, or integrate with third-party services. A plugin is simply an object that implements the `PluginDefinition` interface.
+
+## The Plugin Structure
+
+At its core, a plugin is an object with an `id`, `name`, and an `onRegister` function.
+
+```typescript
+import type { PluginDefinition, PluginContext } from '@mapwise/core';
+
+const myPlugin: PluginDefinition = {
+  id: 'my-org/hello-world',
+  name: 'Hello World Plugin',
+  
+  onRegister(ctx: PluginContext) {
+    console.log('Hello World! Map is:', ctx.mapId);
+    
+    // Return a cleanup function
+    return () => {
+      console.log('Goodbye World!');
+    };
+  }
+};
+```
+
+## Plugin Context
+
+When your plugin is registered, it receives a `PluginContext` object. This gives you access to the core internals of Mapwise.
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `map` | `MapLibreMap` | The underlying MapLibre instance (if ready). |
+| `events` | `EventBus` | The global event bus for emitting/listening to events. |
+| `layers` | `LayerRegistry` | API for adding, removing, or modifying layers. |
+| `store` | `PluginStateStore` | A simple key-value store for your plugin's state. |
+| `interactionMode` | `InteractionModeStore` | Manager for exclusive interaction modes (e.g. drawing). |
+| `cursorManager` | `CursorManager` | Helper to set the map cursor. |
+
+## Creating a Factory Function
+
+The recommended pattern is to export a function that accepts configuration and returns the plugin definition.
+
+```typescript
+interface MyPluginConfig {
+  greeting: string;
+}
+
+export function createMyPlugin(config: MyPluginConfig): PluginDefinition {
+  return {
+    id: 'my-org/greeter',
+    name: 'Greeter',
+    
+    onRegister(ctx) {
+      console.log(config.greeting);
+      
+      // Listen to a map click
+      const onMapClick = (e: any) => {
+        alert(config.greeting);
+      };
+      
+      ctx.map.on('click', onMapClick);
+      
+      // Cleanup
+      return () => {
+        ctx.map.off('click', onMapClick);
+      };
+    }
+  };
+}
+```
+
+## Lifecycle Hooks
+
+Plugins can also define additional hooks to respond to map lifecycle events.
+
+```typescript
+const myPlugin: PluginDefinition = {
+  id: '...',
+  
+  onRegister(ctx) { /* ... */ },
+  
+  // Called when the map style (basemap) finishes loading
+  onStyleChangeComplete(ctx, style) {
+     // Re-add sources/layers if they were lost during style switch
+  },
+  
+  // Called when a new layer is added to the registry
+  onLayerAdded(ctx, layer) {
+    console.log('New layer:', layer.id);
+  }
+};
+```
+
+## Full Example: "Click Coordinates" Plugin
+
+Here is a complete example of a plugin that shows a popup with coordinates when you click the map.
+
+```typescript
+import type { PluginDefinition } from '@mapwise/core';
+import maplibregl from 'maplibre-gl';
+
+export function createClickCoordinatesPlugin(): PluginDefinition {
+  return {
+    id: 'demo/click-coords',
+    name: 'Click Coordinates',
+    
+    onRegister({ map, events }) {
+      // 1. Define the event handler
+      const handleClick = (e: maplibregl.MapMouseEvent) => {
+        const { lng, lat } = e.lngLat;
+        
+        // Show a popup
+        new maplibregl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(`<strong>Coords:</strong> ${lng.toFixed(4)}, ${lat.toFixed(4)}`)
+          .addTo(map);
+          
+        // Emit a custom event for other parts of the app
+        events.emit('demo:click', { lng, lat });
+      };
+      
+      // 2. Attach it
+      map.on('click', handleClick);
+      
+      // 3. Return cleanup
+      return () => {
+        map.off('click', handleClick);
+      };
+    }
+  };
+}
+```
+
+## Implementing Interaction Modes
+
+If your plugin requires exclusive control over the map (like a drawing tool), use the `interactionMode` manager.
+
+```typescript
+onRegister({ interactionMode }) {
+  // Register a mode called 'drawing'
+  const unregisterInfo = interactionMode.register('my-plugin/drawing', {
+    exclusive: true,
+    priority: 10
+  });
+  
+  // Activate it
+  interactionMode.setActive('my-plugin/drawing', true);
+  
+  return () => {
+    unregisterInfo(); // Remove the mode registration
+  };
+}
+```
