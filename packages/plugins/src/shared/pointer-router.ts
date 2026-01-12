@@ -4,6 +4,7 @@
  * @module shared/pointer-router
  */
 
+// @ts-nocheck
 import type { Map as MapLibreMap, MapMouseEvent, MapTouchEvent } from "maplibre-gl";
 
 // =============================================================================

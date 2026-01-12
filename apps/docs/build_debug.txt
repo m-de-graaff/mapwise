@@ -1,0 +1,27 @@
+
+> docs@0.0.0 build D:\hobby\mapwise\apps\docs
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+
+[MDX] generated files in 43.39539999999988ms
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./apps/docs/app/docs/[[...slug]]/page.tsx:2:1
+Export getMDXComponents doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { getPageImage[33m,[39m source } [36mfrom[39m [32m"@/lib/source"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 2 |[39m [36mimport[39m { getMDXComponents } [36mfrom[39m [32m"@/mdx-components"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 3 |[39m [36mimport[39m { [33mDocsBody[39m[33m,[39m [33mDocsDescription[39m[33m,[39m [33mDocsPage[39m[33m,[39m [33mDocsTitle[39m } [36mfrom[39m [32m"fumadocs-ui/layouts/docs/page"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { createRelativeLink } [36mfrom[39m [32m"fumadocs-ui/mdx"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m type { [33mMetadata[39m } [36mfrom[39m [32m"next"[39m[33m;[39m[0m
+
+The export getMDXComponents was not found in module [project]/apps/docs/mdx-components.tsx [app-rsc] (ecmascript).
+Did you mean to import useMDXComponents?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+
+    at <unknown> (./apps/docs/app/docs/[[...slug]]/page.tsx:2:1)
+ ELIFECYCLE  Command failed with exit code 1.

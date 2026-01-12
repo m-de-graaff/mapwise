@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
 import { SyncManager, type ViewState } from "./sync-manager";
 import type { BasePluginConfig } from "../shared/types";

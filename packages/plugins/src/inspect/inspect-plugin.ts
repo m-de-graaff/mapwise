@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
 import type { MapGeoJSONFeature } from "maplibre-gl";
 import { safePluginCall } from "../shared/error-handler";

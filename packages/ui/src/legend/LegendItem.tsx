@@ -2,18 +2,17 @@ import { useState } from "react";
 import { ChevronRight, ChevronDown } from "lucide-react";
 import { WmsLegend } from "./WmsLegend";
 import { VectorLegend } from "./VectorLegend";
-import type { Layer } from "../hooks/useLayerList"; // Assuming type reuse
+import type { PanelLayer } from "../panels/LayerPanel";
 
 interface LegendItemProps {
-	layer: Layer;
+	layer: PanelLayer;
 }
 
 export function LegendItem({ layer }: LegendItemProps) {
 	const [isExpanded, setIsExpanded] = useState(true);
 
 	// Helper to determine legend type
-	// In a real app, layer would have a specific 'legend' property or we infer from source
-	const isWms = layer.type === "overlay" && layer.params?.["LAYERS"]; // Very loose heuristic for this mock
+	const isWms = layer.type === "wms";
 
 	// Mock logic: if it has a 'style' property it's vector, else try WMS URL
 	// We'll mock a WMS legend URL for demo if it's WMS

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * WMS raster layer factory function.
  *

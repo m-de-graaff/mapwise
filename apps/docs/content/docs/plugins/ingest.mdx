@@ -1,0 +1,23 @@
+---
+title: Layer Ingestion
+description: Drag-and-drop file support for GeoJSON, KML, and GPX.
+---
+
+# Layer Ingestion Plugin
+
+This plugin simplifies adding local files to the map.
+
+## Usage
+
+```tsx
+import { createLayerIngestionPlugin } from '@mapwise/plugins';
+
+await controller.plugins.register(createLayerIngestionPlugin());
+```
+
+## Supported Formats
+- **GeoJSON**: Native support.
+- **KML**: Converted to GeoJSON on the fly.
+- **GPX**: Converted to GeoJSON.
+
+Files can be dropped onto the map canvas (if configured) or loaded programmatically.

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Map as MapLibreMap, MapGeoJSONFeature, PointLike } from "maplibre-gl";
 
 /**

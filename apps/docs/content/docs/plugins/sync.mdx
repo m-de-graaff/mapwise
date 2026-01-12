@@ -1,0 +1,23 @@
+---
+title: Sync View
+description: Synchronize view state across multiple maps.
+---
+
+# Sync View Plugin
+
+The Sync View plugin allows two or more associated maps to move in unison.
+
+## Usage
+
+```tsx
+import { createSyncViewPlugin } from '@mapwise/plugins';
+
+const map1 = createMap(...);
+const map2 = createMap(...);
+
+// Register plugin on both
+await map1.plugins.register(createSyncViewPlugin({ groupId: "group-1" }));
+await map2.plugins.register(createSyncViewPlugin({ groupId: "group-1" }));
+```
+
+Any interaction on `map1` will be mirrored to `map2` and vice versa.

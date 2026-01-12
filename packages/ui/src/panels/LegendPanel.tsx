@@ -1,10 +1,10 @@
 import { ScrollArea } from "../shadcn/scroll-area";
 import { cn } from "../utils/cn";
 import { LegendItem } from "../legend/LegendItem";
-import type { Layer } from "../panels/LayerPanel";
+import type { PanelLayer } from "../panels/LayerPanel";
 
 interface LegendPanelProps {
-	layers: Layer[];
+	layers: PanelLayer[];
 	className?: string;
 }
 

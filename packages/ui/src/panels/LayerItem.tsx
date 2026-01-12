@@ -5,10 +5,10 @@ import { Button } from "../shadcn/button";
 import { Slider } from "../shadcn/slider";
 import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover";
 
-import type { Layer } from "./LayerPanel";
+import type { PanelLayer } from "./LayerPanel";
 
 interface LayerItemProps {
-	layer: Layer;
+	layer: PanelLayer;
 	onToggle: (id: string) => void;
 	onOpacityChange: (id: string, val: number) => void;
 	onRemove: (id: string) => void;

@@ -1,0 +1,3 @@
+{
+	"pages": ["index", "development", "inspect", "draw", "measure", "sync", "geocoder", "ingest"]
+}

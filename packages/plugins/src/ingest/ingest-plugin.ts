@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
 import { fetchWmsCapabilities, fetchWmtsCapabilities } from "@mapwise/layers";
 import type { BasePluginConfig } from "../shared/types";

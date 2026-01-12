@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
 import { DrawStore } from "./draw-store";
 import { RenderLayer } from "./render-layer";

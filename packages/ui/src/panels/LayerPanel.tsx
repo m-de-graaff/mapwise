@@ -19,7 +19,7 @@ import { cn } from "../utils/cn";
 
 import { useId } from "react";
 
-export interface Layer {
+export interface PanelLayer {
 	id: string;
 	name: string;
 	type: "wms" | "geojson" | "xyz";
@@ -32,11 +32,11 @@ export interface Layer {
 
 interface LayerPanelProps {
 	className?: string;
-	layers: Layer[];
+	layers: PanelLayer[];
 	onToggle: (id: string) => void;
 	onOpacityChange: (id: string, val: number) => void;
 	onRemove: (id: string) => void;
-	onReorder: (newOrder: Layer[]) => void;
+	onReorder: (newOrder: PanelLayer[]) => void;
 }
 
 export function LayerPanel({

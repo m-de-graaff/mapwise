@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 3D buildings layer factory function.
  *

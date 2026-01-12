@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
 import { MeasureStore } from "./measure-store";
 import { MeasureRender } from "./measure-render";

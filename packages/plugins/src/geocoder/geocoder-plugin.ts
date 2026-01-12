@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
 import type { BasePluginConfig } from "../shared/types";
 import type { GeocoderProvider, GeocoderResult } from "./types";

@@ -1,0 +1,23 @@
+---
+title: Measure
+description: Tools for measuring distance and area.
+---
+
+# Measure Plugin
+
+The Measure plugin allow users to measure distances and areas on the map.
+
+## Usage
+
+```tsx
+import { createMeasurePlugin } from '@mapwise/plugins';
+
+await controller.plugins.register(createMeasurePlugin());
+
+// Start measuring distance
+controller.events.emit("plugin:@mapwise/measure:setMode", { mode: "distance" });
+```
+
+## Modes
+- `distance`: Measure linear distance (e.g. kilometers/miles).
+- `area`: Measure polygon area (e.g. square meters/feet).
