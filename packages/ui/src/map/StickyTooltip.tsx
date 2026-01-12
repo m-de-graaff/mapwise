@@ -59,14 +59,16 @@ export function StickyTooltip({
 	});
 
 	useEffect(() => {
-		if (map?.getContainer()) {
-			map.getContainer().appendChild(container);
-			return () => {
-				if (map.getContainer().contains(container)) {
-					map.getContainer().removeChild(container);
-				}
-			};
+		if (!map?.getContainer()) {
+			return;
 		}
+
+		map.getContainer().appendChild(container);
+		return () => {
+			if (map.getContainer().contains(container)) {
+				map.getContainer().removeChild(container);
+			}
+		};
 	}, [map, container]);
 
 	if (!(visible && position && map)) {

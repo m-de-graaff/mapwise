@@ -30,5 +30,6 @@
 			"@mapwise/plugins/*": ["../../packages/plugins/src/*"]
 		}
 	},
-	"include": ["src", "../../packages/*/src"]
+	"include": ["src"],
+	"exclude": ["**/*.test.ts", "**/*.spec.ts", "**/*.stories.tsx"]
 }

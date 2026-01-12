@@ -29,7 +29,8 @@ function LeafletLayer() {
 		}
 
 		// Initialize adapter
-		const adapter = new LeafletMapAdapter(map);
+		// biome-ignore lint/suspicious/noExplicitAny: Context mismatch between MapLibre versions
+		const adapter = new LeafletMapAdapter(map as any);
 		adapterRef.current = adapter;
 
 		// Create MarkerClusterGroup
@@ -62,14 +63,7 @@ function LeafletLayer() {
 export default function App() {
 	return (
 		<div style={{ width: "100vw", height: "100vh" }}>
-			<MapwiseMap
-				initialViewState={{
-					longitude: 4.9041,
-					latitude: 52.3676,
-					zoom: 13,
-				}}
-				style={{ width: "100%", height: "100%" }}
-			>
+			<MapwiseMap center={[4.9041, 52.3676]} zoom={13} style={{ width: "100%", height: "100%" }}>
 				<LeafletLayer />
 			</MapwiseMap>
 		</div>
