@@ -145,6 +145,19 @@ const MapComponent = forwardRef<MapRef, MapProps>(function MapImpl(
 		return () => cancelAnimationFrame(frameId);
 	}, [mapInstance, resolvedTheme, mapStyles]);
 
+	// Debug helper: Expose map instance to window.getDebugMap()
+	useEffect(() => {
+		if (mapInstance) {
+			(window as unknown as { getDebugMap: () => MapLibreGL.Map }).getDebugMap = () => mapInstance;
+			(window as unknown as { __mapwise: { map: MapLibreGL.Map } }).__mapwise = {
+				map: mapInstance,
+			};
+		}
+		return () => {
+			// Optional: delete (window as any).getDebugMap;
+		};
+	}, [mapInstance]);
+
 	const isLoading = !(isLoaded && isStyleLoaded);
 
 	const contextValue = useMemo(
