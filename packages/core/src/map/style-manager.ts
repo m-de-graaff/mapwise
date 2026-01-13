@@ -8,7 +8,7 @@
  */
 
 import type { Map as MapLibreMap, StyleSpecification } from "maplibre-gl";
-import type { EventBus } from "../events/event-bus";
+import type { EventBus } from "../events/event-bus.js";
 import type {
 	RegisteredFeatureState,
 	RegisteredLayer,
@@ -16,7 +16,7 @@ import type {
 	SetBasemapOptions,
 	SetBasemapResult,
 	StyleInput,
-} from "../types/layer";
+} from "../types/layer.js";
 
 // =============================================================================
 // Constants

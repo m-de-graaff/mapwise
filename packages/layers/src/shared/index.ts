@@ -10,7 +10,7 @@ export type {
 	LayerCapabilities,
 	LayerValidationError,
 	LayerValidationResult,
-} from "./types";
+} from "./types.js";
 
 // Validation
 export {
@@ -20,26 +20,26 @@ export {
 	validateOpacity,
 	validateZoom,
 	validateZoomRange,
-} from "./validation";
+} from "./validation.js";
 
 // URL & Query
-export type { UrlError } from "./url";
-export { normalizeUrl, safeUrl, validateSafeUrl, withQuery } from "./url";
+export type { UrlError } from "./url.js";
+export { normalizeUrl, safeUrl, validateSafeUrl, withQuery } from "./url.js";
 
 // Network
-export type { FetchOptions, NetworkError } from "./network";
-export { fetchText, fetchXml } from "./network";
+export type { FetchOptions, NetworkError } from "./network.js";
+export { fetchText, fetchXml } from "./network.js";
 
 // Parsing
-export type { ParseError } from "./parse";
-export { getXmlText, parseXml } from "./parse";
+export type { ParseError } from "./parse.js";
+export { getXmlText, parseXml } from "./parse.js";
 
 // MapLibre
-export type { MapLibreError } from "./maplibre";
+export type { MapLibreError } from "./maplibre.js";
 export {
 	ensureLayer,
 	ensureSource,
 	removeLayerSafe,
 	removeSourceSafe,
 	setLayerOpacity,
-} from "./maplibre";
+} from "./maplibre.js";

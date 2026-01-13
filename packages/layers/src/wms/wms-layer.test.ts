@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { WmsRasterLayerConfig } from "./types";
-import { createWmsRasterLayer, validateWmsConfig } from "./wms-layer";
+import type { WmsRasterLayerConfig } from "./types.js";
+import { createWmsRasterLayer, validateWmsConfig } from "./wms-layer.js";
 
 describe("WMS Raster Layer", () => {
 	describe("validateWmsConfig", () => {

@@ -1,9 +1,9 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "../shadcn/sheet";
-import { Button } from "../shadcn/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "../shadcn/sheet.js";
+import { Button } from "../shadcn/button.js";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
-import { PropertyTable } from "./PropertyTable";
-import type { Feature } from "../hooks/useSelectedFeature";
+import { PropertyTable } from "./PropertyTable.js";
+import type { Feature } from "../hooks/useSelectedFeature.js";
 
 interface FeatureDetailsSheetProps {
 	feature: Feature | null;

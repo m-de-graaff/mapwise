@@ -17,8 +17,8 @@ import {
 	validateRequiredString,
 	validateSchemaVersion,
 	validateUrl,
-} from "../shared/persistence";
-import type { ArcGisRestRasterLayerConfig } from "./types";
+} from "../shared/persistence.js";
+import type { ArcGisRestRasterLayerConfig } from "./types.js";
 
 // =============================================================================
 // Persisted ArcGIS Config

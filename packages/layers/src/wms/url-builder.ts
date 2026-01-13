@@ -4,8 +4,8 @@
  * @module wms/url-builder
  */
 
-import { withQuery } from "../shared/url";
-import type { WmsGetMapParams, WmsLegendParams, WmsVersion } from "./types";
+import { withQuery } from "../shared/url.js";
+import type { WmsGetMapParams, WmsLegendParams, WmsVersion } from "./types.js";
 
 // =============================================================================
 // Axis Order Handling

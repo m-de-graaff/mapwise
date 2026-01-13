@@ -10,7 +10,7 @@ import type {
 	WmtsFormatSelectionOptions,
 	WmtsMatrixSetSelectionOptions,
 	WmtsTileMatrixSet,
-} from "./types";
+} from "./types.js";
 
 // =============================================================================
 // Tile Matrix Set Selection
@@ -38,8 +38,10 @@ export function selectTileMatrixSet(
 
 	// Get available matrix sets for this layer
 	const availableMatrixSets = layer.tileMatrixSetLinks
-		.map((linkId) => capabilities.tileMatrixSets.find((set) => set.identifier === linkId))
-		.filter((set): set is WmtsTileMatrixSet => set !== undefined);
+		.map((linkId: string) =>
+			capabilities.tileMatrixSets.find((set: WmtsTileMatrixSet) => set.identifier === linkId),
+		)
+		.filter((set: WmtsTileMatrixSet | undefined): set is WmtsTileMatrixSet => set !== undefined);
 
 	if (availableMatrixSets.length === 0) {
 		return undefined;

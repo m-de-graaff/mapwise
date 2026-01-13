@@ -1,10 +1,10 @@
 // @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
-import { MeasureStore } from "./measure-store";
-import { MeasureRender } from "./measure-render";
-import { safePluginCall } from "../shared/error-handler";
-import type { BasePluginConfig } from "../shared/types";
-import { createPointerRouter } from "../shared/pointer-router";
+import { MeasureStore } from "./measure-store.js";
+import { MeasureRender } from "./measure-render.js";
+import { safePluginCall } from "../shared/error-handler.js";
+import type { BasePluginConfig } from "../shared/types.js";
+import { createPointerRouter } from "../shared/pointer-router.js";
 
 /**
  * Configuration for the Measure plugin.

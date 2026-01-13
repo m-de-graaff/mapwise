@@ -4,9 +4,9 @@ import {
 	parsePersistedState,
 	stringifyPersistedState,
 	validateState,
-} from "./hydrate";
-import type { PersistedMapState } from "./persistence-types";
-import { SCHEMA_VERSION } from "./persistence-types";
+} from "./hydrate.js";
+import type { PersistedMapState } from "./persistence-types.js";
+import { SCHEMA_VERSION } from "./persistence-types.js";
 
 describe("persistence validation", () => {
 	describe("isPersistedMapState", () => {

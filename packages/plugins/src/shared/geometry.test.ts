@@ -7,7 +7,7 @@ import {
 	distanceMetersLine,
 	pointToSegmentDistanceMeters,
 	snapToVertex,
-} from "./geometry";
+} from "./geometry.js";
 
 // Simple GeoJSON types for testing
 interface GeoJSONPoint {

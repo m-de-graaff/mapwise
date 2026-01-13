@@ -1,5 +1,5 @@
 import type { Map as MapLibreMap, GeoJSONSource } from "maplibre-gl";
-import type { MeasureState } from "./measure-store";
+import type { MeasureState } from "./measure-store.js";
 import type { Feature } from "geojson";
 
 const SOURCE_ID = "mapwise-measure-source";

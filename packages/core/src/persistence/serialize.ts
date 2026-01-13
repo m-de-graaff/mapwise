@@ -5,11 +5,11 @@
  */
 
 import type { Map as MapLibreMap } from "maplibre-gl";
-import type { StyleManager } from "../map/style-manager";
-import type { LayerRegistry } from "../registry/layer-registry";
-import type { PluginManager } from "../registry/plugin-registry";
-import type { PluginState } from "../registry/plugin-types";
-import type { LayerState } from "../registry/registry-types";
+import type { StyleManager } from "../map/style-manager.js";
+import type { LayerRegistry } from "../registry/layer-registry.js";
+import type { PluginManager } from "../registry/plugin-registry.js";
+import type { PluginState } from "../registry/plugin-types.js";
+import type { LayerState } from "../registry/registry-types.js";
 import {
 	type PersistedLayerState,
 	type PersistedMapState,
@@ -17,7 +17,7 @@ import {
 	type PersistedViewport,
 	SCHEMA_VERSION,
 	type SerializeOptions,
-} from "./persistence-types";
+} from "./persistence-types.js";
 
 // =============================================================================
 // Serialization Context

@@ -5,13 +5,13 @@
  */
 
 import type { LayerDefinition } from "@mapwise/core";
-import { createArcGisRestRasterLayer } from "./arcgis/arcgis-raster-layer";
-import { fromPersistedConfig as fromArcGisPersistedConfig } from "./arcgis/persistence";
-import type { PersistedLayerConfigBase } from "./shared/persistence";
-import { fromPersistedConfig as fromWmsPersistedConfig } from "./wms/persistence";
-import { createWmsRasterLayer } from "./wms/wms-layer";
-import { fromPersistedConfig as fromXyzPersistedConfig } from "./xyz/persistence";
-import { createXyzRasterLayer } from "./xyz/xyz-layer";
+import { createArcGisRestRasterLayer } from "./arcgis/arcgis-raster-layer.js";
+import { fromPersistedConfig as fromArcGisPersistedConfig } from "./arcgis/persistence.js";
+import type { PersistedLayerConfigBase } from "./shared/persistence.js";
+import { fromPersistedConfig as fromWmsPersistedConfig } from "./wms/persistence.js";
+import { createWmsRasterLayer } from "./wms/wms-layer.js";
+import { fromPersistedConfig as fromXyzPersistedConfig } from "./xyz/persistence.js";
+import { createXyzRasterLayer } from "./xyz/xyz-layer.js";
 
 // =============================================================================
 // Layer Type Registry

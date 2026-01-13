@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createEventBus } from "../events/event-bus";
-import { createLayerRegistry } from "./layer-registry";
-import type { LayerDefinition } from "./registry-types";
+import { createEventBus } from "../events/event-bus.js";
+import { createLayerRegistry } from "./layer-registry.js";
+import type { LayerDefinition } from "./registry-types.js";
 
 describe("LayerRegistry", () => {
 	let registry: ReturnType<typeof createLayerRegistry>;

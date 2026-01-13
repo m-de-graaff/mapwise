@@ -1,7 +1,7 @@
 // @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
-import { SyncManager, type ViewState } from "./sync-manager";
-import type { BasePluginConfig } from "../shared/types";
+import { SyncManager, type ViewState } from "./sync-manager.js";
+import type { BasePluginConfig } from "../shared/types.js";
 
 /**
  * Configuration for the Sync View plugin.

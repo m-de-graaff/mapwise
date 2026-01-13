@@ -1,7 +1,7 @@
-import { ScrollArea } from "../shadcn/scroll-area";
-import { cn } from "../utils/cn";
-import { LegendItem } from "../legend/LegendItem";
-import type { PanelLayer } from "../panels/LayerPanel";
+import { ScrollArea } from "../shadcn/scroll-area.js";
+import { cn } from "../utils/cn.js";
+import { LegendItem } from "../legend/LegendItem.js";
+import type { PanelLayer } from "../panels/LayerPanel.js";
 
 interface LegendPanelProps {
 	layers: PanelLayer[];

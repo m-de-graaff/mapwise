@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { createDrawPlugin } from "./draw-plugin";
+import { createDrawPlugin } from "./draw-plugin.js";
 import type { PluginContext } from "@mapwise/core";
 
 // Mock dependencies

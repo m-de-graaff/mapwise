@@ -5,19 +5,19 @@
  */
 
 import type { Map as MapLibreMap, MapOptions as MapLibreMapOptions } from "maplibre-gl";
-import type { StyleManager } from "../map/style-manager";
+import type { StyleManager } from "../map/style-manager.js";
 import type {
 	HydrateOptions,
 	HydrateResult,
 	PersistedMapState,
 	SerializeOptions,
-} from "../persistence/persistence-types";
-import type { AuthManager, RequestManager, RequestTransform } from "../request";
-import type { LayerRegistry } from "../registry/layer-registry";
-import type { PluginManager } from "../registry/plugin-registry";
-import type { SetBasemapOptions, SetBasemapResult, StyleInput } from "./layer";
-import type { InteractionModeStore } from "../interaction/interaction-mode";
-import type { EventBus } from "../events/event-bus";
+} from "../persistence/persistence-types.js";
+import type { AuthManager, RequestManager, RequestTransform } from "../request/index.js";
+import type { LayerRegistry } from "../registry/layer-registry.js";
+import type { PluginManager } from "../registry/plugin-registry.js";
+import type { SetBasemapOptions, SetBasemapResult, StyleInput } from "./layer.js";
+import type { InteractionModeStore } from "../interaction/interaction-mode.js";
+import type { EventBus } from "../events/event-bus.js";
 
 // =============================================================================
 // Lifecycle States

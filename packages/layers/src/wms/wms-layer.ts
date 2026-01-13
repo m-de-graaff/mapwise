@@ -6,11 +6,11 @@
 
 import type { MapLibreLayerDefinition } from "@mapwise/core";
 import type { RasterSourceSpecification } from "maplibre-gl";
-import { validateSafeUrl } from "../shared/url";
-import { validateBaseLayerConfig } from "../shared/validation";
-import { toPersistedConfig } from "./persistence";
-import type { WmsGetMapParams, WmsRasterLayerConfig, WmsVersion } from "./types";
-import { buildWmsTileUrl } from "./url-builder";
+import { validateSafeUrl } from "../shared/url.js";
+import { validateBaseLayerConfig } from "../shared/validation.js";
+import { toPersistedConfig } from "./persistence.js";
+import type { WmsGetMapParams, WmsRasterLayerConfig, WmsVersion } from "./types.js";
+import { buildWmsTileUrl } from "./url-builder.js";
 
 // =============================================================================
 // Validation

@@ -4,4 +4,4 @@
  * @module wms/legend
  */
 
-export { buildWmsLegendUrl } from "./url-builder";
+export { buildWmsLegendUrl } from "./url-builder.js";

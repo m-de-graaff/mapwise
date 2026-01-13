@@ -7,15 +7,15 @@
 import type { MapLibreLayerDefinition } from "@mapwise/core";
 import type { FeatureCollection, Geometry } from "geojson";
 import type { LayerSpecification, SourceSpecification } from "maplibre-gl";
-import { fetchText } from "../shared/network";
-import { validateBaseLayerConfig } from "../shared/validation";
+import { fetchText } from "../shared/network.js";
+import { validateBaseLayerConfig } from "../shared/validation.js";
 import type {
 	ClusterConfig,
 	GeoJsonData,
 	GeoJsonLayerConfig,
 	GeoJsonStyle,
 	GeoJsonStyleInput,
-} from "./types";
+} from "./types.js";
 
 // =============================================================================
 // Validation

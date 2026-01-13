@@ -10,14 +10,18 @@ import type {
 	RasterSourceSpecification,
 	VectorSourceSpecification,
 } from "maplibre-gl";
-import { validateSafeUrl } from "../shared/url";
-import { validateBaseLayerConfig } from "../shared/validation";
-import { PmtilesNotInstalledError, registerPmtilesProtocol, toPmtilesUrl } from "./pmtiles-adapter";
+import { validateSafeUrl } from "../shared/url.js";
+import { validateBaseLayerConfig } from "../shared/validation.js";
+import {
+	PmtilesNotInstalledError,
+	registerPmtilesProtocol,
+	toPmtilesUrl,
+} from "./pmtiles-adapter.js";
 import {
 	type PmtilesLayerConfig,
 	type PmtilesVectorLayerConfig,
 	isPmtilesVectorConfig,
-} from "./types";
+} from "./types.js";
 
 // Track if protocol has been registered
 // This is reset per test run to ensure protocol registration is tested

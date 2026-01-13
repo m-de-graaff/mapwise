@@ -1,6 +1,6 @@
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import { describe, expect, it, vi } from "vitest";
-import { fitToGeoJson, getGeoJsonBounds } from "./bounds";
+import { fitToGeoJson, getGeoJsonBounds } from "./bounds.js";
 
 describe("GeoJSON Bounds Utilities", () => {
 	describe("getGeoJsonBounds", () => {

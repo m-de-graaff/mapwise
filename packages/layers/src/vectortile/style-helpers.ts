@@ -7,7 +7,7 @@
  * @module vectortile/style-helpers
  */
 
-import type { CategoricalStyleOptions, ChoroplethStyleOptions } from "./types";
+import type { CategoricalStyleOptions, ChoroplethStyleOptions } from "./types.js";
 
 // =============================================================================
 // Choropleth Style (Numeric/Continuous)

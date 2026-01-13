@@ -18,10 +18,10 @@ import { describe, expect, it } from "vitest";
 import {
 	type ArcGisRestRasterLayerConfig,
 	createArcGisRestRasterLayer,
-} from "../arcgis/arcgis-raster-layer";
-import { deserializeLayer, getLayerPersistedConfig } from "../persistence";
-import { type WmsRasterLayerConfig, createWmsRasterLayer } from "../wms/wms-layer";
-import { type XyzRasterLayerConfig, createXyzRasterLayer } from "../xyz/xyz-layer";
+} from "../arcgis/arcgis-raster-layer.js";
+import { deserializeLayer, getLayerPersistedConfig } from "../persistence.js";
+import { type WmsRasterLayerConfig, createWmsRasterLayer } from "../wms/wms-layer.js";
+import { type XyzRasterLayerConfig, createXyzRasterLayer } from "../xyz/xyz-layer.js";
 
 describe("Layer Definition Contract", () => {
 	it("should create valid LayerDefinition for WMS", () => {

@@ -1,6 +1,6 @@
 import { MousePointer2, Hexagon, Component, MapPin } from "lucide-react";
-import { ToggleGroup, ToggleGroupItem } from "../shadcn/toggle-group";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "../shadcn/tooltip";
+import { ToggleGroup, ToggleGroupItem } from "../shadcn/toggle-group.js";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "../shadcn/tooltip.js";
 
 export type DrawMode = "point" | "line_string" | "polygon" | "select" | null;
 

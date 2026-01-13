@@ -1,7 +1,7 @@
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { describe, expect, it } from "vitest";
-import type { SerializationContext } from "./persistence-types";
-import { serializeState } from "./serialize";
+import type { SerializationContext } from "./persistence-types.js";
+import { serializeState } from "./serialize.js";
 
 describe("serializeState", () => {
 	it("should serialize map viewport", () => {

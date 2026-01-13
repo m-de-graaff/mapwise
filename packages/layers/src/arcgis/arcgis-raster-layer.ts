@@ -6,11 +6,11 @@
 
 import type { MapLibreLayerDefinition } from "@mapwise/core";
 import type { RasterSourceSpecification } from "maplibre-gl";
-import { validateSafeUrl } from "../shared/url";
-import { validateBaseLayerConfig } from "../shared/validation";
-import { toPersistedConfig } from "./persistence";
-import type { ArcGisRestRasterLayerConfig } from "./types";
-import { buildArcGisExportUrl } from "./url-builder";
+import { validateSafeUrl } from "../shared/url.js";
+import { validateBaseLayerConfig } from "../shared/validation.js";
+import { toPersistedConfig } from "./persistence.js";
+import type { ArcGisRestRasterLayerConfig } from "./types.js";
+import { buildArcGisExportUrl } from "./url-builder.js";
 
 // =============================================================================
 // Validation

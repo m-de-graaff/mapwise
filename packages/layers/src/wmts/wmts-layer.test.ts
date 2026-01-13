@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { WmtsExplicitConfig, WmtsRasterLayerConfig } from "./types";
-import { createWmtsRasterLayer, validateWmtsConfig } from "./wmts-layer";
+import type { WmtsExplicitConfig, WmtsRasterLayerConfig } from "./types.js";
+import { createWmtsRasterLayer, validateWmtsConfig } from "./wmts-layer.js";
 
 describe("WMTS Raster Layer", () => {
 	describe("validateWmtsConfig", () => {

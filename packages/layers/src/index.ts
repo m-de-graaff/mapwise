@@ -12,7 +12,7 @@ export type {
 	BaseLayerConfig,
 	LayerCapabilities,
 	LayerValidationResult,
-} from "./shared/types";
+} from "./shared/types.js";
 export {
 	validateBaseLayerConfig,
 	validateId,
@@ -20,43 +20,43 @@ export {
 	validateOpacity,
 	validateZoom,
 	validateZoomRange,
-} from "./shared/validation";
-export type { UrlError } from "./shared/url";
-export { normalizeUrl, safeUrl, validateSafeUrl, withQuery } from "./shared/url";
-export type { FetchOptions, NetworkError } from "./shared/network";
-export { fetchText, fetchXml } from "./shared/network";
-export type { ParseError } from "./shared/parse";
-export { getXmlText, parseXml } from "./shared/parse";
-export type { MapLibreError } from "./shared/maplibre";
+} from "./shared/validation.js";
+export type { UrlError } from "./shared/url.js";
+export { normalizeUrl, safeUrl, validateSafeUrl, withQuery } from "./shared/url.js";
+export type { FetchOptions, NetworkError } from "./shared/network.js";
+export { fetchText, fetchXml } from "./shared/network.js";
+export type { ParseError } from "./shared/parse.js";
+export { getXmlText, parseXml } from "./shared/parse.js";
+export type { MapLibreError } from "./shared/maplibre.js";
 export {
 	ensureLayer,
 	ensureSource,
 	removeLayerSafe,
 	removeSourceSafe,
 	setLayerOpacity,
-} from "./shared/maplibre";
+} from "./shared/maplibre.js";
 
 // =============================================================================
 // Layer Factories
 // =============================================================================
 
-export { createGeoJsonLayer } from "./geojson/geojson-layer";
-export { createXyzRasterLayer } from "./xyz/xyz-layer";
-export { createWmsRasterLayer } from "./wms/wms-layer";
-export { createWmtsRasterLayer } from "./wmts/wmts-layer";
-export { createVectorTileLayer } from "./vectortile/vector-tile-layer";
+export { createGeoJsonLayer } from "./geojson/geojson-layer.js";
+export { createXyzRasterLayer } from "./xyz/xyz-layer.js";
+export { createWmsRasterLayer } from "./wms/wms-layer.js";
+export { createWmtsRasterLayer } from "./wmts/wmts-layer.js";
+export { createVectorTileLayer } from "./vectortile/vector-tile-layer.js";
 export {
 	createBuildings3DLayer,
 	createBuildings3dLayer,
 	findCandidateBuildingLayer,
-} from "./buildings3d/buildings-3d-layer";
-export { createTerrainLayer, enableTerrain } from "./terrain/terrain-layer";
-export { createArcGisRestRasterLayer } from "./arcgis/arcgis-raster-layer";
-export { createHeatmapLayer } from "./heatmap/heatmap-layer";
+} from "./buildings3d/buildings-3d-layer.js";
+export { createTerrainLayer, enableTerrain } from "./terrain/terrain-layer.js";
+export { createArcGisRestRasterLayer } from "./arcgis/arcgis-raster-layer.js";
+export { createHeatmapLayer } from "./heatmap/heatmap-layer.js";
 // TODO: Export layer factories as they are implemented
-// export { createPmtilesLayer } from "./pmtiles/pmtiles-layer";
-export { createPmtilesLayer } from "./pmtiles/pmtiles-layer";
-export { getPmtilesInfo } from "./pmtiles/pmtiles-adapter";
+// export { createPmtilesLayer } from "./pmtiles/pmtiles-layer.js";
+export { createPmtilesLayer } from "./pmtiles/pmtiles-layer.js";
+export { getPmtilesInfo } from "./pmtiles/pmtiles-adapter.js";
 
 // =============================================================================
 // Layer Types
@@ -69,8 +69,8 @@ export type {
 	GeoJsonStyle,
 	GeoJsonStyleInput,
 	FeatureState,
-} from "./geojson/types";
-export type { XyzRasterLayerConfig } from "./xyz/types";
+} from "./geojson/types.js";
+export type { XyzRasterLayerConfig } from "./xyz/types.js";
 export type {
 	WmsRasterLayerConfig,
 	WmsCapabilities,
@@ -78,7 +78,7 @@ export type {
 	WmsVersion,
 	WmsGetMapParams,
 	WmsLegendParams,
-} from "./wms/types";
+} from "./wms/types.js";
 export type {
 	WmtsRasterLayerConfig,
 	WmtsExplicitConfig,
@@ -89,7 +89,7 @@ export type {
 	WmtsTileMatrix,
 	WmtsMatrixSetSelectionOptions,
 	WmtsFormatSelectionOptions,
-} from "./wmts/types";
+} from "./wmts/types.js";
 export type {
 	VectorTileLayerConfig,
 	VectorTileStylePreset,
@@ -98,77 +98,85 @@ export type {
 	CategoricalStyleOptions,
 	StyleStop,
 	StyleCategory,
-} from "./vectortile/types";
-export type { Buildings3dLayerConfig, BuildingCandidate } from "./buildings3d/types";
-export type { TerrainLayerConfig, HillshadeOptions, EnableTerrainConfig } from "./terrain/types";
+} from "./vectortile/types.js";
+export type { Buildings3dLayerConfig, BuildingCandidate } from "./buildings3d/types.js";
+export type { TerrainLayerConfig, HillshadeOptions, EnableTerrainConfig } from "./terrain/types.js";
 export type {
 	ArcGisRestRasterLayerConfig,
 	ArcGisExportParams,
-} from "./arcgis/types";
-export type { PersistedWmsRasterLayerConfig } from "./wms/persistence";
-export type { PersistedXyzRasterLayerConfig } from "./xyz/persistence";
-export type { PersistedArcGisRestRasterLayerConfig } from "./arcgis/persistence";
+} from "./arcgis/types.js";
+export type { PersistedWmsRasterLayerConfig } from "./wms/persistence.js";
+export type { PersistedXyzRasterLayerConfig } from "./xyz/persistence.js";
+export type { PersistedArcGisRestRasterLayerConfig } from "./arcgis/persistence.js";
 // TODO: Export layer config types as they are implemented
-// export type { PmtilesLayerConfig } from "./pmtiles/types";
-export type { PmtilesHeader, PmtilesMetadata, PmtilesVectorLayer } from "./pmtiles/pmtiles-adapter";
-export type { PmtilesLayerConfig } from "./pmtiles/types";
-export type { HeatmapLayerConfig, HeatmapInputData, HeatmapStyle } from "./heatmap/heatmap-layer";
+// export type { PmtilesLayerConfig } from "./pmtiles/types.js";
+export type {
+	PmtilesHeader,
+	PmtilesMetadata,
+	PmtilesVectorLayer,
+} from "./pmtiles/pmtiles-adapter.js";
+export type { PmtilesLayerConfig } from "./pmtiles/types.js";
+export type {
+	HeatmapLayerConfig,
+	HeatmapInputData,
+	HeatmapStyle,
+} from "./heatmap/heatmap-layer.js";
 
 // =============================================================================
 // Layer Utilities
 // =============================================================================
 
-export { getGeoJsonBounds, fitToGeoJson } from "./geojson/bounds";
+export { getGeoJsonBounds, fitToGeoJson } from "./geojson/bounds.js";
 export {
 	setData,
 	setFeatureState,
 	getFeatureState,
 	removeFeatureState,
-} from "./geojson/operations";
+} from "./geojson/operations.js";
 
 // =============================================================================
 // Capabilities Utilities
 // =============================================================================
 
-export { fetchWmsCapabilities, parseWmsCapabilities } from "./wms/capabilities";
-export { fetchWmtsCapabilities, parseWmtsCapabilities } from "./wmts/capabilities";
+export { fetchWmsCapabilities, parseWmsCapabilities } from "./wms/capabilities/index.js";
+export { fetchWmtsCapabilities, parseWmtsCapabilities } from "./wmts/capabilities/index.js";
 // TODO: Export capabilities utilities as they are implemented
 
 // =============================================================================
 // Legend Utilities
 // =============================================================================
 
-export { buildWmsLegendUrl } from "./wms/legend";
-export { buildWmsTileUrl } from "./wms/url-builder";
-export { buildArcGisExportUrl } from "./arcgis/url-builder";
+export { buildWmsLegendUrl } from "./wms/legend.js";
+export { buildWmsTileUrl } from "./wms/url-builder.js";
+export { buildArcGisExportUrl } from "./arcgis/url-builder.js";
 export {
 	selectTileMatrixSet,
 	selectFormat,
 	selectStyle,
 	selectResourceUrl,
-} from "./wmts/selection";
-export { createChoroplethStyle, createCategoricalStyle } from "./vectortile/style-helpers";
+} from "./wmts/selection.js";
+export { createChoroplethStyle, createCategoricalStyle } from "./vectortile/style-helpers.js";
 
 // =============================================================================
 // Persistence Utilities
 // =============================================================================
 
-export { deserializeLayer, getLayerPersistedConfig } from "./persistence";
+export { deserializeLayer, getLayerPersistedConfig } from "./persistence.js";
 export {
 	toPersistedConfig as toWmsPersistedConfig,
 	fromPersistedConfig as fromWmsPersistedConfig,
 	validatePersistedConfig as validateWmsPersistedConfig,
-} from "./wms/persistence";
+} from "./wms/persistence.js";
 export {
 	toPersistedConfig as toXyzPersistedConfig,
 	fromPersistedConfig as fromXyzPersistedConfig,
 	validatePersistedConfig as validateXyzPersistedConfig,
-} from "./xyz/persistence";
+} from "./xyz/persistence.js";
 export {
 	toPersistedConfig as toArcGisPersistedConfig,
 	fromPersistedConfig as fromArcGisPersistedConfig,
 	validatePersistedConfig as validateArcGisPersistedConfig,
-} from "./arcgis/persistence";
+} from "./arcgis/persistence.js";
 export {
 	LAYER_CONFIG_SCHEMA_VERSION,
 	MIN_LAYER_CONFIG_SCHEMA_VERSION,
@@ -181,14 +189,14 @@ export {
 	validateRequiredString,
 	validateSchemaVersion,
 	validateUrl,
-} from "./shared/persistence";
+} from "./shared/persistence.js";
 export type {
 	LayerConfigMigration,
 	LayerConfigMigrationInfo,
 	LayerValidationError,
 	PersistedConfigValidationResult,
 	PersistedLayerConfigBase,
-} from "./shared/persistence";
+} from "./shared/persistence.js";
 
 // TODO: Export legend utilities as they are implemented
-// export { getWmsLegend } from "./wms/legend";
+// export { getWmsLegend } from "./wms/legend.js";

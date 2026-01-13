@@ -8,8 +8,8 @@
  * @module errors/logger
  */
 
-import type { ErrorSeverity, MapwiseError } from "./error-types";
-import { formatError } from "./error-types";
+import type { ErrorSeverity, MapwiseError } from "./error-types.js";
+import { formatError } from "./error-types.js";
 
 // =============================================================================
 // Logger Configuration

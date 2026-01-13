@@ -10,20 +10,20 @@
 // Map Lifecycle
 // =============================================================================
 
-export { createMap } from "./map/create-map";
-export type { MapController, MapOptions } from "./map/create-map";
+export { createMap } from "./map/create-map.js";
+export type { MapController, MapOptions } from "./map/create-map.js";
 
 // =============================================================================
 // Style Manager
 // =============================================================================
 
-export type { StyleManager } from "./map/style-manager";
+export type { StyleManager } from "./map/style-manager.js";
 
 // =============================================================================
 // Layer Registry
 // =============================================================================
 
-export type { LayerRegistry } from "./registry/layer-registry";
+export type { LayerRegistry } from "./registry/layer-registry.js";
 export type {
 	LayerDefinition,
 	MapLibreLayerDefinition,
@@ -36,32 +36,32 @@ export type {
 	SourceDefinition,
 	RegisterLayerOptions,
 	LayerStateChangeEvent,
-} from "./registry/registry-types";
+} from "./registry/registry-types.js";
 export {
 	Position,
 	isCustomLayerDefinition,
 	isMapLibreLayerDefinition,
-} from "./registry/registry-types";
+} from "./registry/registry-types.js";
 
 // =============================================================================
 // Plugin System
 // =============================================================================
 
-export type { PluginManager } from "./registry/plugin-registry";
+export type { PluginManager } from "./registry/plugin-registry.js";
 export type {
 	PluginDefinition,
 	PluginContext,
 	PluginState,
 	PluginStateStore,
 	PluginLifecycleHooks,
-} from "./registry/plugin-types";
+} from "./registry/plugin-types.js";
 
 // =============================================================================
 // Events
 // =============================================================================
 
-export { createEventBus } from "./events/event-bus";
-export type { EventBus, EventBusOptions, EventHistoryEntry } from "./events/event-bus";
+export { createEventBus } from "./events/event-bus.js";
+export type { EventBus, EventBusOptions, EventHistoryEntry } from "./events/event-bus.js";
 export type {
 	// Core types
 	EventMap,
@@ -96,7 +96,7 @@ export type {
 	// Core system events
 	CoreErrorEvent,
 	EventBusDebugEvent,
-} from "./events/event-types";
+} from "./events/event-types.js";
 
 // =============================================================================
 // Persistence
@@ -105,7 +105,7 @@ export type {
 export {
 	SCHEMA_VERSION,
 	MIN_SCHEMA_VERSION,
-} from "./persistence/persistence-types";
+} from "./persistence/persistence-types.js";
 
 export type {
 	PersistedMapState,
@@ -119,16 +119,16 @@ export type {
 	ValidationResult,
 	SerializableLayer,
 	PersistablePluginState,
-} from "./persistence/persistence-types";
+} from "./persistence/persistence-types.js";
 
-export { deepClone } from "./persistence/serialize";
+export { deepClone } from "./persistence/serialize.js";
 
 export {
 	validateState,
 	isPersistedMapState,
 	parsePersistedState,
 	stringifyPersistedState,
-} from "./persistence/hydrate";
+} from "./persistence/hydrate.js";
 
 // =============================================================================
 // Errors & Diagnostics
@@ -176,7 +176,7 @@ export {
 	createSafeWrapper,
 	createSafeAsyncWrapper,
 	safePromise,
-} from "./errors";
+} from "./errors/index.js";
 
 // =============================================================================
 // Requests & Auth
@@ -191,13 +191,13 @@ export {
 	type TokenProvider,
 	createRequestManager,
 	createAuthManager,
-} from "./request";
+} from "./request/index.js";
 
 // =============================================================================
 // Types
 // =============================================================================
 
-export type { MapLifecycleState, Viewport, LngLatBounds } from "./types/map";
+export type { MapLifecycleState, Viewport, LngLatBounds } from "./types/map.js";
 
 export type {
 	RegisteredSource,
@@ -206,7 +206,7 @@ export type {
 	StyleInput,
 	SetBasemapOptions,
 	SetBasemapResult,
-} from "./types/layer";
+} from "./types/layer.js";
 
 // =============================================================================
 // Interaction
@@ -216,19 +216,19 @@ export {
 	createInteractionModeStore,
 	type InteractionModeStore,
 	type InteractionModeStoreOptions,
-} from "./interaction/interaction-mode";
+} from "./interaction/interaction-mode.js";
 
 export {
 	createCursorManager,
 	type CursorManager,
-} from "./interaction/cursor-manager";
+} from "./interaction/cursor-manager.js";
 
 export {
 	createKeyboardManager,
 	type KeyboardManager,
 	type KeyboardHandler,
 	type KeyboardManagerOptions,
-} from "./interaction/keyboard-manager";
+} from "./interaction/keyboard-manager.js";
 
 // =============================================================================
 // React Adapters (Optional)
@@ -265,4 +265,4 @@ export {
 	useMapEvent,
 	useEmitEvent,
 	type EventHandlerMap,
-} from "./react";
+} from "./react/index.js";

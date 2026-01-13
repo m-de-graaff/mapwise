@@ -7,7 +7,7 @@
  * @module xyz/types
  */
 
-import type { BaseLayerConfig } from "../shared/types";
+import type { BaseLayerConfig } from "../shared/types.js";
 
 // =============================================================================
 // XYZ Layer Configuration

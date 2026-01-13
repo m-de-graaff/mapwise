@@ -6,10 +6,10 @@
 
 import type { CustomLayerDefinition, LayerHandlerContext, MapController } from "@mapwise/core";
 import type { RasterDEMSourceSpecification } from "maplibre-gl";
-import { ensureSource, removeSourceSafe } from "../shared/maplibre";
-import { validateBaseLayerConfig } from "../shared/validation";
-import { createHillshadeLayer } from "./hillshade";
-import type { EnableTerrainConfig, TerrainLayerConfig } from "./types";
+import { ensureSource, removeSourceSafe } from "../shared/maplibre.js";
+import { validateBaseLayerConfig } from "../shared/validation.js";
+import { createHillshadeLayer } from "./hillshade.js";
+import type { EnableTerrainConfig, TerrainLayerConfig } from "./types.js";
 
 // Minimal interface for MapController/MapLibre map to avoid ANY
 interface MinimalMap {

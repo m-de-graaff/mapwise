@@ -13,8 +13,12 @@ import type {
 	SymbolLayerSpecification,
 	VectorSourceSpecification,
 } from "maplibre-gl";
-import { validateBaseLayerConfig } from "../shared/validation";
-import type { VectorTileLayerConfig, VectorTileSimpleStyle, VectorTileStylePreset } from "./types";
+import { validateBaseLayerConfig } from "../shared/validation.js";
+import type {
+	VectorTileLayerConfig,
+	VectorTileSimpleStyle,
+	VectorTileStylePreset,
+} from "./types.js";
 
 // =============================================================================
 // Validation

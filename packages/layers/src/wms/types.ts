@@ -4,7 +4,7 @@
  * @module wms/types
  */
 
-import type { BaseLayerConfig } from "../shared/types";
+import type { BaseLayerConfig } from "../shared/types.js";
 
 // =============================================================================
 // WMS Version

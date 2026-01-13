@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildArcGisExportUrl } from "./url-builder";
+import { buildArcGisExportUrl } from "./url-builder.js";
 
 describe("ArcGIS Export URL Builder", () => {
 	it("should build basic export URL", () => {

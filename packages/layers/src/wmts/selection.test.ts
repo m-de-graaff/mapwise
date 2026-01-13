@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { selectFormat, selectStyle, selectTileMatrixSet } from "./selection";
-import type { WmtsCapabilities, WmtsCapabilityLayer } from "./types";
+import { selectFormat, selectStyle, selectTileMatrixSet } from "./selection.js";
+import type { WmtsCapabilities, WmtsCapabilityLayer } from "./types.js";
 
 describe("WMTS Selection", () => {
 	describe("selectTileMatrixSet", () => {

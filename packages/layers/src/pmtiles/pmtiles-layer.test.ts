@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createPmtilesLayer, validatePmtilesConfig } from "./pmtiles-layer";
-import type { PmtilesRasterLayerConfig, PmtilesVectorLayerConfig } from "./types";
+import { createPmtilesLayer, validatePmtilesConfig } from "./pmtiles-layer.js";
+import type { PmtilesRasterLayerConfig, PmtilesVectorLayerConfig } from "./types.js";
 
 // Mock the registerPmtilesProtocol function to simulate PMTiles being available
 vi.mock("./pmtiles-adapter", async () => {

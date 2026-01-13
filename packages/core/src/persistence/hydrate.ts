@@ -5,9 +5,9 @@
  */
 
 import type { Map as MapLibreMap } from "maplibre-gl";
-import type { StyleManager } from "../map/style-manager";
-import type { LayerRegistry } from "../registry/layer-registry";
-import type { PluginManager } from "../registry/plugin-registry";
+import type { StyleManager } from "../map/style-manager.js";
+import type { LayerRegistry } from "../registry/layer-registry.js";
+import type { PluginManager } from "../registry/plugin-registry.js";
 import {
 	type HydrateOptions,
 	type HydrateResult,
@@ -18,7 +18,7 @@ import {
 	type PersistedPluginState,
 	SCHEMA_VERSION,
 	type ValidationResult,
-} from "./persistence-types";
+} from "./persistence-types.js";
 
 // =============================================================================
 // Hydration Context

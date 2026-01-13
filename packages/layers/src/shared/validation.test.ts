@@ -6,7 +6,7 @@ import {
 	validateOpacity,
 	validateZoom,
 	validateZoomRange,
-} from "./validation";
+} from "./validation.js";
 
 describe("Validation Utilities", () => {
 	describe("validateId / validateLayerId", () => {

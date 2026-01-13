@@ -5,7 +5,7 @@
  */
 
 import type { LayerSpecification } from "maplibre-gl";
-import type { BaseLayerConfig } from "../shared/types";
+import type { BaseLayerConfig } from "../shared/types.js";
 
 // =============================================================================
 // PMTiles Layer Configuration

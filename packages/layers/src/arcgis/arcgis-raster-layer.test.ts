@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createArcGisRestRasterLayer, validateArcGisConfig } from "./arcgis-raster-layer";
-import type { ArcGisRestRasterLayerConfig } from "./types";
+import { createArcGisRestRasterLayer, validateArcGisConfig } from "./arcgis-raster-layer.js";
+import type { ArcGisRestRasterLayerConfig } from "./types.js";
 
 describe("ArcGIS REST Raster Layer", () => {
 	describe("validateArcGisConfig", () => {

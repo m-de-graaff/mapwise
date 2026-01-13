@@ -31,7 +31,7 @@ export {
 	extractError,
 	formatError,
 	serializeError,
-} from "./error-types";
+} from "./error-types.js";
 
 // Logger
 export {
@@ -44,7 +44,7 @@ export {
 	defaultLogger,
 	enableDebugMode,
 	enableProductionMode,
-} from "./logger";
+} from "./logger.js";
 
 // Error reporter
 export {
@@ -56,4 +56,4 @@ export {
 	createSafeWrapper,
 	createSafeAsyncWrapper,
 	safePromise,
-} from "./error-reporter";
+} from "./error-reporter.js";

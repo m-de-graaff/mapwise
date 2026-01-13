@@ -1,7 +1,7 @@
 // @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
-import type { BasePluginConfig } from "../shared/types";
-import type { GeocoderProvider, GeocoderResult } from "./types";
+import type { BasePluginConfig } from "../shared/types.js";
+import type { GeocoderProvider, GeocoderResult } from "./types.js";
 
 /**
  * Configuration for the Geocoder plugin.

@@ -1,8 +1,8 @@
-import { cn } from "../utils/cn";
-import { Button } from "../shadcn/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover";
+import { cn } from "../utils/cn.js";
+import { Button } from "../shadcn/button.js";
+import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover.js";
 import { Layers, Check, Loader2 } from "lucide-react";
-import type { BasemapDef } from "../hooks/useBasemap";
+import type { BasemapDef } from "../hooks/useBasemap.js";
 
 interface BasemapSwitcherProps {
 	basemaps: BasemapDef[];

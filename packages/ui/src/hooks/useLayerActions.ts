@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useMap } from "@mapwise/core/react";
-import type { Layer } from "./useLayerList";
+import type { Layer } from "./useLayerList.js";
 
 export function useLayerActions(
 	setLayers: React.Dispatch<React.SetStateAction<Layer[]>>, // For mock fallback

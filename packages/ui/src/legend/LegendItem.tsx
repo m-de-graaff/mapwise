@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ChevronRight, ChevronDown } from "lucide-react";
-import { WmsLegend } from "./WmsLegend";
-import { VectorLegend } from "./VectorLegend";
-import type { PanelLayer } from "../panels/LayerPanel";
+import { WmsLegend } from "./WmsLegend.js";
+import { VectorLegend } from "./VectorLegend.js";
+import type { PanelLayer } from "../panels/LayerPanel.js";
 
 interface LegendItemProps {
 	layer: PanelLayer;

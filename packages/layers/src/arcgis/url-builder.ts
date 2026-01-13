@@ -4,8 +4,8 @@
  * @module arcgis/url-builder
  */
 
-import { withQuery } from "../shared/url";
-import type { ArcGisExportParams } from "./types";
+import { withQuery } from "../shared/url.js";
+import type { ArcGisExportParams } from "./types.js";
 
 // =============================================================================
 // Export URL Builder

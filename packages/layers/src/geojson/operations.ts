@@ -6,8 +6,8 @@
 
 import type { FeatureCollection, Geometry } from "geojson";
 import type { Map as MapLibreMap } from "maplibre-gl";
-import { fetchText } from "../shared/network";
-import type { FeatureState, GeoJsonData } from "./types";
+import { fetchText } from "../shared/network.js";
+import type { FeatureState, GeoJsonData } from "./types.js";
 
 // =============================================================================
 // Set Data Operation

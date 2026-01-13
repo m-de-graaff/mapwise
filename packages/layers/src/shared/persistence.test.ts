@@ -11,7 +11,7 @@ import {
 	validateRequiredString,
 	validateSchemaVersion,
 	validateUrl,
-} from "./persistence";
+} from "./persistence.js";
 
 describe("Shared Persistence Utilities", () => {
 	describe("validateSchemaVersion", () => {

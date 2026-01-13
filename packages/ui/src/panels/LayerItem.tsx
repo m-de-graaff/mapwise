@@ -1,11 +1,11 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Eye, EyeOff, Trash2 } from "lucide-react";
-import { Button } from "../shadcn/button";
-import { Slider } from "../shadcn/slider";
-import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover";
+import { Button } from "../shadcn/button.js";
+import { Slider } from "../shadcn/slider.js";
+import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/popover.js";
 
-import type { PanelLayer } from "./LayerPanel";
+import type { PanelLayer } from "./LayerPanel.js";
 
 interface LayerItemProps {
 	layer: PanelLayer;

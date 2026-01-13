@@ -4,5 +4,5 @@
  * @module wmts/capabilities
  */
 
-export { fetchWmtsCapabilities } from "./fetch-capabilities";
-export { parseWmtsCapabilities } from "./parse-capabilities";
+export { fetchWmtsCapabilities } from "./fetch-capabilities.js";
+export { parseWmtsCapabilities } from "./parse-capabilities.js";

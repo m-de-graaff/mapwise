@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Button } from "../shadcn/button";
-import { Input } from "../shadcn/input";
-import { Label } from "../shadcn/label";
-import { Textarea } from "../shadcn/textarea";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../shadcn/tabs";
+import { Button } from "../shadcn/button.js";
+import { Input } from "../shadcn/input.js";
+import { Label } from "../shadcn/label.js";
+import { Textarea } from "../shadcn/textarea.js";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../shadcn/tabs.js";
 import { toast } from "sonner";
 
-import type { LayerConfig } from "./AddLayerDialog";
+import type { LayerConfig } from "./AddLayerDialog.js";
 
 interface GeoJsonLayerFormProps {
 	onAdd: (layerConfig: LayerConfig) => void;

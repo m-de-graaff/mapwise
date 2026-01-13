@@ -4,11 +4,11 @@
  * @module wms/capabilities/fetch-capabilities
  */
 
-import { fetchXml } from "../../shared/network";
-import { parseXml } from "../../shared/parse";
-import { withQuery } from "../../shared/url";
-import type { WmsCapabilities } from "../types";
-import { parseWmsCapabilities } from "./parse-capabilities";
+import { fetchXml } from "../../shared/network.js";
+import { parseXml } from "../../shared/parse.js";
+import { withQuery } from "../../shared/url.js";
+import type { WmsCapabilities } from "../types.js";
+import { parseWmsCapabilities } from "./parse-capabilities.js";
 
 // =============================================================================
 // Fetch Capabilities

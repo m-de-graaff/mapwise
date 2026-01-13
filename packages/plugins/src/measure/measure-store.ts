@@ -1,4 +1,4 @@
-import { distanceMetersLine, areaSqMeters } from "../shared/geometry";
+import { distanceMetersLine, areaSqMeters } from "../shared/geometry.js";
 
 export type MeasureMode = "idle" | "distance" | "area";
 

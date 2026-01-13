@@ -12,7 +12,7 @@
  * @module events/event-bus
  */
 
-import type { EventMap, EventName } from "./event-types";
+import type { EventMap, EventName } from "./event-types.js";
 
 type EventHandler<T> = (payload: T) => void;
 

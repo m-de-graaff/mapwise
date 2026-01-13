@@ -5,34 +5,34 @@
  */
 
 import { Map as MapLibreMap } from "maplibre-gl";
-import { type EventBus, createEventBus } from "../events/event-bus";
-import { type HydrationContext, hydrateState } from "../persistence/hydrate";
+import { type EventBus, createEventBus } from "../events/event-bus.js";
+import { type HydrationContext, hydrateState } from "../persistence/hydrate.js";
 import type {
 	HydrateOptions,
 	HydrateResult,
 	PersistedMapState,
 	SerializeOptions,
-} from "../persistence/persistence-types";
+} from "../persistence/persistence-types.js";
 import {
 	createAuthManager,
 	createRequestManager,
 	type AuthManager,
 	type RequestManager,
-} from "../request";
-import { createCursorManager } from "../interaction/cursor-manager";
+} from "../request/index.js";
+import { createCursorManager } from "../interaction/cursor-manager.js";
 import {
 	type InteractionModeStore,
 	createInteractionModeStore,
-} from "../interaction/interaction-mode";
-import { createKeyboardManager } from "../interaction/keyboard-manager";
-import { type SerializationContext, serializeState } from "../persistence/serialize";
-import { type LayerRegistry, createLayerRegistry } from "../registry/layer-registry";
-import { type PluginManager, createPluginManager } from "../registry/plugin-registry";
-import type { SetBasemapOptions, SetBasemapResult, StyleInput } from "../types/layer";
-import type { InternalMapState, MapController, MapOptions } from "../types/map";
-import { assert, assertBrowser, assertDefined, isHTMLElement } from "../utils/assert";
-import { debounce } from "../utils/debounce";
-import { generateMapId } from "../utils/id";
+} from "../interaction/interaction-mode.js";
+import { createKeyboardManager } from "../interaction/keyboard-manager.js";
+import { type SerializationContext, serializeState } from "../persistence/serialize.js";
+import { type LayerRegistry, createLayerRegistry } from "../registry/layer-registry.js";
+import { type PluginManager, createPluginManager } from "../registry/plugin-registry.js";
+import type { SetBasemapOptions, SetBasemapResult, StyleInput } from "../types/layer.js";
+import type { InternalMapState, MapController, MapOptions } from "../types/map.js";
+import { assert, assertBrowser, assertDefined, isHTMLElement } from "../utils/assert.js";
+import { debounce } from "../utils/debounce.js";
+import { generateMapId } from "../utils/id.js";
 import {
 	createInitialState,
 	registerCleanup,
@@ -45,8 +45,8 @@ import {
 	setResizeObserver,
 	setStyleManager,
 	transitionState,
-} from "./map-store";
-import { type StyleManager, createStyleManager } from "./style-manager";
+} from "./map-store.js";
+import { type StyleManager, createStyleManager } from "./style-manager.js";
 
 /**
  * Create a new map instance.

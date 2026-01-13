@@ -1,6 +1,6 @@
 import { MousePointer2, Ruler, PenTool, Trash2 } from "lucide-react";
-import { ToolButton } from "./ToolButton";
-import { cn } from "../utils/cn";
+import { ToolButton } from "./ToolButton.js";
+import { cn } from "../utils/cn.js";
 
 export type ToolId = "inspect" | "measure" | "draw" | "trash" | null;
 

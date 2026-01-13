@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { FolderOpen, Save, Trash2, Download, Upload } from "lucide-react";
-import { Button } from "../shadcn/button";
-import { Input } from "../shadcn/input";
+import { Button } from "../shadcn/button.js";
+import { Input } from "../shadcn/input.js";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -9,7 +9,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "../shadcn/dropdown-menu";
+} from "../shadcn/dropdown-menu.js";
 import {
 	Dialog,
 	DialogContent,
@@ -18,9 +18,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "../shadcn/dialog";
-import { useWorkspaceStorage } from "../hooks/useWorkspaceStorage";
-import { ScrollArea } from "../shadcn/scroll-area";
+} from "../shadcn/dialog.js";
+import { useWorkspaceStorage } from "../hooks/useWorkspaceStorage.js";
+import { ScrollArea } from "../shadcn/scroll-area.js";
 
 interface WorkspaceMenuProps {
 	getSnapshot: () => Record<string, unknown>;

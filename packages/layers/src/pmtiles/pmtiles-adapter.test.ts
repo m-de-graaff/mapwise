@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PmtilesNotInstalledError, isPmtilesAvailable, toPmtilesUrl } from "./pmtiles-adapter";
+import { PmtilesNotInstalledError, isPmtilesAvailable, toPmtilesUrl } from "./pmtiles-adapter.js";
 
 describe("PMTiles Adapter", () => {
 	describe("PmtilesNotInstalledError", () => {

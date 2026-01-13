@@ -4,7 +4,7 @@
  * @module wmts/types
  */
 
-import type { BaseLayerConfig } from "../shared/types";
+import type { BaseLayerConfig } from "../shared/types.js";
 
 // =============================================================================
 // WMTS Layer Configuration

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { XyzRasterLayerConfig } from "./types";
-import { createXyzRasterLayer, validateXyzConfig } from "./xyz-layer";
+import type { XyzRasterLayerConfig } from "./types.js";
+import { createXyzRasterLayer, validateXyzConfig } from "./xyz-layer.js";
 
 describe("XYZ Raster Layer", () => {
 	describe("validateXyzConfig", () => {

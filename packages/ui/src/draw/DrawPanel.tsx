@@ -1,8 +1,8 @@
-import { ScrollArea } from "../shadcn/scroll-area";
-import { Button } from "../shadcn/button";
+import { ScrollArea } from "../shadcn/scroll-area.js";
+import { Button } from "../shadcn/button.js";
 import { Upload, Download } from "lucide-react";
-import { DrawModeSelector, type DrawMode } from "./DrawModeSelector";
-import { DrawFeatureItem } from "./DrawFeatureItem";
+import { DrawModeSelector, type DrawMode } from "./DrawModeSelector.js";
+import { DrawFeatureItem } from "./DrawFeatureItem.js";
 import { toast } from "sonner";
 
 interface DrawFeature {

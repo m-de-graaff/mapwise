@@ -8,11 +8,16 @@
  * @module errors/error-reporter
  */
 
-import type { EventBus } from "../events/event-bus";
-import type { CreateErrorOptions, ErrorCategory, ErrorSeverity, MapwiseError } from "./error-types";
-import { createError, isMapwiseError } from "./error-types";
-import type { Logger } from "./logger";
-import { createLogger } from "./logger";
+import type { EventBus } from "../events/event-bus.js";
+import type {
+	CreateErrorOptions,
+	ErrorCategory,
+	ErrorSeverity,
+	MapwiseError,
+} from "./error-types.js";
+import { createError, isMapwiseError } from "./error-types.js";
+import type { Logger } from "./logger.js";
+import { createLogger } from "./logger.js";
 
 // =============================================================================
 // Error Reporter Configuration

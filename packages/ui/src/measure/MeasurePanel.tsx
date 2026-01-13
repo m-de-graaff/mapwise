@@ -1,7 +1,7 @@
 import { Trash2, Ruler } from "lucide-react";
-import { Button } from "../shadcn/button";
-import { ToggleGroup, ToggleGroupItem } from "../shadcn/toggle-group";
-import { MeasureResult } from "./MeasureResult";
+import { Button } from "../shadcn/button.js";
+import { ToggleGroup, ToggleGroupItem } from "../shadcn/toggle-group.js";
+import { MeasureResult } from "./MeasureResult.js";
 
 interface MeasurePanelProps {
 	result: number | null; // meters or sq meters

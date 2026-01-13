@@ -1,6 +1,6 @@
 import * as React from "react";
-import { cn } from "../utils/cn";
-import { Sheet, SheetContent } from "../shadcn/sheet";
+import { cn } from "../utils/cn.js";
+import { Sheet, SheetContent } from "../shadcn/sheet.js";
 
 interface MapShellProps {
 	children: React.ReactNode;

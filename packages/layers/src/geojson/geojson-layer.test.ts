@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createGeoJsonLayer, validateGeoJsonConfig } from "./geojson-layer";
-import type { GeoJsonLayerConfig } from "./types";
+import { createGeoJsonLayer, validateGeoJsonConfig } from "./geojson-layer.js";
+import type { GeoJsonLayerConfig } from "./types.js";
 
 describe("GeoJSON Layer", () => {
 	describe("validateGeoJsonConfig", () => {

@@ -4,7 +4,7 @@
  * @module request/auth-manager
  */
 
-import type { RequestParameters, RequestTransform, ResourceType, TokenProvider } from "./types";
+import type { RequestParameters, RequestTransform, ResourceType, TokenProvider } from "./types.js";
 
 export interface AuthManager extends RequestTransform {
 	/**

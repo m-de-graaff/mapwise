@@ -8,20 +8,20 @@
  */
 
 import type { Map as MapLibreMap } from "maplibre-gl";
-import type { EventBus } from "../events/event-bus";
-import type { StyleManager } from "../map/style-manager";
-import type { Viewport } from "../types/map";
-import { debounce } from "../utils/debounce";
-import type { LayerRegistry } from "./layer-registry";
+import type { EventBus } from "../events/event-bus.js";
+import type { StyleManager } from "../map/style-manager.js";
+import type { Viewport } from "../types/map.js";
+import { debounce } from "../utils/debounce.js";
+import type { LayerRegistry } from "./layer-registry.js";
 import type {
 	PluginContext,
 	PluginDefinition,
 	PluginState,
 	PluginStateStore,
-} from "./plugin-types";
-import type { InteractionModeStore } from "../interaction/interaction-mode";
-import type { CursorManager } from "../interaction/cursor-manager";
-import type { KeyboardManager } from "../interaction/keyboard-manager";
+} from "./plugin-types.js";
+import type { InteractionModeStore } from "../interaction/interaction-mode.js";
+import type { CursorManager } from "../interaction/cursor-manager.js";
+import type { KeyboardManager } from "../interaction/keyboard-manager.js";
 
 // =============================================================================
 // Internal Types

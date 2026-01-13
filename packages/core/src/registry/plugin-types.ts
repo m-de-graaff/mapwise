@@ -5,14 +5,14 @@
  */
 
 import type { Map as MapLibreMap } from "maplibre-gl";
-import type { EventBus } from "../events/event-bus";
-import type { StyleManager } from "../map/style-manager";
-import type { Viewport } from "../types/map";
-import type { LayerRegistry } from "./layer-registry";
-import type { LayerState } from "./registry-types";
-import type { InteractionModeStore } from "../interaction/interaction-mode";
-import type { CursorManager } from "../interaction/cursor-manager";
-import type { KeyboardManager } from "../interaction/keyboard-manager";
+import type { EventBus } from "../events/event-bus.js";
+import type { StyleManager } from "../map/style-manager.js";
+import type { Viewport } from "../types/map.js";
+import type { LayerRegistry } from "./layer-registry.js";
+import type { LayerState } from "./registry-types.js";
+import type { InteractionModeStore } from "../interaction/interaction-mode.js";
+import type { CursorManager } from "../interaction/cursor-manager.js";
+import type { KeyboardManager } from "../interaction/keyboard-manager.js";
 
 // =============================================================================
 // Plugin Context

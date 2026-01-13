@@ -19,7 +19,7 @@ import {
 import { createPortal } from "react-dom";
 import { X, Minus, Plus, Locate, Maximize, Loader2 } from "lucide-react";
 
-import { cn } from "../utils/cn";
+import { cn } from "../utils/cn.js";
 import type * as React from "react";
 
 type MapContextValue = {
@@ -1286,7 +1286,7 @@ function MapClusterLayer<P extends GeoJSON.GeoJsonProperties = GeoJSON.GeoJsonPr
 }
 
 // Export StickyTooltip from separate file
-import { StickyTooltip } from "./StickyTooltip";
+import { StickyTooltip } from "./StickyTooltip.js";
 
 export {
 	MapComponent as Map,

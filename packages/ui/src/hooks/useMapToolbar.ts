@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { ToolId } from "../toolbar/MapToolbar";
+import type { ToolId } from "../toolbar/MapToolbar.js";
 import { useMap } from "@mapwise/core/react";
 
 export function useMapToolbar(activeTool: ToolId) {

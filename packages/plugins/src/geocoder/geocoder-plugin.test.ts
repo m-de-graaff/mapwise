@@ -1,7 +1,7 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import type { PluginContext } from "@mapwise/core";
-import { createGeocoderPlugin } from "./geocoder-plugin";
-import type { GeocoderProvider, GeocoderResult } from "./types";
+import { createGeocoderPlugin } from "./geocoder-plugin.js";
+import type { GeocoderProvider, GeocoderResult } from "./types.js";
 import type { Map as MapLibreMap } from "maplibre-gl";
 
 describe("Geocoder Plugin", () => {

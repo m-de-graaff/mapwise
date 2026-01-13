@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { fromPersistedConfig, toPersistedConfig, validatePersistedConfig } from "./persistence";
-import type { WmsRasterLayerConfig } from "./types";
+import { fromPersistedConfig, toPersistedConfig, validatePersistedConfig } from "./persistence.js";
+import type { WmsRasterLayerConfig } from "./types.js";
 
 describe("WMS Persistence", () => {
 	describe("toPersistedConfig", () => {

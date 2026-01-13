@@ -5,7 +5,7 @@
  */
 
 import { useCallback, useSyncExternalStore } from "react";
-import { useMap } from "./useMap";
+import { useMap } from "./useMap.js";
 
 /**
  * Hook to track when the map becomes ready.

@@ -17,9 +17,9 @@ import {
 	useState,
 	useSyncExternalStore,
 } from "react";
-import type { MapOptions } from "../map/create-map";
-import { createMap } from "../map/create-map";
-import { MapContext, type MapContextValue } from "./MapContext";
+import type { MapOptions } from "../map/create-map.js";
+import { createMap } from "../map/create-map.js";
+import { MapContext, type MapContextValue } from "./MapContext.js";
 
 /**
  * Props for MapProvider.

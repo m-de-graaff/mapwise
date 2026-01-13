@@ -5,8 +5,8 @@
  */
 
 import { useEffect, useState } from "react";
-import type { LayerCategory, LayerState } from "../registry/registry-types";
-import { useMap } from "./useMap";
+import type { LayerCategory, LayerState } from "../registry/registry-types.js";
+import { useMap } from "./useMap.js";
 
 /**
  * Hook to get the current state of a specific layer.

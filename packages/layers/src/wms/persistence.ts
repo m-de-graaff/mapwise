@@ -17,8 +17,8 @@ import {
 	validateRequiredString,
 	validateSchemaVersion,
 	validateUrl,
-} from "../shared/persistence";
-import type { WmsRasterLayerConfig } from "./types";
+} from "../shared/persistence.js";
+import type { WmsRasterLayerConfig } from "./types.js";
 
 // =============================================================================
 // Persisted WMS Config

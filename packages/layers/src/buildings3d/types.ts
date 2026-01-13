@@ -4,7 +4,7 @@
  * @module buildings3d/types
  */
 
-import type { BaseLayerConfig } from "../shared/types";
+import type { BaseLayerConfig } from "../shared/types.js";
 
 // =============================================================================
 // Buildings 3D Layer Configuration

@@ -5,7 +5,7 @@
  */
 
 import { createContext } from "react";
-import type { MapController } from "../map/create-map";
+import type { MapController } from "../map/create-map.js";
 
 /**
  * Context value for the MapProvider.

@@ -4,7 +4,7 @@
  * @module terrain/types
  */
 
-import type { BaseLayerConfig } from "../shared/types";
+import type { BaseLayerConfig } from "../shared/types.js";
 
 // =============================================================================
 // Terrain Layer Configuration

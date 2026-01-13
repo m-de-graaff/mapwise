@@ -4,7 +4,7 @@
  * @module wmts/capabilities/parse-capabilities
  */
 
-import { getXmlText } from "../../shared/parse";
+import { getXmlText } from "../../shared/parse.js";
 import type {
 	WmtsCapabilities,
 	WmtsCapabilityLayer,
@@ -13,7 +13,7 @@ import type {
 	WmtsStyle,
 	WmtsTileMatrixDefinition,
 	WmtsTileMatrixSet,
-} from "../types";
+} from "../types.js";
 
 // =============================================================================
 // Version Detection

@@ -1,6 +1,6 @@
 import type { EventBus } from "@mapwise/core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { safePluginCall, safePluginCallAsync } from "./error-handler";
+import { safePluginCall, safePluginCallAsync } from "./error-handler.js";
 
 describe("Error Handler", () => {
 	describe("safePluginCall", () => {

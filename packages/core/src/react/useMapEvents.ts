@@ -5,8 +5,8 @@
  */
 
 import { useCallback, useEffect, useRef } from "react";
-import type { EventMap, EventName } from "../events/event-types";
-import { useMap } from "./useMap";
+import type { EventMap, EventName } from "../events/event-types.js";
+import { useMap } from "./useMap.js";
 
 /**
  * Event handler type for a specific event.

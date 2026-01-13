@@ -7,8 +7,8 @@
 import type { MapLibreLayerDefinition } from "@mapwise/core";
 import type { FeatureCollection, Feature, Point } from "geojson";
 import type { LayerSpecification, SourceSpecification } from "maplibre-gl";
-import type { BaseLayerConfig } from "../shared/types";
-import { validateBaseLayerConfig } from "../shared/validation";
+import type { BaseLayerConfig } from "../shared/types.js";
+import { validateBaseLayerConfig } from "../shared/validation.js";
 
 // =============================================================================
 // Types
@@ -160,7 +160,8 @@ export async function createHeatmapLayer(
 	return {
 		id,
 		type: "heatmap", // Our internal type
-		category: category || "overlay",
+		// biome-ignore lint/suspicious/noExplicitAny: Required for compatibility with BaseLayerConfig vs HeatmapLayerConfig
+		category: (category || "overlay") as any,
 		source: {
 			id: sourceId,
 			spec: sourceSpec,

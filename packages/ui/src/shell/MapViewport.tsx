@@ -1,7 +1,7 @@
 "use client";
 
 import type * as React from "react";
-import { cn } from "../utils/cn";
+import { cn } from "../utils/cn.js";
 import { Loader2 } from "lucide-react";
 
 interface MapViewportProps extends React.HTMLAttributes<HTMLDivElement> {

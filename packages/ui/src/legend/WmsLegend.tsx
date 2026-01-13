@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Loader2, ImageOff } from "lucide-react";
-import { cn } from "../utils/cn";
+import { cn } from "../utils/cn.js";
 
 interface WmsLegendProps {
 	url: string;

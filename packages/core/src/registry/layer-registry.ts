@@ -8,7 +8,7 @@
  */
 
 import type { Map as MapLibreMap } from "maplibre-gl";
-import type { EventBus } from "../events/event-bus";
+import type { EventBus } from "../events/event-bus.js";
 import type {
 	CustomLayerDefinition,
 	LayerCategory,
@@ -19,8 +19,8 @@ import type {
 	LayerState,
 	MapLibreLayerDefinition,
 	RegisterLayerOptions,
-} from "./registry-types";
-import { isCustomLayerDefinition, isMapLibreLayerDefinition } from "./registry-types";
+} from "./registry-types.js";
+import { isCustomLayerDefinition, isMapLibreLayerDefinition } from "./registry-types.js";
 
 // =============================================================================
 // Internal Types

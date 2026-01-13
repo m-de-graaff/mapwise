@@ -4,7 +4,7 @@
  * @module arcgis/types
  */
 
-import type { BaseLayerConfig } from "../shared/types";
+import type { BaseLayerConfig } from "../shared/types.js";
 
 // =============================================================================
 // ArcGIS REST Raster Layer Configuration

@@ -1,4 +1,4 @@
-import { cn } from "../utils/cn";
+import { cn } from "../utils/cn.js";
 import { MousePointer2, Ruler, PenTool } from "lucide-react";
 
 export interface ToolStatusPanelProps {

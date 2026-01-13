@@ -12,9 +12,9 @@ export type {
 	BasePluginConfig,
 	PluginEventNames,
 	PluginFactory,
-} from "./shared/types";
+} from "./shared/types.js";
 
-export { createPluginEventName } from "./shared/types";
+export { createPluginEventName } from "./shared/types.js";
 
 // Pointer Router
 export {
@@ -22,7 +22,7 @@ export {
 	type NormalizedPointerEvent,
 	type PointerHandlers,
 	type PointerRouterOptions,
-} from "./shared/pointer-router";
+} from "./shared/pointer-router.js";
 
 // Keyboard Manager
 export {
@@ -58,37 +58,37 @@ export {
 	type GeoJSONLineString,
 	type GeoJSONPolygon,
 	type GeoJSONGeometry,
-} from "./shared/geometry";
+} from "./shared/geometry.js";
 
 // Error Handler
 export {
 	safePluginCall,
 	safePluginCallAsync,
 	type PluginErrorContext,
-} from "./shared/error-handler";
+} from "./shared/error-handler.js";
 
 // =============================================================================
 // Plugin Exports
 // =============================================================================
 
 // Inspect Plugin
-export { createInspectPlugin } from "./inspect/inspect-plugin";
-export type { InspectPluginConfig } from "./inspect/inspect-plugin";
+export { createInspectPlugin } from "./inspect/inspect-plugin.js";
+export type { InspectPluginConfig } from "./inspect/inspect-plugin.js";
 
 // Draw Plugin
-export { createDrawPlugin } from "./draw/draw-plugin";
-export type { DrawPluginConfig } from "./draw/draw-plugin";
+export { createDrawPlugin } from "./draw/draw-plugin.js";
+export type { DrawPluginConfig } from "./draw/draw-plugin.js";
 
 // Measure Plugin
-export { createMeasurePlugin } from "./measure/measure-plugin";
-export type { MeasurePluginConfig } from "./measure/measure-plugin";
+export { createMeasurePlugin } from "./measure/measure-plugin.js";
+export type { MeasurePluginConfig } from "./measure/measure-plugin.js";
 
 // Note: Additional plugins (geocoder, sync, etc.) will be exported here as they are implemented.
-export { createSyncViewPlugin } from "./sync/sync-plugin";
-export type { SyncViewPluginConfig } from "./sync/sync-plugin";
+export { createSyncViewPlugin } from "./sync/sync-plugin.js";
+export type { SyncViewPluginConfig } from "./sync/sync-plugin.js";
 
-export { createGeocoderPlugin } from "./geocoder/geocoder-plugin";
-export type { GeocoderConfig as GeocoderPluginConfig } from "./geocoder/geocoder-plugin";
+export { createGeocoderPlugin } from "./geocoder/geocoder-plugin.js";
+export type { GeocoderConfig as GeocoderPluginConfig } from "./geocoder/geocoder-plugin.js";
 
-export { createLayerIngestionPlugin } from "./ingest/ingest-plugin";
-export type { IngestPluginConfig as LayerIngestionPluginConfig } from "./ingest/ingest-plugin";
+export { createLayerIngestionPlugin } from "./ingest/ingest-plugin.js";
+export type { IngestPluginConfig as LayerIngestionPluginConfig } from "./ingest/ingest-plugin.js";

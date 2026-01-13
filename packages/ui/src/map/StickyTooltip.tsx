@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useMap } from "./Map";
-import { cn } from "../utils/cn";
+import { useMap } from "./Map.js";
+import { cn } from "../utils/cn.js";
 
 export interface StickyTooltipProps {
 	/** Tooltip content */

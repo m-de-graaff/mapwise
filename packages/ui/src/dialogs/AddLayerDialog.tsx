@@ -4,13 +4,13 @@ import {
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from "../shadcn/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../shadcn/tabs";
-import { WmsLayerForm } from "./WmsLayerForm";
-import { WmtsLayerForm } from "./WmtsLayerForm";
-import { XyzLayerForm } from "./XyzLayerForm";
-import { GeoJsonLayerForm } from "./GeoJsonLayerForm";
-import { PmtilesLayerForm } from "./PmtilesLayerForm";
+} from "../shadcn/dialog.js";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../shadcn/tabs.js";
+import { WmsLayerForm } from "./WmsLayerForm.js";
+import { WmtsLayerForm } from "./WmtsLayerForm.js";
+import { XyzLayerForm } from "./XyzLayerForm.js";
+import { GeoJsonLayerForm } from "./GeoJsonLayerForm.js";
+import { PmtilesLayerForm } from "./PmtilesLayerForm.js";
 import { toast } from "sonner";
 
 export interface LayerConfig {

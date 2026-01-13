@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { SyncManager } from "./sync-manager";
+import { SyncManager } from "./sync-manager.js";
 import type { Map as MapLibreMap } from "maplibre-gl";
 
 describe("SyncManager", () => {

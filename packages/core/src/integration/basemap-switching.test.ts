@@ -1,6 +1,6 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { createMap } from "../map/create-map";
-import type { MapController } from "../map/create-map";
+import { createMap } from "../map/create-map.js";
+import type { MapController } from "../map/create-map.js";
 
 /**
  * Integration tests for basemap switching.

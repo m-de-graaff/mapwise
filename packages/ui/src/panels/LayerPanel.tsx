@@ -14,8 +14,8 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { LayerItem } from "./LayerItem";
-import { cn } from "../utils/cn";
+import { LayerItem } from "./LayerItem.js";
+import { cn } from "../utils/cn.js";
 
 import { useId } from "react";
 

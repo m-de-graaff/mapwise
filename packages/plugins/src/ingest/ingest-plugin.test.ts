@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import type { PluginContext } from "@mapwise/core";
-import { createLayerIngestionPlugin } from "./ingest-plugin";
+import { createLayerIngestionPlugin } from "./ingest-plugin.js";
 import { fetchWmsCapabilities, fetchWmtsCapabilities } from "@mapwise/layers";
 
 // Mock @mapwise/layers

@@ -10,20 +10,20 @@
  */
 
 // Context
-export { MapContext } from "./MapContext";
-export type { MapContextValue } from "./MapContext";
+export { MapContext } from "./MapContext.js";
+export type { MapContextValue } from "./MapContext.js";
 
 // Provider
-export { MapProvider } from "./MapProvider";
-export type { MapProviderProps } from "./MapProvider";
+export { MapProvider } from "./MapProvider.js";
+export type { MapProviderProps } from "./MapProvider.js";
 
 // Core hooks
-export { useMap, useMapController } from "./useMap";
-export { useMapReady, useAwaitMapReady } from "./useMapReady";
+export { useMap, useMapController } from "./useMap.js";
+export { useMapReady, useAwaitMapReady } from "./useMapReady.js";
 
 // Layer hooks
-export { useLayerState, useAllLayers, useLayersByCategory } from "./useLayerState";
+export { useLayerState, useAllLayers, useLayersByCategory } from "./useLayerState.js";
 
 // Event hooks
-export { useMapEvents, useMapEvent, useEmitEvent } from "./useMapEvents";
-export type { EventHandlerMap } from "./useMapEvents";
+export { useMapEvents, useMapEvent, useEmitEvent } from "./useMapEvents.js";
+export type { EventHandlerMap } from "./useMapEvents.js";

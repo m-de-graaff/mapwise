@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizeUrl, safeUrl, validateSafeUrl, withQuery } from "./url";
+import { normalizeUrl, safeUrl, validateSafeUrl, withQuery } from "./url.js";
 
 describe("URL Utilities", () => {
 	describe("withQuery", () => {

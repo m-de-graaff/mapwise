@@ -1,8 +1,8 @@
 // @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
 import { fetchWmsCapabilities, fetchWmtsCapabilities } from "@mapwise/layers";
-import type { BasePluginConfig } from "../shared/types";
-import type { IngestResult, IngestLayerType } from "./types";
+import type { BasePluginConfig } from "../shared/types.js";
+import type { IngestResult, IngestLayerType } from "./types.js";
 
 /**
  * Configuration for the Layer Ingestion plugin.

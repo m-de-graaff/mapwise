@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { DrawStore } from "./draw-store";
+import { DrawStore } from "./draw-store.js";
 import type { LineString, Point, Polygon } from "geojson";
 
 describe("DrawStore", () => {

@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-	reactStrictMode: true,
-	transpilePackages: ["@mapwise/core", "@mapwise/ui", "@mapwise/plugins"],
+	transpilePackages: ["@mapwise/core", "@mapwise/ui", "@mapwise/plugins", "@mapwise/layers"],
 };
 
 export default nextConfig;

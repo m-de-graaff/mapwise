@@ -1,6 +1,6 @@
 import * as React from "react";
-import { cn } from "../utils/cn";
-import { useMap } from "../map/Map";
+import { cn } from "../utils/cn.js";
+import { useMap } from "../map/Map.js";
 
 interface MapStatusBarProps {
 	className?: string;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { parseXml } from "../../shared/parse";
-import { parseWmtsCapabilities } from "./parse-capabilities";
+import { parseXml } from "../../shared/parse.js";
+import { parseWmtsCapabilities } from "./parse-capabilities.js";
 
 describe("WMTS Capabilities Parsing", () => {
 	const wmtsXml = `<?xml version="1.0" encoding="UTF-8"?>

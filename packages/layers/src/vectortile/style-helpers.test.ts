@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createCategoricalStyle, createChoroplethStyle } from "./style-helpers";
+import { createCategoricalStyle, createChoroplethStyle } from "./style-helpers.js";
 
 describe("Vector Tile Style Helpers", () => {
 	describe("createChoroplethStyle", () => {

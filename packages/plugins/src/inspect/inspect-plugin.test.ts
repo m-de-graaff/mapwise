@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach, type Mock } from "vitest";
 import type { PluginContext } from "@mapwise/core";
-import { createInspectPlugin } from "./inspect-plugin";
+import { createInspectPlugin } from "./inspect-plugin.js";
 import type { Map as MapLibreMap } from "maplibre-gl";
 
 // Mock dependencies

@@ -1,4 +1,4 @@
-import { ScrollArea } from "../shadcn/scroll-area";
+import { ScrollArea } from "../shadcn/scroll-area.js";
 
 interface PropertyTableProps {
 	properties?: Record<string, unknown> | undefined;

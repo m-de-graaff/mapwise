@@ -1,12 +1,12 @@
 // @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
 import type { MapGeoJSONFeature } from "maplibre-gl";
-import { safePluginCall } from "../shared/error-handler";
-import { FeatureHighlighter } from "./highlight";
-import { type FeatureQueryOptions, queryFeatures } from "./feature-query";
-import type { BasePluginConfig } from "../shared/types";
-import { createPointerRouter, type NormalizedPointerEvent } from "../shared/pointer-router";
-import { throttle } from "../shared/utils";
+import { safePluginCall } from "../shared/error-handler.js";
+import { FeatureHighlighter } from "./highlight.js";
+import { type FeatureQueryOptions, queryFeatures } from "./feature-query.js";
+import type { BasePluginConfig } from "../shared/types.js";
+import { createPointerRouter, type NormalizedPointerEvent } from "../shared/pointer-router.js";
+import { throttle } from "../shared/utils.js";
 
 /**
  * Configuration for the Inspect plugin.

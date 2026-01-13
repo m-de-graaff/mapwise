@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Button } from "../shadcn/button";
-import { Input } from "../shadcn/input";
+import { Button } from "../shadcn/button.js";
+import { Input } from "../shadcn/input.js";
 import { Pencil, Trash2, Check, X, MapPin, Hexagon, Component } from "lucide-react";
-import { cn } from "../utils/cn";
+import { cn } from "../utils/cn.js";
 
 interface DrawFeatureItemProps {
 	feature: {

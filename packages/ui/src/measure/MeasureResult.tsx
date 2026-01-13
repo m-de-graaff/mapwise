@@ -1,5 +1,5 @@
 import { Copy } from "lucide-react";
-import { Button } from "../shadcn/button";
+import { Button } from "../shadcn/button.js";
 import { toast } from "sonner";
 
 interface MeasureResultProps {

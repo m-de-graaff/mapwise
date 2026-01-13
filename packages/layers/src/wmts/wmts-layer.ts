@@ -6,18 +6,18 @@
 
 import type { MapLibreLayerDefinition } from "@mapwise/core";
 import type { RasterSourceSpecification } from "maplibre-gl";
-import { validateSafeUrl } from "../shared/url";
-import { validateBaseLayerConfig } from "../shared/validation";
-import { fetchWmtsCapabilities } from "./capabilities";
-import { selectFormat, selectResourceUrl, selectStyle, selectTileMatrixSet } from "./selection";
+import { validateSafeUrl } from "../shared/url.js";
+import { validateBaseLayerConfig } from "../shared/validation.js";
+import { fetchWmtsCapabilities } from "./capabilities/index.js";
+import { selectFormat, selectResourceUrl, selectStyle, selectTileMatrixSet } from "./selection.js";
 import type {
 	WmtsCapabilitiesConfig,
 	WmtsExplicitConfig,
 	WmtsRasterLayerConfig,
 	WmtsTileMatrix,
 	WmtsCapabilityLayer,
-} from "./types";
-import { isWmtsExplicitConfig } from "./types";
+} from "./types.js";
+import { isWmtsExplicitConfig } from "./types.js";
 
 // =============================================================================
 // Validation
@@ -158,7 +158,8 @@ function createWmtsSourceSpecExplicit(config: WmtsExplicitConfig): RasterSourceS
 
 			return buildTileUrl(tileUrlTemplate, matrix, x, y, format, style, dimensions);
 		};
-		tiles = tilesFn as unknown as string[];
+		// biome-ignore lint/suspicious/noExplicitAny: MapLibre type definition mismatch workaround
+		tiles = tilesFn as any as string[];
 	}
 
 	return {

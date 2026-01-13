@@ -1,6 +1,6 @@
 import type { Map as MapLibreMap, MapMouseEvent, MapTouchEvent } from "maplibre-gl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createPointerRouter } from "./pointer-router";
+import { createPointerRouter } from "./pointer-router.js";
 
 describe("Pointer Router", () => {
 	let mockMap: MapLibreMap;

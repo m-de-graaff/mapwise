@@ -6,8 +6,8 @@ import type {
 	LayerPosition,
 	LayerState,
 	MapLibreLayerDefinition,
-} from "../registry/registry-types";
-import { isCustomLayerDefinition, isMapLibreLayerDefinition } from "../registry/registry-types";
+} from "../registry/registry-types.js";
+import { isCustomLayerDefinition, isMapLibreLayerDefinition } from "../registry/registry-types.js";
 
 /**
  * Contract tests for Layer Definition invariants.

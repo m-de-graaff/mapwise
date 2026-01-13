@@ -1,10 +1,10 @@
 import { useState, useMemo } from "react";
-import { Button } from "../shadcn/button";
-import { Input } from "../shadcn/input";
-import { Label } from "../shadcn/label";
+import { Button } from "../shadcn/button.js";
+import { Input } from "../shadcn/input.js";
+import { Label } from "../shadcn/label.js";
 import { toast } from "sonner";
 import { Loader2, Check, Search } from "lucide-react";
-import { cn } from "../utils/cn";
+import { cn } from "../utils/cn.js";
 import { useDebounce } from "use-debounce";
 import type { ComponentType } from "react";
 import { List as FixedSizeListImpl } from "react-window";
@@ -13,7 +13,7 @@ import { List as FixedSizeListImpl } from "react-window";
 // biome-ignore lint/suspicious/noExplicitAny: Library type mismatch
 const FixedSizeList = FixedSizeListImpl as unknown as ComponentType<any>;
 
-import type { LayerConfig } from "./AddLayerDialog";
+import type { LayerConfig } from "./AddLayerDialog.js";
 import {
 	fetchWmtsCapabilities,
 	createWmtsRasterLayer,

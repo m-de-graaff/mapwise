@@ -8,11 +8,11 @@
  */
 
 import type { Map as MapLibreMap } from "maplibre-gl";
-import type { EventBus } from "../events/event-bus";
-import type { LayerRegistry } from "../registry/layer-registry";
-import type { PluginManager } from "../registry/plugin-registry";
-import type { InternalMapState, MapLifecycleState, ResolvedMapOptions } from "../types/map";
-import type { StyleManager } from "./style-manager";
+import type { EventBus } from "../events/event-bus.js";
+import type { LayerRegistry } from "../registry/layer-registry.js";
+import type { PluginManager } from "../registry/plugin-registry.js";
+import type { InternalMapState, MapLifecycleState, ResolvedMapOptions } from "../types/map.js";
+import type { StyleManager } from "./style-manager.js";
 
 /**
  * Valid state transitions for the lifecycle state machine.

@@ -17,8 +17,8 @@ import {
 	validateObject,
 	validateRequiredString,
 	validateSchemaVersion,
-} from "../shared/persistence";
-import type { XyzRasterLayerConfig } from "./types";
+} from "../shared/persistence.js";
+import type { XyzRasterLayerConfig } from "./types.js";
 
 // =============================================================================
 // Persisted XYZ Config

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { VectorTileLayerConfig } from "./types";
-import { createVectorTileLayer, validateVectorTileConfig } from "./vector-tile-layer";
+import type { VectorTileLayerConfig } from "./types.js";
+import { createVectorTileLayer, validateVectorTileConfig } from "./vector-tile-layer.js";
 
 describe("Vector Tile Layer", () => {
 	describe("validateVectorTileConfig", () => {

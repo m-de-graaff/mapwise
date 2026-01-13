@@ -4,7 +4,7 @@
  * @module events/event-types
  */
 
-import type { MapLifecycleState } from "../types/map";
+import type { MapLifecycleState } from "../types/map.js";
 
 // =============================================================================
 // Map Lifecycle Events

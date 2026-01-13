@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildWmsLegendUrl, buildWmsTileUrl } from "./url-builder";
+import { buildWmsLegendUrl, buildWmsTileUrl } from "./url-builder.js";
 
 describe("WMS URL Builder", () => {
 	describe("buildWmsTileUrl", () => {

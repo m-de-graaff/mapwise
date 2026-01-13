@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createEventBus } from "../events/event-bus";
-import { createStyleManager } from "../map/style-manager";
-import { createLayerRegistry } from "./layer-registry";
-import { createPluginManager } from "./plugin-registry";
-import type { PluginDefinition } from "./plugin-types";
+import { createEventBus } from "../events/event-bus.js";
+import { createStyleManager } from "../map/style-manager.js";
+import { createLayerRegistry } from "./layer-registry.js";
+import { createPluginManager } from "./plugin-registry.js";
+import type { PluginDefinition } from "./plugin-types.js";
 
 describe("PluginRegistry", () => {
 	let pluginManager: ReturnType<typeof createPluginManager>;

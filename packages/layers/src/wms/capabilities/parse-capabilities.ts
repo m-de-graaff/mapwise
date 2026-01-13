@@ -4,8 +4,8 @@
  * @module wms/capabilities/parse-capabilities
  */
 
-import { getXmlText } from "../../shared/parse";
-import type { WmsCapabilities, WmsCapabilityLayer } from "../types";
+import { getXmlText } from "../../shared/parse.js";
+import type { WmsCapabilities, WmsCapabilityLayer } from "../types.js";
 
 // =============================================================================
 // Version Detection

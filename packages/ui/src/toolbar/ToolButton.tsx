@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import { Button } from "../shadcn/button";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "../shadcn/tooltip";
-import { cn } from "../utils/cn";
+import { Button } from "../shadcn/button.js";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "../shadcn/tooltip.js";
+import { cn } from "../utils/cn.js";
 
 export interface ToolButtonProps {
 	icon: LucideIcon;

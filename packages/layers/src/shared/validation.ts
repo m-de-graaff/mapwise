@@ -4,7 +4,7 @@
  * @module shared/validation
  */
 
-import type { BaseLayerConfig, LayerValidationError, LayerValidationResult } from "./types";
+import type { BaseLayerConfig, LayerValidationError, LayerValidationResult } from "./types.js";
 
 // =============================================================================
 // Validation Helpers

@@ -6,7 +6,7 @@
 
 import type { MapLibreLayerDefinition } from "@mapwise/core";
 import type { HillshadeLayerSpecification } from "maplibre-gl";
-import type { HillshadeOptions } from "./types";
+import type { HillshadeOptions } from "./types.js";
 
 // =============================================================================
 // Hillshade Layer Creation

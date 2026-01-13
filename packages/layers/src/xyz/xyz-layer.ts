@@ -6,9 +6,9 @@
 
 import type { MapLibreLayerDefinition } from "@mapwise/core";
 import type { RasterSourceSpecification } from "maplibre-gl";
-import { validateBaseLayerConfig } from "../shared/validation";
-import { toPersistedConfig } from "./persistence";
-import type { XyzRasterLayerConfig } from "./types";
+import { validateBaseLayerConfig } from "../shared/validation.js";
+import { toPersistedConfig } from "./persistence.js";
+import type { XyzRasterLayerConfig } from "./types.js";
 
 // =============================================================================
 // Validation

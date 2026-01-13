@@ -4,7 +4,7 @@ import type {
 	PluginDefinition,
 	PluginLifecycleHooks,
 	PluginStateStore,
-} from "../registry/plugin-types";
+} from "../registry/plugin-types.js";
 
 /**
  * Contract tests for Plugin API stability.

@@ -1,10 +1,10 @@
 // @ts-nocheck
 import type { PluginDefinition } from "@mapwise/core";
-import { DrawStore } from "./draw-store";
-import { RenderLayer } from "./render-layer";
-import { safePluginCall } from "../shared/error-handler";
-import type { BasePluginConfig } from "../shared/types";
-import { createPointerRouter } from "../shared/pointer-router";
+import { DrawStore } from "./draw-store.js";
+import { RenderLayer } from "./render-layer.js";
+import { safePluginCall } from "../shared/error-handler.js";
+import type { BasePluginConfig } from "../shared/types.js";
+import { createPointerRouter } from "../shared/pointer-router.js";
 import type { FeatureCollection } from "geojson";
 
 /**

@@ -5,8 +5,8 @@
  */
 
 import { useContext } from "react";
-import type { MapController } from "../map/create-map";
-import { MapContext, type MapContextValue } from "./MapContext";
+import type { MapController } from "../map/create-map.js";
+import { MapContext, type MapContextValue } from "./MapContext.js";
 
 /**
  * Hook to access the MapController from context.

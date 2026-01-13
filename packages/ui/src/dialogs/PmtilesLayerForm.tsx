@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Button } from "../shadcn/button";
-import { Input } from "../shadcn/input";
-import { Label } from "../shadcn/label";
+import { Button } from "../shadcn/button.js";
+import { Input } from "../shadcn/input.js";
+import { Label } from "../shadcn/label.js";
 
 import { createPmtilesLayer, getPmtilesInfo, type PmtilesVectorLayer } from "@mapwise/layers";
-import type { LayerConfig } from "./AddLayerDialog";
+import type { LayerConfig } from "./AddLayerDialog.js";
 
 interface PmtilesLayerFormProps {
 	onAdd: (layerConfig: LayerConfig) => void;

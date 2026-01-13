@@ -8,8 +8,8 @@
 
 import type { MapLibreLayerDefinition } from "@mapwise/core";
 import type { FillExtrusionLayerSpecification, StyleSpecification } from "maplibre-gl";
-import { validateBaseLayerConfig } from "../shared/validation";
-import type { BuildingCandidate, Buildings3dLayerConfig } from "./types";
+import { validateBaseLayerConfig } from "../shared/validation.js";
+import type { BuildingCandidate, Buildings3dLayerConfig } from "./types.js";
 
 // =============================================================================
 // Validation

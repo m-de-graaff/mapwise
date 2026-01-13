@@ -4,7 +4,7 @@
  * @module request/request-manager
  */
 
-import type { RequestParameters, RequestTransform, ResourceType } from "./types";
+import type { RequestParameters, RequestTransform, ResourceType } from "./types.js";
 
 export interface RequestManager {
 	/**
