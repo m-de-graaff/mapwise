@@ -25,12 +25,33 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 
 function App() {
   return (
-    <MapProvider>
+    <MapProvider
+      id="main-map"
+      className="map-container"
+      options={{
+        style: 'https://demotiles.maplibre.org/style.json',
+        center: [0, 0],
+        zoom: 2
+      }}
+      onReady={() => console.log('Map is ready!')}
+    >
       <MyMapApp />
     </MapProvider>
   );
 }
 ```
+
+### MapProvider Props
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `children` | `ReactNode` | Child components (UI overlays, toolbars). |
+| `options` | [`MapOptions`](/docs/core/api/initialization#mapoptions) | Initial map configuration. |
+| `onReady` | `() => void` | Callback when map is fully loaded and style applied. |
+| `className` | `string` | CSS class for the container `<div>`. |
+| `style` | `CSSProperties` | Inline styles for the container. |
+| `id` | `string` | ID attribute for the container. |
+
 
 ## Core Concepts
 

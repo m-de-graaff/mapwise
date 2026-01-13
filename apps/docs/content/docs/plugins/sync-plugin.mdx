@@ -1,0 +1,36 @@
+---
+title: Sync View Plugin
+description: Synchronize viewports across multiple maps.
+---
+
+# Sync View Plugin
+
+The Sync View plugin allows you to synchronize the viewport (center, zoom, bearing, pitch) of multiple Mapwise instances. All maps sharing the same `groupId` will stay in sync.
+
+## Usage
+
+```typescript
+import { createSyncViewPlugin } from '@mapwise/plugins';
+
+const syncPlugin = createSyncViewPlugin({
+  enabled: true,
+  groupId: 'main-group'
+});
+
+controller.plugins.register(syncPlugin);
+```
+
+## Configuration
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `groupId` | `string` | **Required** | Identifier for the sync group. Maps with the same ID will sync. |
+| `syncCenter` | `boolean` | `true` | Whether to sync the map center latitude/longitude. |
+| `syncZoom` | `boolean` | `true` | Whether to sync the zoom level. |
+| `syncBearing` | `boolean` | `true` | Whether to sync the rotation/bearing. |
+| `syncPitch` | `boolean` | `true` | Whether to sync the tilt/pitch. |
+| `enabled` | `boolean` | `true` | Whether synchronization is active. |
+
+## How it works
+
+The plugin uses a shared `SyncManager` singleton to coordinate updates. When one map moves, it notifies the manager, which then updates all other maps in the same group. Interactions are debounced to prevent feedback loops.

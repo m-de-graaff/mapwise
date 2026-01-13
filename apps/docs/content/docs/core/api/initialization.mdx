@@ -1,0 +1,33 @@
+---
+title: Initialization
+description: Creating and configuring a map instance.
+---
+
+# Initialization
+
+To create a map, use the `createMap` function. This function initializes the MapLibre engine, sets up all managers (layers, events, plugins), and returns a `MapController`.
+
+## `createMap(container, options)`
+
+```typescript
+import { createMap } from '@mapwise/core';
+
+const controller = createMap(document.getElementById('map'), {
+  style: 'https://demotiles.maplibre.org/style.json',
+  center: [-74.5, 40],
+  zoom: 9
+});
+```
+
+**Returns:** [`MapController`](/docs/core/api/map-controller)
+
+## `MapOptions`
+
+The options object extends standard MapLibre options with additional configuration.
+
+| Option | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `autoResize` | `boolean` | `true` | Automatically resize the map when the container size changes. |
+| `resizeDebounceMs` | `number` | `100` | Delay in ms before resizing to prevent thrashing. |
+| `request.transformers` | `RequestTransform[]` | `[]` | Array of request transformers for intercepting network calls. |
+| ... | | | All standard MapLibre options (`style`, `center`, `zoom`, `minZoom`, `maxZoom`, etc.). |

@@ -17,10 +17,13 @@ You can access the controller via [`useMap`](/docs/core/hooks/map-hooks#usemap) 
 | `isReady` | `boolean` | `true` if the map lifecycle state is 'ready'. |
 | `map` | `MapLibreMap` | Access the underlying MapLibre instance. **Throws an error** if the map is not ready. |
 | `layers` | [`LayerRegistry`](/docs/core/api/layer-registry) | Manager for adding, removing, and updating layers. |
-| `events` | `EventBus` | System for subscribing to and emitting typed events. |
-| `style` | `StyleManager` | Manager for map styles and basemaps. |
-| `plugins` | `PluginManager` | Manager for registered plugins. |
-| `interaction` | `InteractionModeStore` | Manager for interaction modes (e.g., drawing vs panning). |
+| `events` | [`EventBus`](/docs/core/api/events) | System for subscribing to and emitting typed events. |
+| `style` | [`StyleManager`](/docs/core/api/style-manager) | Manager for map styles and basemaps. |
+| `plugins` | [`PluginManager`](/docs/core/api/plugin-manager) | Manager for registered plugins. |
+| `interaction` | [`InteractionModeStore`](/docs/core/api/interaction) | Manager for interaction modes (e.g., drawing vs panning). |
+| `request` | [`RequestManager`](/docs/core/api/requests) | Manager for making authenticated requests. |
+| `auth` | [`AuthManager`](/docs/core/api/requests) | Manager for authentication tokens and sessions. |
+| `state` | `StateStore` | Global state manager for the map. |
 
 ## Methods
 
@@ -72,3 +75,33 @@ Cleanly destroys the map instance, removing all event listeners and DOM elements
 ```typescript
 await controller.destroy();
 ```
+
+---
+
+### `serialize()`
+
+Serializes the current map state (style, layers, camera, etc.) into a JSON object.
+
+```typescript
+const serializedState = controller.serialize();
+console.log(serializedState);
+```
+
+**Returns:** `object`
+
+---
+
+### `hydrate(state)`
+
+Applies a previously serialized map state to the current map.
+
+```typescript
+const savedState = { /* ... previously serialized state ... */ };
+await controller.hydrate(savedState);
+```
+
+**Parameters:**
+
+- `state` (`object`): The serialized map state object.
+
+**Returns:** `Promise<void>`

@@ -110,9 +110,37 @@ function SubmitButton() {
   const isReady = useMapReady();
 
   return (
-    <button disabled={!isReady}>
-      Submit Location
     </button>
   );
 }
 ```
+
+---
+
+## `useAwaitMapReady`
+
+Returns a function that returns a Promise which resolves when the map is ready. This is useful for async operations that need to wait for the map to be fully loaded before proceeding.
+
+```tsx
+const awaitReady = useAwaitMapReady();
+```
+
+### Usage
+
+```tsx
+function AsyncAction() {
+  const { controller } = useMap();
+  const awaitReady = useAwaitMapReady();
+
+  const handleFly = async () => {
+    // Wait for map to be ready
+    await awaitReady();
+    
+    // Now safe to use map methods
+    controller.map.flyTo({ center: [0, 0], zoom: 5 });
+  };
+
+  return <button onClick={handleFly}>Fly Home</button>;
+}
+```
+

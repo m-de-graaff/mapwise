@@ -14,12 +14,12 @@ Wrap your application (or the specific route) with the `MapwiseProvider`. This c
 ```tsx title="app/page.tsx"
 "use client";
 
-import { MapwiseProvider } from "@mapwise/core";
+import { MapProvider } from "@mapwise/core";
 import { Map, MapControls } from "@mapwise/ui";
 
 export default function Page() {
   return (
-    <MapwiseProvider>
+    <MapProvider>
       <div className="h-screen w-full relative">
         <Map
           initialViewState={{
@@ -32,7 +32,7 @@ export default function Page() {
           <MapControls position="bottom-right" />
         </Map>
       </div>
-    </MapwiseProvider>
+    </MapProvider>
   );
 }
 ```

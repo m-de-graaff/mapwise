@@ -17,12 +17,27 @@ pnpm add @mapwise/ui
 
 ## Core Components
 
-| Component | Description |
-| :--- | :--- |
-| **[`Map`](/docs/ui/components/map)** | The main map component. Wraps MapLibre GL JS. |
+| **[`Map`](/docs/ui/components/map)** | The main map component with markers, popups, and controls. |
 | **[`MapShell`](/docs/ui/components/map-shell)** | An application shell layout with sidebars and panels. |
 | **[`LayerPanel`](/docs/ui/components/panels)** | A sortable list of layers with controls. |
-| **[`MapToolbar`](/docs/ui/components/toolbar)** | A toolbar for map interactions. |
+| **[`MapToolbar`](/docs/ui/components/toolbar)** | A toolbar for map interactions (draw, measure, inspect). |
+| **[`AddLayerDialog`](/docs/ui/components/dialogs)** | A dialog to add WMS, WMTS, GeoJSON, and other layers. |
+| **[`BasemapSwitcher`](/docs/ui/components/basemap)** | A popover to switch between base maps. |
+| **[`WorkspaceMenu`](/docs/ui/components/workspace)** | A dropdown to save/load/export/import map states. |
+| **[`Layout`](/docs/ui/components/layout)** | Application shell sub-components (TopBar, StatusBar). |
+
+## Hooks
+
+The package exports [several hooks](/docs/ui/components/hooks) to manage UI state and interactions.
+
+| Hook | Description |
+| :--- | :--- |
+| **`useLayerList`** | Get formatted layer list for UI. |
+| **`useLayerActions`** | Toggle visibility, opacity, reorder, etc. |
+| **`useBasemap`** | Manage basemap selection. |
+| **`useSelectedFeature`** | Manage feature selection state. |
+| **`useMapToolbar`** | Sync toolbar state with map interactions. |
+| **`useWorkspaceStorage`** | Save/load workspaces. |
 
 ## Usage
 

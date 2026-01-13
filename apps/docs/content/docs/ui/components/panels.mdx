@@ -40,3 +40,81 @@ function MyLayerPanel() {
 | `onOpacityChange` | `(id, val) => void` | Callback for opacity slider. |
 | `onRemove` | `(id) => void` | Callback for layer removal. |
 | `onReorder` | `(layers) => void` | Callback when drag-and-drop finishes. |
+
+## `LegendPanel`
+
+Displays a legend for all visible layers that support it (mostly WMS/WFS).
+
+### Usage
+
+```tsx
+import { LegendPanel } from '@mapwise/ui';
+
+<LegendPanel 
+  layers={layers} 
+  className="w-full h-full"
+/>
+```
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `layers` | `PanelLayer[]` | List of layer objects to generate legend for. |
+
+## `FeatureDetailsSheet`
+
+A side sheet that displays detailed properties of a selected feature.
+
+### Usage
+
+```tsx
+import { FeatureDetailsSheet } from '@mapwise/ui';
+
+<FeatureDetailsSheet 
+  feature={selectedFeature} 
+  open={!!selectedFeature} 
+  onOpenChange={(open) => !open && onClearSelection()}
+/>
+```
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `feature` | `Feature \| null` | The selected GeoJSON feature. |
+| `open` | `boolean` | Visibility state. |
+| `onOpenChange` | `(open: boolean) => void` | Callback when sheet is closed. |
+
+## `PropertyTable`
+
+A simple key-value table for displaying feature properties. Used internally by `FeatureDetailsSheet` but can be used standalone.
+
+```tsx
+<PropertyTable properties={feature.properties} />
+```
+
+## `DrawPanel`
+
+A specialized panel for managing drawn geometries. Integrates with the `DrawModeSelector`.
+
+```tsx
+<DrawPanel 
+  features={features} 
+  mode="draw_polygon"
+  onModeChange={setMode}
+  onImport={importGeoJson}
+  onExport={exportGeoJson}
+  onDelete={deleteFeature}
+/>
+```
+
+## `MeasurePanel`
+
+Displays active measurement results and controls.
+
+```tsx
+<MeasurePanel 
+  result={1250.5} // Result in meters or sq meters
+  mode="distance"
+  unit="metric" 
+  onUnitChange={setUnit}
+  onReset={resetMeasurement}
+/>
+```

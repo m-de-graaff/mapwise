@@ -1,0 +1,53 @@
+---
+title: Persistence
+description: Saving and restoring map state.
+---
+
+# Persistence
+
+Mapwise includes a powerful state persistence system that can serialize the entire map state—including view, layers, plugins, and feature states—into a JSON object.
+
+## API
+
+### `controller.serialize(options?)`
+
+Returns a `PersistedMapState` object.
+
+```typescript
+const state = controller.serialize();
+localStorage.setItem('map-state', JSON.stringify(state));
+```
+
+**Options:**
+- `includePlugins` (`boolean`): Whether to include plugin state (default: `true`).
+
+### `controller.hydrate(state, options?)`
+
+Restores the map to a previously serialized state.
+
+```typescript
+const saved = JSON.parse(localStorage.getItem('map-state'));
+await controller.hydrate(saved);
+```
+
+**Options:**
+- `animate` (`boolean`): Whether to animate the camera movement (default: `true`).
+
+## Schema
+
+The persisted state object follows a versioned schema:
+
+```typescript
+interface PersistedMapState {
+  version: number; // Schema version
+  timestamp: number;
+  viewport: {
+    center: [number, number];
+    zoom: number;
+    // ...
+  };
+  style: string;
+  layers: PersistedLayerState[]; // Only registered layers
+  plugins: Record<string, unknown>;
+}
+```

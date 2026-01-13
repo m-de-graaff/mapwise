@@ -1,0 +1,50 @@
+---
+title: Layer Ingestion Plugin
+description: Detect and ingest WMS/WMTS services.
+---
+
+# Layer Ingestion Plugin
+
+The Layer Ingestion plugin helps in detecting service types from URLs and determining their capabilities. It supports WMS, WMTS, and GeoJSON detection, making it easier to build "Add Layer via URL" interfaces.
+
+## Usage
+
+```typescript
+import { createLayerIngestionPlugin } from '@mapwise/plugins';
+
+const ingestPlugin = createLayerIngestionPlugin();
+
+controller.plugins.register(ingestPlugin);
+```
+
+## Configuration
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `enabled` | `boolean` | `true` | Whether the plugin is active upon registration. |
+
+## Events
+
+| Event Name | Payload | Description |
+| :--- | :--- | :--- |
+| `plugin:@mapwise/ingest:detected` | `{ type, url, capabilities }` | Emitted when a service is successfully detected and parsed. |
+| `plugin:@mapwise/ingest:error` | `{ url, message, originalError }` | Emitted when detection or parsing fails. |
+
+### Supported Types
+
+The `type` in the payload can be one of:
+- `'wms'`
+- `'wmts'`
+- `'geojson'`
+
+## Controlling the Plugin
+
+### Request Ingestion
+
+To start the detection process for a URL:
+
+```typescript
+controller.events.emit('plugin:@mapwise/ingest:request', { 
+  url: 'https://ows.terrestris.de/osm/service?SERVICE=WMS&REQUEST=GetCapabilities' 
+});
+```

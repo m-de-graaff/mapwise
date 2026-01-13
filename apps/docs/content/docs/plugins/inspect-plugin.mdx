@@ -29,6 +29,9 @@ controller.plugins.register(inspectPlugin);
 | `highlight` | `boolean` | `true` | Whether to visually highlight the hovered feature. |
 | `inspectOnHover` | `boolean` | `false` | If true, emits events on hover in addition to click. |
 | `layers` | `string[]` | `undefined` | Optional list of layer IDs to restrict queries to. |
+| `hitTolerance` | `number` | `0` | Pixel buffer around the point to include in the query. |
+| `maxFeatures` | `number` | `undefined` | Maximum number of features to return. |
+| `includeRasterLayers` | `boolean` | `false` | Whether to include raster layers in the result. |
 
 ## Events
 

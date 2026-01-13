@@ -25,13 +25,28 @@ controller.plugins.register(measurePlugin);
 | :--- | :--- | :--- | :--- |
 | `enabled` | `boolean` | `true` | Whether the plugin is active upon registration. |
 | `cursor` | `string` | `'crosshair'` | CSS cursor to use when measuring. |
+| `hotkeys` | `Record<string, string>` | `undefined` | Custom keyboard shortcuts. |
+
+## Requirements
+
+The measurement labels use the **"Noto Sans Regular"** font. Ensure your map style's glyphs URL supports this font, otherwise labels may not appear.
 
 ## Events
 
 | Event Name | Payload | Description |
 | :--- | :--- | :--- |
 | `plugin:@mapwise/measure:update` | `{ result, points, mode }` | Emitted as the user adds points or moves the cursor. |
-| `plugin:@mapwise/measure:complete` | `{ result, points, mode }` | Emitted when the measurement is finished (e.g., via double-click or Enter). |
+| `plugin:@mapwise/measure:complete` | `{ result, points, mode }` | Emitted when the measurement is finished. |
+
+### Payload Types
+
+**MeasureResult**
+```typescript
+{
+  value: number; // The numeric value (distance or area)
+  unit: string;  // 'm', 'km', 'sqm', 'ha', 'sqkm'
+}
+```
 
 ## Controlling the Plugin
 

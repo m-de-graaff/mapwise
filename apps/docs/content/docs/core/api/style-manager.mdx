@@ -1,0 +1,80 @@
+---
+title: StyleManager
+description: API for managing map styles and basemaps.
+---
+
+# StyleManager
+
+The `StyleManager` handles basemap switching and ensures that your custom layers and sources are preserved (re-applied) when the underlying MapLibre style changes.
+
+Access it via `controller.style`.
+
+## Properties
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `currentStyle` | `string \| null` | The URL or identifier of the currently active style. |
+| `isChanging` | `boolean` | `true` if a style change is currently in progress. |
+
+## Methods
+
+### `setBasemap(style, options?)`
+
+Changes the map's basemap style. This method automatically:
+1. Validates the new style.
+2. Unbinds existing layers/sources that are tracked by the registry.
+3. Applies the new style to MapLibre.
+4. Re-applies all registered layers and sources.
+
+```typescript
+await controller.style.setBasemap('https://demotiles.maplibre.org/style.json');
+```
+
+**Parameters:**
+- `style` (`string | object`): The style URL or JSON object.
+- `options` (`object`):
+  - `diff` (`boolean`): Use MapLibre's style diffing (default: `false`).
+  - `timeout` (`number`): Max time to wait for style load (default: `30000`ms).
+
+**Returns:** `Promise<SetBasemapResult>`
+
+---
+
+### `registerSource(id, spec)`
+
+Registers a source so it persists across basemap changes.
+
+```typescript
+controller.style.registerSource('my-source', {
+  type: 'geojson',
+  data: myGeoJSON
+});
+```
+
+---
+
+### `registerLayer(id, spec, beforeId?)`
+
+Registers a raw MapLibre layer to persist across basemap changes. 
+*Note: Generally, you should use `controller.layers.registerLayer` instead, which provides higher-level management.*
+
+```typescript
+controller.style.registerLayer('my-layer', {
+  id: 'my-layer',
+  type: 'fill',
+  source: 'my-source',
+  paint: { 'fill-color': 'blue' }
+});
+```
+
+---
+
+### `setFeatureState(sourceId, featureId, state)`
+
+Sets the feature state and remembers it, so it can be restored after a style change.
+
+```typescript
+controller.style.setFeatureState('my-source', 'feature-1', { hover: true });
+```
+
+---

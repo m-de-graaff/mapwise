@@ -5,9 +5,13 @@ description: Functions to create layer definitions.
 
 # Layer Factories
 
+This reference documents the factory functions available in `@mapwise/layers`. These functions are the primary way to create layer definitions for the Mapwise `LayerRegistry`.
+
+---
+
 ## `createGeoJsonLayer`
 
-Creates a layer from GeoJSON data. It automatically handles the source creation and can generate multiple sub-layers (fill, stroke) from a simplified style object.
+Creates a layer from GeoJSON data. It automatically handles the source creation and can generate multiple sub-layers (fill, stroke, points) from a simplified style object.
 
 ```typescript
 import { createGeoJsonLayer } from '@mapwise/layers';
@@ -16,6 +20,7 @@ const layer = await createGeoJsonLayer({
   id: 'my-data',
   data: 'https://example.com/data.geojson', // URL or GeoJSON object
   cluster: true, // Optional: enable clustering
+  // Simplified styling
   style: {
     circleColor: '#ff0000',
     circleRadius: 8
@@ -31,7 +36,7 @@ const layer = await createGeoJsonLayer({
 | `data` | `string \| object` | URL to GeoJSON or the FeatureCollection object itself. |
 | `cluster` | `boolean \| object` | Enable clustering. Can pass config object `{ radius: 50, maxZoom: 14 }`. |
 | `generateId` | `boolean` | If true, assigns unique IDs to features (useful for hover state). |
-| `style` | `GeoJsonStyle` | Simplified styling options (see Types). |
+| `style` | `GeoJsonStyleInput` | Simplified styling options (see Types) OR array of raw MapLibre layer specs. |
 
 ---
 
@@ -47,7 +52,8 @@ const wmsLayer = createWmsRasterLayer({
   baseUrl: 'https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi',
   layers: 'nexrad-n0r-900913',
   format: 'image/png',
-  transparent: true
+  transparent: true,
+  version: '1.3.0'
 });
 ```
 
@@ -61,12 +67,13 @@ const wmsLayer = createWmsRasterLayer({
 | `styles` | `string \| string[]` | Comma-separated list or array of style names. |
 | `version` | `'1.1.1' \| '1.3.0'` | WMS version (default: '1.3.0'). |
 | `crs` | `string` | Coordinate Reference System (default: 'EPSG:3857'). |
+| `extraParams` | `Record<string, string>` | Custom vendor parameters (e.g. `TIME`, `elevation`). |
 
 ---
 
 ## `createXyzRasterLayer`
 
-Creates a standard tiled raster layer.
+Creates a standard tiled raster layer. Supports TMS (inverted Y) and subdomain rotation.
 
 ```typescript
 import { createXyzRasterLayer } from '@mapwise/layers';
@@ -74,7 +81,15 @@ import { createXyzRasterLayer } from '@mapwise/layers';
 const satellite = createXyzRasterLayer({
   id: 'satellite',
   url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  controlId: 'basemap-switcher' // Group ID for exclusive visibility
+  attribution: '&copy; Esri',
+  maxzoom: 19
+});
+
+// Mapbox style with subdomains
+const mapbox = createXyzRasterLayer({
+  id: 'mapbox',
+  tiles: 'https://{s}.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png',
+  subdomains: ['a', 'b', 'c', 'd']
 });
 ```
 
@@ -83,29 +98,240 @@ const satellite = createXyzRasterLayer({
 | Property | Type | Description |
 | :--- | :--- | :--- |
 | `id` | `string` | Unique layer ID. |
-| `url` | `string \| string[]` | Tile URL template or array of templates. |
+| `tiles` | `string \| string[]` | Tile URL template or array of templates. |
+| `subdomains` | `string[]` | Array of subdomains to replace `{s}`. |
 | `tileSize` | `number` | Size of tiles (default: 256). |
+| `tms` | `boolean` | Enable TMS Y-flipping (default: false). |
 | `maxzoom` | `number` | Maximum zoom level. |
+
+---
+
+## `createWmtsRasterLayer`
+
+Creates a WMTS layer. Supports both explicit configuration and capabilities-based discovery from a URL.
+
+```typescript
+import { createWmtsRasterLayer, fetchWmtsCapabilities } from '@mapwise/layers';
+
+// 1. Auto-discover from capabilities
+const caps = await fetchWmtsCapabilities('https://example.com/wmts/1.0.0/WMTSCapabilities.xml');
+const layer = await createWmtsRasterLayer({
+  id: 'wmts-auto',
+  capabilitiesUrl: 'https://example.com/wmts/1.0.0/WMTSCapabilities.xml',
+  layerId: 'MyLayer',
+  prefetchedCapabilities: caps // Optional optimization
+});
+
+// 2. Explicit configuration (no network discovery)
+const explicitLayer = await createWmtsRasterLayer({
+  id: 'wmts-explicit',
+  tileUrlTemplate: 'https://example.com/wmts/{TileMatrix}/{TileCol}/{TileRow}.png',
+  matrixSet: 'EPSG:3857',
+  tileMatrix: [ ... ] // Array of matrix definitions
+});
+```
+
+### Configuration (`WmtsRasterLayerConfig`)
+
+Can be **Capabilities Config** or **Explicit Config**.
+
+**Capabilities:**
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `capabilitiesUrl` | `string` | URL to GetCapabilities XML. |
+| `layerId` | `string` | Layer identifier in the service. |
+| `style` | `string` | Optional style identifier. |
+
+**Explicit:**
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `tileUrlTemplate` | `string` | URL template. |
+| `tileMatrix` | `WmtsTileMatrix[]` | Definition of zoom levels and resolutions. |
+| `matrixSet` | `string` | Identifier for the matrix set. |
 
 ---
 
 ## `createVectorTileLayer`
 
-Creates a layer from Vector Tiles (MVT/PBF). Unlike MapLibre's raw API where you add source and layers separately, this factory groups them.
+Creates a layer from Vector Tiles (MVT/PBF).
 
 ```typescript
 import { createVectorTileLayer } from '@mapwise/layers';
 
 const vectorLayer = createVectorTileLayer({
   id: 'streets',
-  url: 'https://demotiles.maplibre.org/tiles/tiles.json', // TileJSON URL
-  // OR
-  // tiles: ['https://.../{z}/{x}/{y}.pbf'],
+  tiles: 'https://demotiles.maplibre.org/tiles/{z}/{x}/{y}.pbf',
+  sourceLayer: 'streets', // Required: source-layer name in the PBF
   
-  // Style function or object to define how features are rendered
-  style: (feature) => ({
-    fillColor: 'gray',
-    lineColor: 'black'
-  })
+  // 1. Use a preset
+  style: 'line', 
+  
+  // 2. Preset with options
+  // style: {
+  //   preset: 'line',
+  //   options: { color: 'red', width: 2 }
+  // }
+  
+  // 3. Advanced MapLibre specs
+  // style: [
+  //   { type: 'line', paint: { 'line-color': 'blue' }, ... }
+  // ]
 });
 ```
+
+### Configuration (`VectorTileLayerConfig`)
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `id` | `string` | Unique layer ID. |
+| `tiles` | `string \| string[]` | Tile URL(s). |
+| `sourceLayer` | `string` | Name of the source layer in the vector tile. |
+| `style` | `Style` | Preset (`'fill'|'line'|'symbol'|'circle'`) or array of Layer Specs. |
+
+---
+
+## `createBuildings3DLayer`
+
+Extrudes 3D buildings from a vector tile source. Can auto-detect building layers from a Style JSON.
+
+```typescript
+import { createBuildings3DLayer } from '@mapwise/layers';
+
+const buildings = createBuildings3DLayer({
+  id: '3d-buildings',
+  sourceId: 'openmaptiles', // Must refer to an existing vector source
+  sourceLayer: 'building',
+  heightProperty: 'render_height', // Property or numeric default
+  minZoom: 15,
+  color: '#ddd',
+  opacity: 0.8
+});
+```
+
+### Configuration (`Buildings3dLayerConfig`)
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `sourceId` | `string` | ID of the vector source. |
+| `sourceLayer` | `string` | Source layer name. |
+| `heightProperty` | `string \| number` | Feature property for height, or constant value. |
+| `baseProperty` | `string \| number` | Feature property for base height (elevation). |
+
+---
+
+## `createTerrainLayer`
+
+Enables 3D terrain using RGB-encoded DEM tiles.
+
+```typescript
+import { createTerrainLayer } from '@mapwise/layers';
+
+const terrain = createTerrainLayer({
+  id: 'terrain-rgb',
+  demTiles: 'https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{z}/{x}/{y}.webp',
+  exaggeration: 1.5,
+  hillshade: true // Adds visual shading
+});
+```
+
+### Configuration (`TerrainLayerConfig`)
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `demTiles` | `string \| string[]` | DEM tile URL template. |
+| `exaggeration` | `number` | Vertical scaling factor (default 1.0). |
+| `hillshade` | `boolean` | If true, adds a hillshade layer. |
+| `hillshadeOptions` | `object` | Config for hillshade (shadow color, azimuth, etc). |
+
+---
+
+## `createArcGisRestRasterLayer`
+
+Creates a raster layer from an ArcGIS REST MapServer export service.
+
+```typescript
+import { createArcGisRestRasterLayer } from '@mapwise/layers';
+
+const arcLayer = createArcGisRestRasterLayer({
+  id: 'arcgis-world',
+  serviceUrl: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+  layerId: 0 // Optional layer index
+});
+```
+
+### Configuration (`ArcGisRestRasterLayerConfig`)
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `serviceUrl` | `string` | Base URL of the MapServer. |
+| `layerId` | `number` | Index of the layer to export (default 0). |
+| `tileWidth` | `number` | Width of tiles to request (default 256). |
+| `extraParams` | `object` | Custom params (e.g. `layers: 'show:0,2'`). |
+
+---
+
+## `createHeatmapLayer`
+
+Creates a heatmap visualization from points.
+
+```typescript
+import { createHeatmapLayer } from '@mapwise/layers';
+
+const heatmap = await createHeatmapLayer({
+  id: 'quake-heatmap',
+  data: 'https://earthquake.usgs.gov/.../all_week.geojson',
+  style: {
+    radius: 30,
+    intensity: 1,
+    color: [
+      [0, 'rgba(0,0,0,0)'],
+      [0.2, '#ffffb2'],
+      [0.6, '#fd8d3c'],
+      [1, '#bd0026']
+    ]
+  }
+});
+```
+
+### Configuration (`HeatmapLayerConfig`)
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `data` | `GeoJSON \| string` | FeatureCollection or URL. |
+| `style.radius` | `number` | Radius of influence (pixels). |
+| `style.weight` | `number` | Weight property (default 1). |
+| `style.color` | `array` | Color ramp gradient. |
+
+---
+
+## `createPmtilesLayer`
+
+Creates a layer from a PMTiles archive (Vector or Raster).
+
+```typescript
+import { createPmtilesLayer } from '@mapwise/layers';
+
+// Vector PMTiles
+const vectorPm = createPmtilesLayer({
+  id: 'my-vector-pmtiles',
+  url: 'https://example.com/my.pmtiles',
+  sourceLayer: 'my_features',
+  style: 'fill'
+});
+
+// Raster PMTiles
+const rasterPm = createPmtilesLayer({
+  id: 'my-raster-pmtiles',
+  url: 'https://example.com/raster.pmtiles',
+  format: 'image/jpeg'
+});
+```
+
+### Configuration (`PmtilesLayerConfig`)
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `url` | `string` | URL to the .pmtiles file. |
+| `sourceLayer` | `string` | Required for Vector tiles. |
+| `format` | `string` | Required for Raster tiles (e.g., 'image/png'). |
+| `style` | `Style` | For Vector tiles (preset or specs). |

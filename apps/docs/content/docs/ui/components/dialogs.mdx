@@ -1,0 +1,51 @@
+---
+title: Dialogs
+description: Modal dialogs for user interactions.
+---
+
+# Add Layer Dialog
+
+The `AddLayerDialog` provides a comprehensive interface for users to add various types of layers to the map, including WMS, WMTS, XYZ, GeoJSON, and PMTiles.
+
+## Usage
+
+```tsx
+import { AddLayerDialog } from '@mapwise/ui';
+import { useState } from 'react';
+
+function MyApp() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)}>Add Layer</button>
+      
+      <AddLayerDialog 
+        open={isOpen} 
+        onOpenChange={setIsOpen}
+        onLayerAdd={(config) => {
+            console.log("New layer config:", config);
+            // Logic to add layer to map controller usually goes here
+        }}
+      />
+    </>
+  );
+}
+```
+
+## Supported Layer Types
+
+The dialog automates configuration for:
+- **WMS**: Enter URL and select layers from capabilities.
+- **WMTS**: Configure tile matrices.
+- **XYZ**: Add standard tile layers.
+- **GeoJSON**: Upload files or paste content.
+- **PMTiles**: Add cloud-native vector archives.
+
+## Props
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `open` | `boolean` | Dialog visibility state. |
+| `onOpenChange` | `(open: boolean) => void` | Callback when dialog is closed. |
+| `onLayerAdd` | `(config: LayerConfig) => void` | Callback with the generated layer configuration when user completes the form. |

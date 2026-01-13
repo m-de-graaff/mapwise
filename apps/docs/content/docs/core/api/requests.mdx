@@ -1,0 +1,54 @@
+---
+title: Requests & Auth
+description: Managing network requests and authentication.
+---
+
+# Requests & Authentication
+
+Mapwise provides built-in managers to handle network requests and authentication tokens, ensuring consistent behavior across layers and plugins.
+
+## RequestManager
+
+The `RequestManager` (accessed via `controller.request`) intercepts and transforms network requests made by the map engine.
+
+### Methods
+
+#### `setTransform(transform)`
+
+Sets a global request transform function. This is equivalent to MapLibre's `transformRequest`.
+
+```typescript
+controller.request.setTransform((url, resourceType) => {
+  if (url.startsWith('https://api.myapp.com')) {
+    return {
+      url,
+      headers: { 'X-Custom-Header': 'value' }
+    };
+  }
+  return { url };
+});
+```
+
+---
+
+## AuthManager
+
+The `AuthManager` (accessed via `controller.auth`) manages authentication tokens for protected resources.
+
+### Methods
+
+#### `setTokenProvider(provider)`
+
+Registers a function that provides tokens for specific domains.
+
+```typescript
+controller.auth.setTokenProvider(async (url) => {
+  if (url.includes('secure.mapservice.com')) {
+    const token = await myAuthService.getToken();
+    return token;
+  }
+  return null;
+});
+```
+
+The `RequestManager` automatically consulting the `AuthManager` when making requests, adding the `Authorization: Bearer <token>` header if a token is provided.

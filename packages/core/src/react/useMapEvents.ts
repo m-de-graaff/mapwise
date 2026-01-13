@@ -62,13 +62,27 @@ export function useMapEvents(handlers: EventHandlerMap): void {
 			return;
 		}
 
-		// TODO: The controller doesn't expose the event bus directly yet.
-		// For a proper implementation, we'd need to expose it or add event
-		// subscription methods to the controller.
-		// This is a placeholder for future event bus integration.
+		// Store unsubscribe functions
+		const unsubs: Array<() => void> = [];
+
+		for (const eventName of Object.keys(handlersRef.current)) {
+			const typedName = eventName as EventName;
+
+			const listener = (payload: EventMap[EventName]) => {
+				const currentHandler = handlersRef.current[typedName];
+				if (currentHandler) {
+					(currentHandler as (p: EventMap[EventName]) => void)(payload);
+				}
+			};
+
+			const unsub = controller.events.on(typedName, listener);
+			unsubs.push(unsub);
+		}
 
 		return () => {
-			/* cleanup placeholder for future event subscription */
+			for (const unsub of unsubs) {
+				unsub();
+			}
 		};
 	}, [controller, isReady]);
 }
@@ -90,7 +104,7 @@ export function useMapEvents(handlers: EventHandlerMap): void {
  * }
  * ```
  */
-export function useMapEvent<E extends EventName>(_event: E, handler: EventHandler<E>): void {
+export function useMapEvent<E extends EventName>(event: E, handler: EventHandler<E>): void {
 	const { controller, isReady } = useMap();
 
 	// Store handler in ref for stability
@@ -102,13 +116,17 @@ export function useMapEvent<E extends EventName>(_event: E, handler: EventHandle
 			return;
 		}
 
-		// TODO: Same limitation as useMapEvents - need access to event bus
-		// This is a placeholder for future event bus integration.
+		const listener = (payload: EventMap[E]) => {
+			handlerRef.current?.(payload);
+		};
+
+		// EventBus.on returns an unsubscribe function
+		const unsub = controller.events.on(event, listener);
 
 		return () => {
-			/* cleanup placeholder for future event subscription */
+			unsub();
 		};
-	}, [controller, isReady]);
+	}, [controller, isReady, event]);
 }
 
 /**
@@ -122,14 +140,23 @@ export function useMapEvent<E extends EventName>(_event: E, handler: EventHandle
  * @example
  * ```tsx
  * function FeatureSelector() {
- *   // This would need event bus access to work
- *   // Shown as example of API design
+ *   const emitClick = useEmitEvent('feature:click');
+ *   // ...
+ *   emitClick({ ... });
  * }
  * ```
  */
-export function useEmitEvent<E extends EventName>(_event: E): (payload: EventMap[E]) => void {
-	return useCallback((_payload: EventMap[E]) => {
-		// TODO: Would need access to event bus
-		console.warn("[@mapwise/core] useEmitEvent not yet fully implemented");
-	}, []);
+export function useEmitEvent<E extends EventName>(event: E): (payload: EventMap[E]) => void {
+	const { controller } = useMap();
+
+	return useCallback(
+		(payload: EventMap[E]) => {
+			if (controller) {
+				controller.events.emit(event, payload);
+			} else {
+				console.warn("[@mapwise/core] useEmitEvent: No MapController available to emit event");
+			}
+		},
+		[controller, event],
+	);
 }

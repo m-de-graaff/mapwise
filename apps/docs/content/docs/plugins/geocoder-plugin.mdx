@@ -1,0 +1,82 @@
+---
+title: Geocoder Plugin
+description: Search for locations and fly to results.
+---
+
+# Geocoder Plugin
+
+The Geocoder plugin provides location search functionality. It acts as a bridge between a geocoding service provider and the map, handling search queries, result selection, and viewport transitions.
+
+## Usage
+
+```typescript
+import { createGeocoderPlugin } from '@mapwise/plugins';
+
+// You need a provider implementation
+const myProvider = {
+  search: async (query) => {
+    // Call API...
+    return [{ label: 'New York', center: [-74, 40] }];
+  }
+};
+
+const geocoderPlugin = createGeocoderPlugin({
+  enabled: true,
+  provider: myProvider,
+  flyToSelected: true
+});
+
+controller.plugins.register(geocoderPlugin);
+```
+
+## Configuration
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `provider` | `GeocoderProvider` | **Required** | The geocoding service provider. |
+| `flyToSelected` | `boolean` | `true` | If true, the map automatically flies to the selected result's location. |
+| `enabled` | `boolean` | `true` | Whether the plugin is active upon registration. |
+
+## GeocoderProvider Interface
+
+You must implement the `GeocoderProvider` interface:
+
+```typescript
+interface GeocoderProvider {
+  search(query: string): Promise<GeocoderResult[]>;
+  reverse?(lngLat: [number, number]): Promise<GeocoderResult[]>;
+}
+
+interface GeocoderResult {
+  label: string;
+  center: [number, number];
+  bbox?: [number, number, number, number]; // [minX, minY, maxX, maxY]
+  data?: any; // Raw result data
+}
+```
+
+## Events
+
+| Event Name | Payload | Description |
+| :--- | :--- | :--- |
+| `plugin:@mapwise/geocoder:results` | `{ query, results }` | Emitted when a search completes. |
+| `plugin:@mapwise/geocoder:select` | `{ result }` | Emitted when a result is selected. |
+
+## Controlling the Plugin
+
+### Perform Search
+
+```typescript
+controller.events.emit('plugin:@mapwise/geocoder:search', { 
+  query: 'Paris' 
+});
+```
+
+### Select Result
+
+```typescript
+// This will trigger the flyTo behavior if enabled
+controller.events.emit('plugin:@mapwise/geocoder:select', { 
+  result: { center: [2.35, 48.85], label: 'Paris' } 
+});
+```

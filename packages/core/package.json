@@ -1,6 +1,6 @@
 {
 	"name": "@mapwise/core",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"private": false,
 	"description": "MapWise headless map engine",
 	"type": "module",
@@ -20,7 +20,7 @@
 	"scripts": {
 		"typecheck": "tsc",
 		"build": "tsc",
-		"clean": "rimraf .turbo",
+		"clean": "rimraf dist .turbo",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage"

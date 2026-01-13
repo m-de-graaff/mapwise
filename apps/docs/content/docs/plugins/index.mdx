@@ -22,6 +22,28 @@ pnpm add @mapwise/plugins
 | **Draw** | [`createDrawPlugin`](/docs/plugins/draw-plugin) | Draw points, lines, and polygons on the map. |
 | **Measure** | [`createMeasurePlugin`](/docs/plugins/measure-plugin) | Measure distances and areas. |
 | **Inspect** | [`createInspectPlugin`](/docs/plugins/inspect-plugin) | Query and highlight features on click/hover. |
+| **Geocoder** | [`createGeocoderPlugin`](/docs/plugins/geocoder-plugin) | Search for locations and fly to results. |
+| **Ingest** | [`createLayerIngestionPlugin`](/docs/plugins/ingest-plugin) | Detect and ingest WMS/WMTS services. |
+| **Sync View** | [`createSyncViewPlugin`](/docs/plugins/sync-plugin) | Synchronize viewport with other maps. |
+
+## Geometry Helpers
+
+The package also exports pure geometry utility functions:
+
+*   `distanceMeters(p1, p2)` - Calculate distance between two points.
+*   `areaSqMeters(polygon)` - Calculate area of a polygon.
+*   `bbox(coords)` - Calculate bounding box of coordinates.
+*   `snapToVertex(point, vertices, tolerance)` - Find nearest vertex.
+*   `pointToSegmentDistanceMeters(point, start, end)` - Distance from point to line segment.
+
+## Interaction Priority
+
+When multiple plugins are active, they compete for pointer events based on priority:
+1.  **Draw** (Priority 10) - Highest priority.
+2.  **Measure** (Priority 5)
+3.  **Inspect** (Priority 0) - Lowest priority.
+
+Only one "exclusive" mode can be active at a time (e.g., you cannot draw and measure simultaneously).
 
 ## Usage
 

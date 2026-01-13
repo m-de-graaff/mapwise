@@ -36,6 +36,57 @@ controller.layers.registerLayer({
   - `visible`: Initial visibility override.
   - `opacity`: Initial opacity override.
 
+
+---
+
+## Layer Definitions
+
+The `registerLayer` method accepts a `LayerDefinition`, which can be one of two types:
+
+### MapLibre Definition
+
+Standard layers that map directly to MapLibre style layers.
+
+```typescript
+interface MapLibreLayerDefinition {
+  id: string;
+  type: string; // Internal grouping type
+  category?: 'base' | 'overlay' | 'annotation';
+  source?: SourceDefinition;
+  layers: maplibregl.LayerSpecification[]; // Actual MapLibre layers
+  metadata?: LayerMetadata;
+}
+```
+
+### Custom Definition
+
+Layers that require custom lifecycle management (e.g., HTML markers, WebGL overlays).
+
+```typescript
+interface CustomLayerDefinition {
+  id: string;
+  type: string;
+  apply: (ctx: LayerHandlerContext) => void | Promise<void>;
+  remove: (ctx: LayerHandlerContext) => void | Promise<void>;
+  // ... optional lifecycle hooks (setVisibility, setOpacity)
+}
+```
+
+### Metadata
+
+```typescript
+interface LayerMetadata {
+  title?: string;
+  description?: string;
+  attribution?: string;
+  initialVisibility?: boolean;
+  initialOpacity?: number;
+  minZoom?: number;
+  maxZoom?: number;
+  legend?: unknown;
+}
+```
+
 ---
 
 ### `removeLayer(id)`
@@ -106,3 +157,52 @@ if (state?.visible) {
   // ...
 }
 ```
+
+---
+
+### `getLayersByCategory(category)`
+
+Returns a list of layers filtered by a specific category.
+
+```typescript
+const overlays = controller.layers.getLayersByCategory('overlay');
+```
+
+**Returns:** `LayerState[]`
+
+---
+
+### `hasLayer(id)`
+
+Checks if a layer is registered.
+
+```typescript
+if (controller.layers.hasLayer('my-layer')) {
+  // ...
+}
+```
+
+**Returns:** `boolean`
+
+---
+
+### `clear()`
+
+Removes all layers from both the registry and the map.
+
+```typescript
+controller.layers.clear();
+```
+
+---
+
+### `count`
+
+Returns the number of registered layers.
+
+```typescript
+console.log(controller.layers.count);
+```
+
+**Type:** `number`
+

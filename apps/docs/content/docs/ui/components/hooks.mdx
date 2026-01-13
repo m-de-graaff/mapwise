@@ -1,0 +1,118 @@
+---
+title: Hooks
+description: React hooks for interacting with the map and UI state.
+---
+
+# UI Hooks
+
+The `@mapwise/ui` package provides several hooks to bridge your React UI with the Mapwise core controller.
+
+## `useLayerList`
+
+Returns a list of layers formatted for UI display (e.g., in a `LayerPanel`).
+
+```tsx
+import { useLayerList } from '@mapwise/ui';
+
+function MyPanel() {
+  const { layers, baseLayers, overlayLayers } = useLayerList();
+  
+  return (
+    <ul>
+      {overlayLayers.map(l => <li key={l.id}>{l.name}</li>)}
+    </ul>
+  );
+}
+```
+
+## `useLayerActions`
+
+Provides helper callbacks to modify layers, automatically handling MapController interaction.
+
+```tsx
+import { useLayerActions } from '@mapwise/ui';
+
+function LayerControl({ id }) {
+  const { toggleVisibility, setOpacity, removeLayer } = useLayerActions();
+  
+  return (
+    <button onClick={() => toggleVisibility(id)}>Toggle</button>
+  );
+}
+```
+
+## `useSelectedFeature`
+
+Manages the state of the currently selected feature, often used with `FeatureDetailsSheet`.
+
+```tsx
+import { useSelectedFeature, FeatureDetailsSheet } from '@mapwise/ui';
+
+function App() {
+  const { selectedFeature, isOpen, selectFeature, setIsOpen } = useSelectedFeature();
+  
+  // You would typically call selectFeature from a map click handler
+  
+  return (
+    <FeatureDetailsSheet 
+        feature={selectedFeature} 
+        open={isOpen} 
+        onOpenChange={setIsOpen} 
+    />
+  );
+}
+```
+
+## `useBasemap`
+
+Manages basemap selection state, persisting to local storage by default.
+
+```tsx
+import { useBasemap } from '@mapwise/ui';
+
+const definitions = [{ id: 'osm', name: 'OpenStreetMap', type: 'image', ... }];
+
+function BasemapControl() {
+  const { activeBasemapId, setBasemap } = useBasemap(definitions, 'osm');
+  
+  return (
+    <select value={activeBasemapId} onChange={e => setBasemap(e.target.value)}>
+      {definitions.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+    </select>
+  );
+}
+```
+
+## `useMapToolbar`
+
+A side-effect hook that links a UI toolbar state to the map controller's interaction modes.
+
+```tsx
+import { useMapToolbar } from '@mapwise/ui';
+
+function App({ activeTool }) {
+  // Automatically switches map interaction keys (draw, measure, inspect)
+  // when activeTool changes.
+  useMapToolbar(activeTool);
+  
+  return <MapToolbar activeTool={activeTool} ... />;
+}
+```
+
+## `useWorkspaceStorage`
+
+Manages saving and loading workspace configurations (layer state, view state) to LocalStorage and files.
+
+```tsx
+import { useWorkspaceStorage } from '@mapwise/ui';
+
+function WorkspaceManager() {
+  const { workspaces, saveWorkspace, loadWorkspace } = useWorkspaceStorage();
+  
+  return (
+    <button onClick={() => saveWorkspace("My Map", currentData)}>
+      Save
+    </button>
+  );
+}
+```

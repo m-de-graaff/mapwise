@@ -59,3 +59,63 @@ import { Map, MapMarker, MapPopup } from '@mapwise/ui';
   </MapPopup>
 </Map>
 ```
+
+## Map Controls
+
+Add standard map controls like zoom, compass, and fullscreen.
+
+```tsx
+import { Map, MapControls } from '@mapwise/ui';
+
+<Map>
+  <MapControls 
+    position="bottom-right" 
+    showZoom={true} 
+    showCompass={true} 
+    showLocate={true} // Requires HTTPS
+    showFullscreen={true}
+  />
+</Map>
+```
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `position` | `'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'` | Corner to place controls. |
+| `showZoom` | `boolean` | Show zoom in/out buttons. |
+| `showCompass` | `boolean` | Show bearing reset button. |
+| `showLocate` | `boolean` | Show "Find my location" button. |
+| `showFullscreen` | `boolean` | Show fullscreen toggle. |
+
+## Routes and Lines
+
+Draw simple polylines/routes on the map.
+
+```tsx
+import { Map, MapRoute } from '@mapwise/ui';
+
+<Map>
+  <MapRoute 
+    coordinates={[[-122.4, 37.8], [-122.5, 37.9]]}
+    color="#FF0000"
+    width={4}
+    dashArray={[2, 2]}
+  />
+</Map>
+```
+
+## Clustering
+
+Visualizes point data using supercluster-based clustering.
+
+```tsx
+import { Map, MapClusterLayer } from '@mapwise/ui';
+
+<Map>
+  <MapClusterLayer 
+    data={myGeoJsonFeatureCollection} 
+    clusterColors={['#51bbd6', '#f1f075', '#f28cb1']}
+    clusterRadius={50}
+    onPointClick={(feature) => console.log(feature)}
+  />
+</Map>
+```

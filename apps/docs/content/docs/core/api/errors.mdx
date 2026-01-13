@@ -1,0 +1,89 @@
+---
+title: Error Handling
+description: Handling errors and diagnostics in Mapwise.
+---
+
+# Error Handling
+
+Mapwise provides a structured error handling system that categorizes errors and enables recovery where possible.
+
+## MapwiseError
+
+All errors emitted by the core library follow the `MapwiseError` interface.
+
+```typescript
+interface MapwiseError {
+  code: string;
+  message: string;
+  category: ErrorCategory;
+  severity: ErrorSeverity; // 'fatal' | 'error' | 'warning'
+  recoverable: boolean;
+  originalError?: Error;
+}
+```
+
+## Error Codes
+
+Errors are grouped by domain:
+
+- `ConfigurationErrors`: Invalid options or setup (e.g., `INVALID_CONTAINER`).
+- `MapLibreErrors`: Issues from the underlying map engine.
+- `LayerErrors`: Issues with layer registration or rendering.
+- `NetworkErrors`: HTTP or connection failures.
+
+## events
+
+Subscribe to `map:error` to catch and handle errors globally.
+
+
+```typescript
+controller.events.on('map:error', (error) => {
+  console.error(`Status: ${error.code} - ${error.message}`);
+  
+  if (error.recoverable) {
+    // Attempt recovery...
+  }
+});
+```
+
+## Diagnostics & Logging
+
+Mapwise includes a built-in logger that can be configured for debugging or production use.
+
+### `enableDebugMode()`
+
+Enables verbose logging, event tracing, and timestamps.
+
+```typescript
+import { enableDebugMode } from '@mapwise/core';
+
+enableDebugMode();
+```
+
+### `enableProductionMode()`
+
+Reduces logging to errors only. (Default for `NODE_ENV=production`)
+
+```typescript
+import { enableProductionMode } from '@mapwise/core';
+
+enableProductionMode();
+```
+
+### `createLogger(options)`
+
+Create a custom logger instance.
+
+```typescript
+import { createLogger } from '@mapwise/core';
+
+const logger = createLogger({
+  level: 'debug',
+  prefix: 'MyApp',
+  handler: (entry) => {
+    // Send to remote logging service (Sentry, Datadog, etc.)
+    myMonitoringService.log(entry.message, entry.data);
+  }
+});
+```
+

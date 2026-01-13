@@ -1,0 +1,92 @@
+---
+title: Interaction System
+description: Managing map interactions, cursors, and keyboard events.
+---
+
+# Interaction System
+
+Mapwise provides a robust system for managing how users interact with the map, ensuring that different tools (e.g., drawing vs. measuring) don't conflict with each other.
+
+## InteractionModeStore
+
+The `InteractionModeStore` (accessed via `controller.interaction`) manages active tools and exclusivity.
+
+### Key Concepts
+
+- **Exclusivity**: Only one "exclusive" mode can be active at a time. For example, you cannot be in "Draw Polygon" mode and "Measure Distance" mode simultaneously.
+- **Priority**: When multiple modes are active (if non-exclusive), priority determines which one handles the event.
+
+### Methods
+
+#### `register(id, options)`
+
+Registers a new interaction mode.
+
+```typescript
+const unregister = controller.interaction.register('draw-point', {
+  exclusive: true,
+  priority: 10
+});
+```
+
+#### `setActive(id, active)`
+
+Activates or deactivates a mode. If the mode is exclusive, this will automatically deactivate other exclusive modes.
+
+```typescript
+controller.interaction.setActive('draw-point', true);
+```
+
+#### `getActiveMode()`
+
+Returns the ID of the currently active exclusive mode.
+
+```typescript
+const mode = controller.interaction.getActiveMode();
+```
+
+---
+
+---
+
+## CursorManager
+
+The `CursorManager` (accessed via `createCursorManager` internally, or via plugins) handles setting the map cursor using a stack-based approach. This prevents plugins from fighting over the cursor state.
+
+### Methods
+
+#### `set(id, cursor, priority?)`
+
+Sets the cursor for a specific ID. Returns an unset function.
+
+```typescript
+// Set crosshair cursor with high priority
+const restore = controller.cursorManager.set('draw-tool', 'crosshair', 10);
+
+// Later...
+restore();
+```
+
+---
+
+## KeyboardManager
+
+The `KeyboardManager` handles keyboard shortcuts and accessibility. It automatically disables hotkeys when the user is typing in an input field.
+
+### Methods
+
+#### `register(id, key, handler, priority?)`
+
+Registers a hotkey.
+
+```typescript
+controller.keyboard.register('save', 'Ctrl+s', (e) => {
+  e.preventDefault();
+  saveMap();
+});
+```
+
+**Parameters:**
+- `key`: Key combination (e.g., `'Ctrl+z'`, `'Escape'`, `'Shift+Click'`).
+- `priority`: Higher priority handlers catch events first.
+

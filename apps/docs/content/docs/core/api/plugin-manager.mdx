@@ -1,0 +1,91 @@
+---
+title: PluginManager
+description: API for managing map plugins.
+---
+
+# PluginManager
+
+The `PluginManager` handles the lifecycle of plugins, allowing them to hook into map events, state changes, and core functionality in a modular way.
+
+Access it via `controller.plugins`.
+
+## Methods
+
+### `register(plugin)`
+
+Registers and activates a new plugin.
+
+```typescript
+await controller.plugins.register({
+  id: 'my-plugin',
+  onRegister(ctx) {
+    console.log('Plugin registered');
+  },
+  onMapReady(ctx) {
+    ctx.map.flyTo({ center: [0, 0], zoom: 2 });
+  }
+});
+```
+
+**Parameters:**
+- `plugin` (`PluginDefinition`): The plugin configuration object.
+
+---
+
+### `unregister(id)`
+
+Removes a plugin and cleans up its resources (event listeners, state).
+
+```typescript
+await controller.plugins.unregister('my-plugin');
+```
+
+**Returns:** `Promise<boolean>`
+
+---
+
+### `getPluginState(id)`
+
+Retrieves the runtime state of a plugin (active status, version, etc.).
+
+```typescript
+const state = controller.plugins.getPluginState('my-plugin');
+if (state?.active) {
+  // ...
+}
+```
+
+---
+
+### `getAllPlugins()`
+
+Returns a list of all registered plugins and their states.
+
+```typescript
+const plugins = controller.plugins.getAllPlugins();
+```
+
+---
+
+## Plugin Definition
+
+To create a plugin, implement the `PluginDefinition` interface:
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `id` | `string` | Unique identifier. |
+| `dependencies` | `string[]` | IDs of other plugins required by this one. |
+| `onRegister` | `(ctx) => void` | Called when the plugin is registered. |
+| `onMapReady` | `(ctx) => void` | Called when the map is fully loaded. |
+| `onLayerAdded` | `(ctx, layer) => void` | Called when a layer is added. |
+| `onResize` | `(ctx, width, height) => void` | Called when the map resizes. |
+| `persistence` | `object` | Configuration for state serialization. |
+
+### `PluginContext`
+
+Hooks receive a `PluginContext` object with safe access to core systems:
+
+- `ctx.map`: The MapLibre instance.
+- `ctx.layers`: LayerRegistry.
+- `ctx.events`: EventBus.
+- `ctx.state`: A persistent state store for the plugin.

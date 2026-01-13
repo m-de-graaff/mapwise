@@ -28,6 +28,8 @@ controller.plugins.register(drawPlugin);
 | `cursor` | `string` | `'crosshair'` | CSS cursor to use when drawing. |
 | `finishOnDoubleClick` | `boolean` | `true` | If true, double-clicking finishes the current line/polygon. |
 
+| `hotkeys` | `Record<string, string>` | `undefined` | Custom keyboard shortcuts. |
+
 ## Events
 
 The plugin emits events through the `MapController` event bus.
@@ -45,7 +47,7 @@ You can control the plugin via events.
 
 ```typescript
 controller.events.emit('plugin:@mapwise/draw:setMode', { 
-  mode: 'draw_polygon' // 'static' | 'draw_point' | 'draw_line' | 'draw_polygon' | 'select'
+  mode: 'draw_polygon' // 'static' | 'draw_point' | 'draw_line' | 'draw_polygon' | 'draw_rectangle' | 'select'
 });
 ```
 

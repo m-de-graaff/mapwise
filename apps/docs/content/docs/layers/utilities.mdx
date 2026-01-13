@@ -5,6 +5,8 @@ description: Helper functions for working with spatial data and services.
 
 # Layer Utilities
 
+`@mapwise/layers` exports several utility functions to assist with common tasks like configuration discovery, bounding box calculation, and style generation.
+
 ## GeoJSON Utilities
 
 ### `getGeoJsonBounds(data)`
@@ -35,23 +37,102 @@ fitToGeoJson(controller.map, featureCollection, { padding: 20 });
 
 ### `fetchWmsCapabilities(url)`
 
-Fetches and parses the `GetCapabilities` XML from a WMS server. Useful for building UI that lets users select layers from a server.
+Fetches and parses the `GetCapabilities` XML from a WMS server. useful for discovering available layers, styles, and CRS.
 
 ```typescript
 import { fetchWmsCapabilities } from '@mapwise/layers';
 
-const caps = await fetchWmsCapabilities('https://example.com/wms');
+const caps = await fetchWmsCapabilities('https://example.com/wms?request=GetCapabilities');
 console.log(caps.layers); // List of available layers
+console.log(caps.version); // '1.3.0' or '1.1.1'
 ```
 
 ### `fetchWmtsCapabilities(url)`
 
-Features and parses WMTS capabilities.
+Fetches and parses WMTS capabilities (XML). Essential for configuring WMTS layers when the matrix set is unknown.
 
 ```typescript
 import { fetchWmtsCapabilities } from '@mapwise/layers';
 
-const caps = await fetchWmtsCapabilities('https://example.com/wmts');
+const caps = await fetchWmtsCapabilities('https://example.com/wmts/1.0.0/WMTSCapabilities.xml');
+// Use caps with createWmtsRasterLayer
+```
+
+### `buildWmsLegendUrl(baseUrl, layer, style?, format?)`
+
+Constructs a `GetLegendGraphic` request URL for a WMS layer.
+
+```typescript
+import { buildWmsLegendUrl } from '@mapwise/layers';
+
+const legendUrl = buildWmsLegendUrl(
+  'https://example.com/wms',
+  'layer-name',
+  'default',
+  'image/png'
+);
+```
+
+---
+
+## Terrain Utilities
+
+### `enableTerrain(controller, config)`
+
+A high-level helper that registers a terrain layer and immediately enables it on the map controller. This handles the complexity of adding the DEM source and setting the `map.setTerrain()` property.
+
+```typescript
+import { enableTerrain } from '@mapwise/layers';
+
+await enableTerrain(controller, {
+  demTiles: 'https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{z}/{x}/{y}.webp',
+  exaggeration: 1.5,
+  hillshade: true
+});
+```
+
+---
+
+## Style Helpers
+
+These helpers generate MapLibre style expressions for vector tile layers.
+
+### `createChoroplethStyle(options)`
+
+Creates a style expression for data-driven coloring (e.g., population density).
+
+```typescript
+import { createChoroplethStyle } from '@mapwise/layers';
+
+const paint = {
+  'fill-color': createChoroplethStyle({
+    property: 'population',
+    colorStops: [
+      { value: 0, result: '#ffcccc' },
+      { value: 1000, result: '#ff0000' }
+    ],
+    defaultColor: '#ccc'
+  })
+};
+```
+
+### `createCategoricalStyle(options)`
+
+Creates a style expression for categorical data (e.g., zoning types).
+
+```typescript
+import { createCategoricalStyle } from '@mapwise/layers';
+
+const paint = {
+  'fill-color': createCategoricalStyle({
+    property: 'zone_type',
+    categories: [
+      { value: 'commercial', result: 'blue' },
+      { value: 'residential', result: 'green' }
+    ],
+    default: 'gray'
+  })
+};
 ```
 
 ---
@@ -59,19 +140,218 @@ const caps = await fetchWmtsCapabilities('https://example.com/wmts');
 ## URL Utilities
 
 ### `normalizeUrl(url)`
-
 Ensures a URL is valid and absolute.
 
-### `buildWmsLegendUrl(baseUrl, layer, style?, format?)`
+### `validateSafeUrl(url)`
+Checks if a URL uses a safe protocol (http/https). Throws if invalid.
 
-Constructs a `GetLegendGraphic` request URL for a WMS layer.
+---
+
+## Runtime Operations
+
+These functions allow you to update layer data and state dynamically without recreating the layer.
+
+### `setData(map, sourceId, data)`
+Updates the data for a GeoJSON source.
 
 ```typescript
-const legendUrl = buildWmsLegendUrl(
-  'https://example.com/wms',
-  'layer-name',
-  'default',
-  'image/png'
-);
-// Use as <img src={legendUrl} />
+import { setData } from '@mapwise/layers';
+
+await setData(controller.map, 'my-layer-source', {
+  type: 'FeatureCollection',
+  features: [...]
+});
 ```
+
+### `setFeatureState(map, sourceId, featureId, state)`
+Sets the feature state (e.g., for hover or selection effects).
+
+```typescript
+import { setFeatureState } from '@mapwise/layers';
+
+// Select feature with ID 123
+setFeatureState(controller.map, 'my-layer-source', 123, { selected: true });
+```
+
+### `getFeatureState(map, sourceId, featureId)`
+Retrieves the current state of a feature.
+
+```typescript
+const state = getFeatureState(controller.map, 'my-layer-source', 123);
+// { selected: true }
+```
+
+---
+
+## Persistence Utilities
+
+Functions to serialize and deserialize layer configurations for saving map state.
+
+### `deserializeLayer(config)`
+Recreates a layer definition from a persisted configuration object.
+
+```typescript
+import { deserializeLayer } from '@mapwise/layers';
+
+const savedConfig = JSON.parse(localStorage.getItem('my-layer'));
+const layer = deserializeLayer(savedConfig);
+controller.layers.registerLayer(layer);
+```
+
+### `getLayerPersistedConfig(layer)`
+Extracts a serializable configuration object from a layer definition.
+
+```typescript
+import { getLayerPersistedConfig } from '@mapwise/layers';
+
+const config = getLayerPersistedConfig(myLayer);
+localStorage.setItem('my-layer', JSON.stringify(config));
+```
+
+---
+
+## Advanced Utilities
+
+### `getPmtilesInfo(url)`
+Fetches header and metadata from a PMTiles archive without loading the visual layer. Useful for inspecting file contents.
+
+```typescript
+import { getPmtilesInfo } from '@mapwise/layers';
+
+const info = await getPmtilesInfo('https://example.com/map.pmtiles');
+console.log(info.header.minZoom, info.header.maxZoom);
+console.log(info.metadata.name);
+```
+
+### `findCandidateBuildingLayer(style)`
+Analyzes a MapLibre style JSON to find layers that likely contain building data suitable for 3D extrusion.
+
+```typescript
+import { findCandidateBuildingLayer } from '@mapwise/layers';
+
+const candidates = findCandidateBuildingLayer(styleJson);
+// Use result to config 3D layer
+```
+
+---
+
+## MapLibre Helpers
+
+Low-level utilities for interacting directly with the MapLibre instance.
+
+### `ensureSource(map, id, spec)`
+Safely adds a source to the map if it doesn't already exist.
+
+```typescript
+import { ensureSource } from '@mapwise/layers';
+
+ensureSource(map, 'my-source', { type: 'geojson', data: ... });
+```
+
+### `ensureLayer(map, spec, beforeId?)`
+Safely adds a layer to the map if it doesn't already exist.
+
+```typescript
+import { ensureLayer } from '@mapwise/layers';
+
+ensureLayer(map, {
+  id: 'my-layer',
+  type: 'fill',
+  source: 'my-source',
+  paint: { 'fill-color': 'red' }
+});
+```
+
+### `removeLayerSafe(map, id)`
+Removes a layer if it exists, swallowing errors if it doesn't.
+
+### `setLayerOpacity(map, id, opacity)`
+Sets opacity on a layer, handling different layer types (raster, fill, line, etc.) automatically.
+
+---
+
+## URL Building Utilities
+
+### `buildWmsTileUrl(params)`
+Constructs a WMS `GetMap` URL. Handles WMS version differences (CRS vs SRS) and 1.3.0 axis order.
+
+### `buildArcGisExportUrl(params)`
+Constructs an ArcGIS REST `export` URL.
+
+### `withQuery(url, params)`
+Appends query parameters to a URL, handling existing parameters correctly.
+
+```typescript
+import { withQuery } from '@mapwise/layers';
+const fullUrl = withQuery('https://api.com/endpoint', { foo: 'bar' });
+```
+
+---
+
+## WMTS Selection Utilities
+
+Heuristics for selecting options from WMTS Capabilities.
+
+### `selectTileMatrixSet(layer, capabilities, options)`
+Finds the best `TileMatrixSet` (e.g., matching EPSG:3857).
+
+### `selectFormat(layer, options)`
+Selects options like `image/png` or `image/jpeg`.
+
+### `selectStyle(layer, preferredId)`
+Finds a style by ID or defaults to the service default.
+
+### `selectResourceUrl(layer, resourceType)`
+Selects options like `tile` or `featureInfo`.
+
+---
+
+## Validation Utilities
+
+Helper functions for validating layer configuration properties.
+
+### `validateBaseLayerConfig(config)`
+Validates common properties like `id`, `opacity`, `minzoom`, and `maxzoom`.
+
+### `validateId(id)`
+Checks if an ID is a non-empty string with valid characters.
+
+### `validateOpacity(value)`
+Ensures opacity is a number between 0 and 1.
+
+### `validateZoom(value, field)`
+Ensures zoom level is a number between 0 and 24.
+
+---
+
+## Network Utilities
+
+### `fetchText(url, options)`
+Fetches text content with timeout and abort support.
+
+```typescript
+const text = await fetchText('https://example.com/data.txt', { timeout: 5000 });
+```
+
+### `fetchXml(url, options)`
+Fetches XML content (returns string).
+
+---
+
+## Parsing Utilities
+
+### `parseXml(xmlString)`
+Parses an XML string into a DOM `Document`.
+
+### `getXmlText(node, path)`
+Safely retrieves text content from an XML node using a slash-separated path.
+
+```typescript
+const title = getXmlText(xmlDoc, 'Capability/Service/Title');
+```
+
+### `parseWmsCapabilities(xml)`
+Parses WMS Capabilities XML into a structured object.
+
+### `parseWmtsCapabilities(xml)`
+Parses WMTS Capabilities XML into a structured object.

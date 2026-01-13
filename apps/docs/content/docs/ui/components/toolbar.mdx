@@ -1,0 +1,86 @@
+---
+title: Map Toolbar
+description: Tools for interacting with the map.
+---
+
+# Map Toolbar
+
+The `MapToolbar` provides a set of common GIS tools (Inspect, Draw, Measure) in a unified UI widget.
+
+## Usage
+
+```tsx
+import { MapToolbar } from '@mapwise/ui';
+import { useState } from 'react';
+
+function MyMapApp() {
+  const [activeTool, setActiveTool] = useState(null);
+
+  return (
+    <div className="relative h-full">
+        {/* Map would go here */}
+        
+        <div className="absolute top-4 left-4 z-10">
+            <MapToolbar
+                activeTool={activeTool}
+                onToolChange={setActiveTool}
+                onClear={() => console.log('Clear shapes')}
+                orientation="vertical"
+            />
+        </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `activeTool` | `'inspect' | 'measure' | 'draw' | null` | The currently active tool ID. |
+| `onToolChange` | `(tool: ToolId) => void` | Callback when a tool is selected. |
+| `onClear` | `() => void` | Callback when the trash icon is clicked. |
+| `orientation` | `'vertical' | 'horizontal'` | Layout direction of the toolbar (default: vertical). |
+| `className` | `string` | Additional classes. |
+
+## Tool Status
+
+The `ToolStatusPanel` component displays instructions for the currently active tool (e.g., "Click to add points").
+
+```tsx
+import { ToolStatusPanel } from '@mapwise/ui';
+
+<ToolStatusPanel 
+    activeTool={activeTool} 
+    className="absolute bottom-8 left-1/2 -translate-x-1/2" 
+/>
+```
+
+## Primitives
+
+Lower-level components for building custom toolbars.
+
+### `ToolButton`
+
+A standardized button with icon, label, and tooltip.
+
+```tsx
+<ToolButton 
+  icon={PenTool} 
+  label="Draw" 
+  active={isActive} 
+  onClick={handleClick} 
+  shortcut="D"
+/>
+```
+
+### `DrawModeSelector`
+
+A segmented toggle group for switching between drawing modes (Point, Line, Polygon, Select).
+
+```tsx
+<DrawModeSelector 
+  mode={currentMode} 
+  onModeChange={setMode} 
+/>
+```

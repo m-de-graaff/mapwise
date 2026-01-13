@@ -12,7 +12,8 @@ Mapwise is designed to be extensible. You can build plugins to add custom tools,
 At its core, a plugin is an object with an `id`, `name`, and an `onRegister` function.
 
 ```typescript
-import type { PluginDefinition, PluginContext } from '@mapwise/core';
+import type { PluginDefinition, PluginContext } from '@mapwise/core'; 
+// Note: Utilities like KeyboardManager and CursorManager are re-exported by @mapwise/plugins for convenience.
 
 const myPlugin: PluginDefinition = {
   id: 'my-org/hello-world',
@@ -38,7 +39,7 @@ When your plugin is registered, it receives a `PluginContext` object. This gives
 | `map` | `MapLibreMap` | The underlying MapLibre instance (if ready). |
 | `events` | `EventBus` | The global event bus for emitting/listening to events. |
 | `layers` | `LayerRegistry` | API for adding, removing, or modifying layers. |
-| `store` | `PluginStateStore` | A simple key-value store for your plugin's state. |
+| `state` | `PluginStateStore` | A simple key-value store for your plugin's state. |
 | `interactionMode` | `InteractionModeStore` | Manager for exclusive interaction modes (e.g. drawing). |
 | `cursorManager` | `CursorManager` | Helper to set the map cursor. |
 
@@ -156,4 +157,60 @@ onRegister({ interactionMode }) {
     unregisterInfo(); // Remove the mode registration
   };
 }
+  };
+}
+```
+
+## Development Helpers
+
+The package exports several utilities to help you build robust plugins.
+
+### Pointer Router
+
+For handling click and touch events consistently (normalizing standard vs touch events and distinguishing clicks from digs), use `createPointerRouter`.
+
+```typescript
+import { createPointerRouter } from '@mapwise/plugins';
+
+onRegister({ map }) {
+  const cleanup = createPointerRouter(map, {
+    onClick: (e) => console.log('Click', e.lngLat),
+    onMove: (e) => console.log('Drag', e.lngLat),
+    onDown: (e) => console.log('Down', e.lngLat),
+    onUp: (e) => console.log('Up', e.lngLat),
+  }, {
+    clickThreshold: 5 // pixels
+  });
+
+  return cleanup;
+}
+```
+
+### Safe Plugin Call
+
+Wrap your event handlers in `safePluginCall` to ensure errors are caught, logged, and emitted to the event bus without crashing the application.
+
+```typescript
+import { safePluginCall } from '@mapwise/plugins';
+
+const handleClick = () => {
+  safePluginCall(() => {
+    // Risky operation
+    throw new Error('Oops');
+  }, {
+    pluginId: '@my/plugin',
+    context: 'handleClick'
+  }, ctx.events);
+};
+```
+
+### Event Naming
+
+Use `createPluginEventName` to ensure your events follow the standard `plugin:<id>:<event>` convention.
+
+```typescript
+import { createPluginEventName } from '@mapwise/plugins';
+
+const eventName = createPluginEventName('@my/plugin', 'click');
+// 'plugin:@my/plugin:click'
 ```

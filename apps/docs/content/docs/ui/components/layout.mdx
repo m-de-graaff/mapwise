@@ -1,0 +1,66 @@
+---
+title: Layout
+description: Components for building the application frame and layout.
+---
+
+# Map Layouts
+
+Mapwise provides a set of composable layout components to build standard GIS application shells.
+
+## `MapShell`
+
+The primary layout container. It manages the responsive sidebar, floating panels, and full-screen map area.
+
+```tsx
+import { MapShell, Map } from '@mapwise/ui';
+
+<MapShell
+  sidebar={<SidebarContent />}
+  topBar={<MapTopBar title="My App" />}
+  statusBar={<MapStatusBar />}
+>
+  <Map />
+</MapShell>
+```
+
+See [MapShell](/docs/ui/components/map-shell) for full props.
+
+## `MapTopBar`
+
+A standard header component designed to fit within the `MapShell`.
+
+```tsx
+import { MapTopBar } from '@mapwise/ui';
+import { User } from 'lucide-react';
+
+<MapTopBar
+  title="Project Atlas"
+  left={<Logo />}
+  right={<Button size="icon"><User /></Button>}
+/>
+```
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `title` | `ReactNode` | The application title. |
+| `left` | `ReactNode` | Content for the left section (e.g., logo). |
+| `center` | `ReactNode` | Content for the center section (e.g., search bar). |
+| `right` | `ReactNode` | Content for the right section (e.g., user menu). |
+
+## `MapStatusBar`
+
+A footer component that automatically displays map state (zoom, coordinates) when used within a `MapProvider`.
+
+```tsx
+import { MapStatusBar } from '@mapwise/ui';
+
+// Automatically connects to map context
+<MapStatusBar message="Ready" attribution="© Mapbox" />
+```
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `message` | `ReactNode` | An arbitrary status message to display. |
+| `attribution` | `ReactNode` | Right-aligned attribution text. |
+| `zoom` | `number` | Override displayed zoom level. |
+| `center` | `{ lat, lng }` | Override displayed coordinates. |

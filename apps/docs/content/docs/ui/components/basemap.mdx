@@ -1,0 +1,41 @@
+---
+title: Basemap Switcher
+description: Component for switching base layer styles.
+---
+
+# Basemap Switcher
+
+The `BasemapSwitcher` is a popover component that allows users to select from a list of defined basemap styles (e.g., Light, Dark, Satellite).
+
+## Usage
+
+```tsx
+import { BasemapSwitcher, useBasemap } from '@mapwise/ui';
+
+const myBasemaps = [
+    { id: 'light', name: 'Light Map', style: 'https://...' },
+    { id: 'dark', name: 'Dark Map', style: 'https://...' },
+];
+
+function MyToolbar() {
+    // You can use the hook or manage state manually
+    const { activeBasemapId, setBasemap } = useBasemap();
+
+    return (
+        <BasemapSwitcher
+            basemaps={myBasemaps}
+            activeId={activeBasemapId}
+            onChange={setBasemap}
+        />
+    );
+}
+```
+
+## Props
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `basemaps` | `BasemapDef[]` | Array of basemap definitions with `{ id, name, thumbnail?, style }`. |
+| `activeId` | `string` | The ID of the currently active basemap. |
+| `onChange` | `(id: string) => void` | Callback when a user selects a new basemap. |
+| `isLoading` | `boolean` | Show a loading spinner state. |

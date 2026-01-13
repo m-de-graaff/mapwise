@@ -1,0 +1,57 @@
+---
+title: Workspace
+description: Components for managing map workspaces (saving/loading state).
+---
+
+# Workspace Menu
+
+The `WorkspaceMenu` is a dropdown component that provides a complete UI for managing saved workspaces. It handles:
+- Saving the current state to LocalStorage.
+- Restoring saved workspaces.
+- Exporting workspaces to JSON files.
+- Importing workspaces from JSON files.
+- Deleting saved workspaces.
+
+## Usage
+
+```tsx
+import { WorkspaceMenu, useMap } from '@mapwise/ui';
+import { useCallback } from 'react';
+
+function MyHeader() {
+  const { controller } = useMap();
+
+  // Define how to get the state snapshot
+  const getSnapshot = useCallback(() => {
+    return {
+       center: controller?.getCenter(),
+       zoom: controller?.getZoom(),
+       // ... other state
+    };
+  }, [controller]);
+
+  // Define how to restore the state
+  const onRestore = useCallback((data) => {
+     if (data.center) controller?.setCenter(data.center);
+     if (data.zoom) controller?.setZoom(data.zoom);
+  }, [controller]);
+
+  return (
+    <WorkspaceMenu 
+        getSnapshot={getSnapshot}
+        onRestore={onRestore}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `getSnapshot` | `() => Record<string, unknown>` | Callback that returns the serializable state object to save. |
+| `onRestore` | `(data: Record<string, unknown>) => void` | Callback invoked when a workspace is loaded. |
+
+## Storage Hook
+
+This component uses the [`useWorkspaceStorage`](/docs/ui/components/hooks#useworkspacestorage) hook internally.

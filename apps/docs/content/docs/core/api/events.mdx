@@ -1,0 +1,88 @@
+---
+title: Event System
+description: The Mapwise typed event bus.
+---
+
+# Event System
+
+The `EventBus` is the central communication hub of the Mapwise core. It allows components, plugins, and the UI to react to changes in the map state without tight coupling.
+
+Access it via `controller.events`.
+
+## API
+
+### `on(event, handler)`
+
+Subscribes to an event. Returns an unsubscribe function.
+
+```typescript
+const unsub = controller.events.on('map:ready', (event) => {
+  console.log('Map is ready');
+});
+
+// Later...
+unsub();
+```
+
+### `once(event, handler)`
+
+Subscribes to an event once. The handler is automatically removed after the first invocation.
+
+```typescript
+controller.events.once('layer:added', () => {
+  console.log('First layer added');
+});
+```
+
+### `emit(event, payload)`
+
+Emits an event to all subscribers.
+
+```typescript
+controller.events.emit('custom:event', { data: 123 });
+```
+
+### `off(event, handler?)`
+
+Removes a specific handler, or all handlers for an event type if no handler is provided.
+
+> **Warning**: Avoid calling `off(event)` without a handler, as it will remove *all* listeners for that event, potentially breaking other plugins.
+
+---
+
+## Standard Events
+
+### Map Lifecycle
+- `map:ready`: `{ timestamp: number }`
+- `map:error`: `{ code: string, message: string, recoverable: boolean, originalError?: Error }`
+- `map:resize`: `{ width: number, height: number }`
+
+### Layers
+- `layer:added`: `{ layerId: string, sourceId: string | null }`
+- `layer:removed`: `{ layerId: string }`
+- `layer:visibility`: `{ layerId: string, visible: boolean }`
+- `layer:updated`: `{ layerId: string, changes: { opacity?, visible?, order?, metadata? } }`
+
+### Styles
+- `style:changeStart`: `{ previousStyle: string | null, newStyle: string }`
+- `style:changeComplete`: `{ style: string, durationMs: number }`
+- `style:changeError`: `{ style: string, code: string, message: string, rolledBack: boolean }`
+
+### Plugins
+- `plugin:registered`: `{ pluginId: string, name: string, version: string }`
+- `plugin:error`: `{ pluginId: string, hook: string, message: string }`
+
+### Features
+- `feature:click` / `feature:hover`:
+  ```typescript
+  {
+    layerId: string;
+    sourceId: string;
+    featureId?: string | number;
+    properties: Record<string, unknown>;
+    geometry: GeoJSON.Geometry;
+    lngLat: [number, number];
+    point: { x: number, y: number };
+  }
+  ```
+

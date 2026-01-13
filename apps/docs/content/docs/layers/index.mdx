@@ -22,11 +22,13 @@ pnpm add @mapwise/layers
 | **GeoJSON** | [`createGeoJsonLayer`](/docs/layers/factories#creategeojsonlayer) | Renders points, lines, and polygons from GeoJSON data. Supports clustering. |
 | **WMS** | [`createWmsRasterLayer`](/docs/layers/factories#createwmsrasterlayer) | OGC Web Map Service (Raster). Supports WMS 1.1.1 and 1.3.0. |
 | **XYZ** | [`createXyzRasterLayer`](/docs/layers/factories#createxyzrasterlayer) | Standard XYZ tile layers (e.g., OpenStreetMap, Google Maps). |
-| **WMTS** | [`createWmtsRasterLayer`](/docs/layers/factories#createwmtsrasterlayer) | OGC Web Map Tile Service. |
+| **WMTS** | [`createWmtsRasterLayer`](/docs/layers/factories#createwmtsrasterlayer) | OGC Web Map Tile Service. Supports capabilities discovery. |
 | **Vector Tile** | [`createVectorTileLayer`](/docs/layers/factories#createvectortilelayer) | Vector tiles (MVT/PBF) with styling. |
 | **3D Buildings** | [`createBuildings3DLayer`](/docs/layers/factories#createbuildings3dlayer) | Extruded 3D buildings from vector tiles. |
-| **Terrain** | [`createTerrainLayer`](/docs/layers/factories#createterrrainlayer) | 3D terrain mesh. |
+| **Terrain** | [`createTerrainLayer`](/docs/layers/factories#createterrrainlayer) | 3D terrain mesh from DEM tiles (RGB or Mapbox encoded). |
 | **ArcGIS** | [`createArcGisRestRasterLayer`](/docs/layers/factories#createarcgisrestrasterlayer) | ArcGIS REST MapServer export. |
+| **Heatmap** | [`createHeatmapLayer`](/docs/layers/factories#createheatmaplayer) | Heatmap visualization from points. |
+| **PMTiles** | [`createPmtilesLayer`](/docs/layers/factories#createpmtileslayer) | Serverless map tiles (Vector or Raster) from a single archive. |
 
 ## Usage Pattern
 
