@@ -1,5 +1,11 @@
 # @mapwise/core
 
+## 1.0.3
+
+### Patch Changes
+
+- Fix lint errors in useMapEvents.ts (noForEach, noExplicitAny)
+
 ## 1.0.2
 
 ### Patch Changes
