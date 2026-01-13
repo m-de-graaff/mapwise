@@ -1,5 +1,14 @@
 # @mapwise/ui
 
+## 1.0.4
+
+### Patch Changes
+
+- 6103a86: fix: resolve ESM import extensions and strict type errors across all packages
+- Updated dependencies [6103a86]
+  - @mapwise/core@1.0.4
+  - @mapwise/layers@1.0.4
+
 ## 1.0.3
 
 ### Patch Changes
