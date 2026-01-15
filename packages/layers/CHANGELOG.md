@@ -1,5 +1,11 @@
 # @mapwise/layers
 
+## 1.0.7
+
+### Patch Changes
+
+- Fix "callback is not a function" runtime error in `wmts-protocol.ts` by updating the adapter to match MapLibre GL JS v5 Promise-based signature.
+
 ## 1.0.6
 
 ### Patch Changes

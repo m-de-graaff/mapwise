@@ -5,8 +5,6 @@ import type { RequestParameters } from "maplibre-gl";
 // Types
 // =============================================================================
 
-type MapLibreResponseCallback<T> = (error?: Error | null, data?: T | null) => void;
-
 /**
  * Function that builds a real HTTP URL for a tile.
  * @param z Zoom level
@@ -131,22 +129,11 @@ async function wmtsProtocolHandler(
 
 /**
  * Adapter to match MapLibre's addProtocol signature.
- * MapLibre expects a callback-based or promise-based handler depending on version,
- * but the type usually demands a callback wrapper for broad compatibility.
+ * MapLibre v2+ expects a promise-based handler for async protocols.
  */
 // biome-ignore lint/suspicious/noExplicitAny: MapLibre protocol types are complex
-const protocolAdapter = (request: RequestParameters, callback: MapLibreResponseCallback<any>) => {
-	// We use a dummy AbortController for simplicity if one isn't passed effectively,
-	// but MapLibre usually passes one.
-	const controller = new AbortController();
-
-	wmtsProtocolHandler(request, controller)
-		.then((result) => callback(null, result))
-		.catch((err) => callback(err, null));
-
-	return {
-		cancel: () => controller.abort(),
-	};
+const protocolAdapter = (request: RequestParameters, abortController: AbortController) => {
+	return wmtsProtocolHandler(request, abortController);
 };
 
 /**
