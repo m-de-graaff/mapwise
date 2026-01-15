@@ -1,5 +1,14 @@
 # @mapwise/layers
 
+## 1.0.6
+
+### Patch Changes
+
+- e0e09fe: - Fix "ResizeObserver loop completed with undelivered notifications" error by adding dimension guards and using requestAnimationFrame.
+  - Implement custom `wmts://` protocol handler to support non-standard WMTS tile matrices in `createWmtsRasterLayer`.
+- Updated dependencies [e0e09fe]
+  - @mapwise/core@1.0.6
+
 ## 1.0.5
 
 ### Patch Changes

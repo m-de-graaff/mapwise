@@ -1,5 +1,12 @@
 # @mapwise/plugins
 
+## 1.0.6
+
+### Patch Changes
+
+- Updated dependencies [e0e09fe]
+  - @mapwise/core@1.0.6
+
 ## 1.0.5
 
 ### Patch Changes
