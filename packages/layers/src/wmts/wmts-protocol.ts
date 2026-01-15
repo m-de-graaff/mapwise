@@ -1,9 +1,11 @@
 import maplibregl from "maplibre-gl";
-import type { RequestParameters, ResponseCallback } from "maplibre-gl";
+import type { RequestParameters } from "maplibre-gl";
 
 // =============================================================================
 // Types
 // =============================================================================
+
+type MapLibreResponseCallback<T> = (error?: Error | null, data?: T | null) => void;
 
 /**
  * Function that builds a real HTTP URL for a tile.
@@ -110,11 +112,21 @@ async function wmtsProtocolHandler(
 
 	const buffer = await response.arrayBuffer();
 
-	return {
+	const result: { data: ArrayBuffer; cacheControl?: string; expires?: string } = {
 		data: buffer,
-		cacheControl: response.headers.get("Cache-Control") || undefined,
-		expires: response.headers.get("Expires") || undefined,
 	};
+
+	const cacheControl = response.headers.get("Cache-Control");
+	if (cacheControl) {
+		result.cacheControl = cacheControl;
+	}
+
+	const expires = response.headers.get("Expires");
+	if (expires) {
+		result.expires = expires;
+	}
+
+	return result;
 }
 
 /**
@@ -123,7 +135,7 @@ async function wmtsProtocolHandler(
  * but the type usually demands a callback wrapper for broad compatibility.
  */
 // biome-ignore lint/suspicious/noExplicitAny: MapLibre protocol types are complex
-const protocolAdapter = (request: RequestParameters, callback: ResponseCallback<any>) => {
+const protocolAdapter = (request: RequestParameters, callback: MapLibreResponseCallback<any>) => {
 	// We use a dummy AbortController for simplicity if one isn't passed effectively,
 	// but MapLibre usually passes one.
 	const controller = new AbortController();
