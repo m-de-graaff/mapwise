@@ -1,3 +1,4 @@
+import type { RasterSourceSpecification } from "maplibre-gl";
 import { describe, expect, it } from "vitest";
 import type { WmtsExplicitConfig, WmtsRasterLayerConfig } from "./types.js";
 import { createWmtsRasterLayer, validateWmtsConfig } from "./wmts-layer.js";
@@ -212,6 +213,32 @@ describe("WMTS Raster Layer", () => {
 
 			const layer = await createWmtsRasterLayer(config);
 			expect(layer).toBeDefined();
+		});
+
+		it("should use custom protocol for non-standard tile matrix", async () => {
+			const config: WmtsExplicitConfig = {
+				id: "test-layer-custom",
+				tileUrlTemplate: "https://example.com/wmts/{TileMatrix}/{TileCol}/{TileRow}.png",
+				matrixSet: "CustomGrid",
+				tileMatrix: [
+					{
+						identifier: "matrix-0", // Non-standard identifier
+						zoom: 0,
+						matrixWidth: 1,
+						matrixHeight: 1,
+						tileWidth: 256,
+						tileHeight: 256,
+						topLeftCorner: [-20037508.34, 20037508.34],
+						scaleDenominator: 559082264.029,
+					},
+				],
+			};
+
+			const layer = await createWmtsRasterLayer(config);
+
+			// Should use wmts:// protocol
+			const sourceSpec = layer.source?.spec as RasterSourceSpecification;
+			expect(sourceSpec.tiles?.[0]).toMatch(/^wmts:\/\/test-layer-custom-source\/{z}\/{x}\/{y}$/);
 		});
 	});
 });

@@ -1,5 +1,13 @@
 # @mapwise/core
 
+## 1.0.5
+
+### Patch Changes
+
+- Fix ResizeObserver loop error by deferring resize callback to next animation frame
+
+  Wrapped the ResizeObserver callback in `requestAnimationFrame` to prevent "ResizeObserver loop completed with undelivered notifications" errors that occurred when the map resize triggered additional layout changes within the same frame.
+
 ## 1.0.4
 
 ### Patch Changes

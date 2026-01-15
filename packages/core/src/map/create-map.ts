@@ -255,6 +255,8 @@ function setupResizeObserver(
 		return;
 	}
 
+	let rafId: number | null = null;
+
 	const debouncedResize = debounce(() => {
 		if (state.lifecycleState === "ready" && state.map) {
 			state.map.resize();
@@ -267,14 +269,45 @@ function setupResizeObserver(
 		}
 	}, debounceMs);
 
-	const resizeObserver = new ResizeObserver(() => {
-		debouncedResize();
+	let lastWidth = 0;
+	let lastHeight = 0;
+
+	const resizeObserver = new ResizeObserver((entries) => {
+		// Use requestAnimationFrame to defer the resize callback to the next frame.
+		// This prevents "ResizeObserver loop completed with undelivered notifications"
+		// errors that occur when resize handling triggers additional layout changes.
+		if (rafId !== null) {
+			cancelAnimationFrame(rafId);
+		}
+
+		// Guard: Check if size actually changed significantly
+		// We use the first entry valid for the container
+		const entry = entries[0];
+		if (entry) {
+			const { width, height } = entry.contentRect;
+			// Ignore sub-pixel changes or non-changes (threshold of 0.5px)
+			if (Math.abs(width - lastWidth) <= 1 && Math.abs(height - lastHeight) <= 1) {
+				return;
+			}
+
+			lastWidth = width;
+			lastHeight = height;
+		}
+
+		rafId = requestAnimationFrame(() => {
+			rafId = null;
+			debouncedResize();
+		});
 	});
 
 	resizeObserver.observe(container);
 	setResizeObserver(state, resizeObserver);
 
 	registerCleanup(state, () => {
+		if (rafId !== null) {
+			cancelAnimationFrame(rafId);
+			rafId = null;
+		}
 		debouncedResize.cancel();
 		resizeObserver.disconnect();
 		setResizeObserver(state, null);

@@ -18,6 +18,7 @@ import type {
 	WmtsCapabilityLayer,
 } from "./types.js";
 import { isWmtsExplicitConfig } from "./types.js";
+import { registerWmtsProtocol, registerWmtsSource } from "./wmts-protocol.js";
 
 // =============================================================================
 // Validation
@@ -134,17 +135,11 @@ function createWmtsSourceSpecExplicit(config: WmtsExplicitConfig): RasterSourceS
 		}
 		tiles = [url];
 	} else {
-		console.warn(
-			"[WMTS] Tile matrix identifiers do not match zoom levels. MapLibre may not support this without custom protocol.",
-		);
-		// Build tile URL function
-		// MapLibre calls this with { x, y, z } for each tile
-		// NOTE: MapLibre GL JS standard raster source expects string[], passing a function
-		// usually doesn't work unless using a custom protocol interceptor.
-		// We will try to map it best effort or this might need a custom protocol handler.
-		const tilesFn = (tileCoord: { x: number; y: number; z: number }): string => {
-			const { x, y, z } = tileCoord;
+		// Register protocol implementation if needed
+		registerWmtsProtocol();
 
+		// Create a builder function for this specific source
+		const tilesFn = (z: number, x: number, y: number): string => {
 			// Find tile matrix for this zoom level
 			const matrix = tileMatrix[z];
 			if (!matrix) {
@@ -158,8 +153,22 @@ function createWmtsSourceSpecExplicit(config: WmtsExplicitConfig): RasterSourceS
 
 			return buildTileUrl(tileUrlTemplate, matrix, x, y, format, style, dimensions);
 		};
-		// biome-ignore lint/suspicious/noExplicitAny: MapLibre type definition mismatch workaround
-		tiles = tilesFn as any as string[];
+
+		// Register the builder for this source
+		// We need a unique ID for the registration. The config.id is good but we need to ensure
+		// it matches the source ID we generate.
+		// In createWmtsRasterLayer, sourceId is `${id}-source`.
+		// However, we don't have the sourceId passed into this function yet.
+		// We need to change the function signature or pass it in.
+		// Wait, looking at createWmtsRasterLayer, it calls this with config.
+		// config has 'id'. So checking createWmtsRasterLayer...
+		// sourceId = `${id}-source`.
+
+		const sourceId = `${config.id}-source`;
+		registerWmtsSource(sourceId, tilesFn);
+
+		// The tile URL tells MapLibre to use our protocol
+		tiles = [`wmts://${sourceId}/{z}/{x}/{y}`];
 	}
 
 	return {

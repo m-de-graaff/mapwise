@@ -1,5 +1,13 @@
 # @mapwise/ui
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @mapwise/core@1.0.5
+  - @mapwise/layers@1.0.5
+
 ## 1.0.4
 
 ### Patch Changes
